@@ -3,7 +3,7 @@
 ## Prerequisites
   - [Git](https://git-scm.com/)
   - [CMake](https://cmake.org/) (version 3.14 or higher)
-  - A C++20 compiler (GCC, Clang, MSVC)
+  - A C++14 compiler or newer (GCC, Clang, MSVC)
   - Internet connection (for downloading dependencies)
 
 ## Build steps

@@ -12,15 +12,15 @@ file(GLOB_RECURSE GTEST_ALLURE_UTILITIES_SRC "*.cpp")
 file(GLOB_RECURSE GTEST_ALLURE_UTILITIES_HDR "*.h")
 
 # Add vendored Systelab RapidJSONAdapter sources (see vendor/MODIFICATIONS.md)
-file(GLOB RAPIDJSON_ADAPTER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../../vendor/RapidJSONAdapter/*.cpp")
+file(GLOB RAPIDJSON_ADAPTER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../vendor/RapidJSONAdapter/*.cpp")
 # Exclude JSONSchemaValidator - not needed and has RapidJSON version incompatibility
-list(REMOVE_ITEM RAPIDJSON_ADAPTER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../../vendor/RapidJSONAdapter/JSONSchemaValidator.cpp")
+list(REMOVE_ITEM RAPIDJSON_ADAPTER_SRC "${CMAKE_CURRENT_SOURCE_DIR}/../vendor/RapidJSONAdapter/JSONSchemaValidator.cpp")
 list(APPEND GTEST_ALLURE_UTILITIES_SRC ${RAPIDJSON_ADAPTER_SRC})
 
 add_library(${GTEST_ALLURE_UTILITIES} STATIC ${GTEST_ALLURE_UTILITIES_SRC} ${GTEST_ALLURE_UTILITIES_HDR})
 target_include_directories(${GTEST_ALLURE_UTILITIES} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/../..
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../vendor
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../vendor
 )
 target_link_libraries(${GTEST_ALLURE_UTILITIES} PUBLIC gtest)
 

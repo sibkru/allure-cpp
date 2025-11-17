@@ -1,12 +1,12 @@
 #pragma once
 
-#include "GTestAllureUtilities/Framework/ITestLifecycleListener.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestProgramStartEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestProgramEndEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestSuiteStartEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestSuiteEndEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestCaseStartEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestCaseEndEventHandler.h"
+#include "Framework/ITestLifecycleListener.h"
+#include "Services/EventHandlers/ITestProgramStartEventHandler.h"
+#include "Services/EventHandlers/ITestProgramEndEventHandler.h"
+#include "Services/EventHandlers/ITestSuiteStartEventHandler.h"
+#include "Services/EventHandlers/ITestSuiteEndEventHandler.h"
+#include "Services/EventHandlers/ITestCaseStartEventHandler.h"
+#include "Services/EventHandlers/ITestCaseEndEventHandler.h"
 
 #include <memory>
 

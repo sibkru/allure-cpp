@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GTestAllureUtilities/Framework/ITestStatusProvider.h"
+#include "Framework/ITestStatusProvider.h"
 #include <gtest/gtest.h>
 
 

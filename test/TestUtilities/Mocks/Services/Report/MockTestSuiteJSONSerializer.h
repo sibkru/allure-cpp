@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GTestAllureUtilities/Model/TestSuite.h"
-#include "GTestAllureUtilities/Services/Report/ITestSuiteJSONSerializer.h"
+#include "Model/TestSuite.h"
+#include "Services/Report/ITestSuiteJSONSerializer.h"
 
 
 namespace allure_cpp { namespace test_utility {

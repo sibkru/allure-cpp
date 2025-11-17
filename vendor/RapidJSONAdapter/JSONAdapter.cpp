@@ -3,6 +3,7 @@
 #include "JSONDocument.h"
 // MODIFICATION: Commented out - see vendor/MODIFICATIONS.md
 // #include "JSONSchemaValidator.h"
+#include "../JSONAdapterInterface/IJSONSchemaValidator.h"
 
 
 namespace systelab { namespace json { namespace rapidjson {
@@ -36,13 +37,13 @@ namespace systelab { namespace json { namespace rapidjson {
 	// MODIFICATION: Schema validation methods return nullptr - see vendor/MODIFICATIONS.md
 	std::unique_ptr<IJSONSchemaValidator> JSONAdapter::buildSchemaValidator(const IJSONDocument&) const
 	{
-		return nullptr;  // Not implemented - schema validation not needed
+		return std::unique_ptr<IJSONSchemaValidator>();  // Not implemented - schema validation not needed
 	}
 
 	std::unique_ptr<IJSONSchemaValidator> JSONAdapter::buildSchemaValidator(const IJSONDocument&,
 																			const IJSONRemoteSchemaProvider&) const
 	{
-		return nullptr;  // Not implemented - schema validation not needed
+		return std::unique_ptr<IJSONSchemaValidator>();  // Not implemented - schema validation not needed
 	}
 
 }}}

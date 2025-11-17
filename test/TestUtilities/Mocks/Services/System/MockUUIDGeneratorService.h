@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GTestAllureUtilities/Services/System/IUUIDGeneratorService.h"
+#include "Services/System/IUUIDGeneratorService.h"
 
 
 namespace allure_cpp { namespace test_utility {

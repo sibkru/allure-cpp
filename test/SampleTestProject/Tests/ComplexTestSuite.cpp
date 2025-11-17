@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "GTestAllureUtilities/AllureAPI.h"
+#include "AllureAPI.h"
 
 
 using namespace testing;

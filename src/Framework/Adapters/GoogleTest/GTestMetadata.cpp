@@ -1,4 +1,4 @@
-#include "GTestAllureUtilities/Framework/Adapters/GoogleTest/GTestMetadata.h"
+#include "Framework/Adapters/GoogleTest/GTestMetadata.h"
 
 
 namespace allure_cpp {

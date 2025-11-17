@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GTestAllureUtilities/Framework/FrameworkCapabilities.h"
-#include "GTestAllureUtilities/Framework/ITestStatusProvider.h"
+#include "Framework/FrameworkCapabilities.h"
+#include "Framework/ITestStatusProvider.h"
 
 #include <memory>
 

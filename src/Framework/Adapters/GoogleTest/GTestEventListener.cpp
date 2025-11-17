@@ -1,6 +1,6 @@
-#include "GTestAllureUtilities/Framework/Adapters/GoogleTest/GTestEventListener.h"
-#include "GTestAllureUtilities/Framework/Adapters/GoogleTest/GTestMetadata.h"
-#include "GTestAllureUtilities/Model/Status.h"
+#include "Framework/Adapters/GoogleTest/GTestEventListener.h"
+#include "Framework/Adapters/GoogleTest/GTestMetadata.h"
+#include "Model/Status.h"
 
 
 namespace allure_cpp {

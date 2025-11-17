@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BaseIntegrationTest.h"
 
-#include "GTestAllureUtilities/Services/ServicesFactory.h"
+#include "Services/ServicesFactory.h"
 
 #include "TestUtilities/Mocks/Services/System/MockTimeService.h"
 #include "TestUtilities/Mocks/Services/System/MockUUIDGeneratorService.h"

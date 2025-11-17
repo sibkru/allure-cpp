@@ -1,5 +1,5 @@
-#include "GTestAllureUtilities/AllureAPI.h"
-#include "GTestAllureUtilities/Model/TestSuite.h"
+#include "AllureAPI.h"
+#include "Model/TestSuite.h"
 
 #include "RapidJSONAdapter/JSONAdapter.h"
 

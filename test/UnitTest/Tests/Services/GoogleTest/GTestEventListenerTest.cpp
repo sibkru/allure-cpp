@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "GTestAllureUtilities/Services/GoogleTest/GTestEventListener.h"
+#include "Services/GoogleTest/GTestEventListener.h"
 
 #include "TestUtilities/Mocks/Services/EventHandlers/MockTestCaseStartEventHandler.h"
 #include "TestUtilities/Mocks/Services/EventHandlers/MockTestCaseEndEventHandler.h"

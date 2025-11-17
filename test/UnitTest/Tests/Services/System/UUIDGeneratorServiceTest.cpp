@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "GTestAllureUtilities/Services/System/UUIDGeneratorService.h"
+#include "Services/System/UUIDGeneratorService.h"
 
 
 using namespace allure_cpp;

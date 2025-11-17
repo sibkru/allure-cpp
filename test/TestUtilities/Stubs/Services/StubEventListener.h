@@ -1,13 +1,13 @@
 #pragma once
 
-#include "GTestAllureUtilities/Model/Status.h"
-#include "GTestAllureUtilities/Services/IServicesFactory.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestCaseEndEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestCaseStartEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestProgramEndEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestProgramStartEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestSuiteEndEventHandler.h"
-#include "GTestAllureUtilities/Services/EventHandlers/ITestSuiteStartEventHandler.h"
+#include "Model/Status.h"
+#include "Services/IServicesFactory.h"
+#include "Services/EventHandlers/ITestCaseEndEventHandler.h"
+#include "Services/EventHandlers/ITestCaseStartEventHandler.h"
+#include "Services/EventHandlers/ITestProgramEndEventHandler.h"
+#include "Services/EventHandlers/ITestProgramStartEventHandler.h"
+#include "Services/EventHandlers/ITestSuiteEndEventHandler.h"
+#include "Services/EventHandlers/ITestSuiteStartEventHandler.h"
 
 
 namespace allure_cpp { namespace test_utility {

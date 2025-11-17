@@ -1,4 +1,4 @@
-#include "GTestAllureUtilities/Framework/Adapters/GoogleTest/GTestStatusProvider.h"
+#include "Framework/Adapters/GoogleTest/GTestStatusProvider.h"
 
 
 namespace allure_cpp {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "GTestAllureUtilities/Framework/ITestMetadata.h"
-#include "GTestAllureUtilities/Model/Status.h"
+#include "Framework/ITestMetadata.h"
+#include "Model/Status.h"
 
 
 namespace allure_cpp {

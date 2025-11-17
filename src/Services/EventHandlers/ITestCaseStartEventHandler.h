@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GTestAllureUtilities/Framework/ITestMetadata.h"
+#include "Framework/ITestMetadata.h"
 #include <string>
 
 

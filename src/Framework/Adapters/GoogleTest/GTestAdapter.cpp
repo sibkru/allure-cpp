@@ -1,6 +1,6 @@
-#include "GTestAllureUtilities/Framework/Adapters/GoogleTest/GTestAdapter.h"
-#include "GTestAllureUtilities/Framework/Adapters/GoogleTest/GTestEventListener.h"
-#include "GTestAllureUtilities/Framework/Adapters/GoogleTest/GTestStatusProvider.h"
+#include "Framework/Adapters/GoogleTest/GTestAdapter.h"
+#include "Framework/Adapters/GoogleTest/GTestEventListener.h"
+#include "Framework/Adapters/GoogleTest/GTestStatusProvider.h"
 #include <gtest/gtest.h>
 
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GTestAllureUtilities/Services/EventHandlers/ITestProgramStartEventHandler.h"
+#include "Services/EventHandlers/ITestProgramStartEventHandler.h"
 
 
 namespace allure_cpp { namespace test_utility {

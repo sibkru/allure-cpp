@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GTestAllureUtilities/Services/System/ITimeService.h"
+#include "Services/System/ITimeService.h"
 
 
 namespace allure_cpp { namespace test_utility {

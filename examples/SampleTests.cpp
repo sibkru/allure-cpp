@@ -1,4 +1,4 @@
-#include "GTestAllureUtilities/AllureAPI.h"
+#include "AllureAPI.h"
 #include <gtest/gtest.h>
 #include <thread>
 #include <chrono>

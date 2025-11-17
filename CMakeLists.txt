@@ -50,7 +50,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vendor)
 include_directories(${rapidjson_SOURCE_DIR}/include)
 
 # Add main library (always built)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/GTestAllureUtilities)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Only build tests and examples if this is the main project
 # This allows the library to be used via FetchContent without building tests
@@ -60,7 +60,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/UnitTest)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/IntegrationTest)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/SampleTestProject)
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples/api-comparison)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)
 else()
     message(STATUS "GTestAllureUtilities: Skipping tests and examples (included as subdirectory)")
 endif()

@@ -1,4 +1,4 @@
-#include "GTestAllureUtilities/Framework/TestLifecycleListenerBase.h"
+#include "Framework/TestLifecycleListenerBase.h"
 
 #include <stdexcept>
 

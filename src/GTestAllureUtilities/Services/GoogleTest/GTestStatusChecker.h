@@ -1,0 +1,17 @@
+#pragma once
+
+#include "IGTestStatusChecker.h"
+
+
+namespace allure_cpp { namespace service {
+
+	class GTestStatusChecker : public IGTestStatusChecker
+	{
+	public:
+		GTestStatusChecker();
+		virtual ~GTestStatusChecker();
+
+		model::Status getCurrentTestStatus() const override;
+	};
+
+}} // namespace allure_cpp::service

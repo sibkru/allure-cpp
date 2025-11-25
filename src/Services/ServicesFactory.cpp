@@ -21,8 +21,6 @@
 #include "Services/Report/TestSuiteJSONSerializer.h"
 #include "Services/Report/TestProgramJSONBuilder.h"
 
-#include "RapidJSONAdapter/JSONAdapter.h"
-
 
 namespace allure_cpp { namespace service {
 
@@ -129,20 +127,17 @@ namespace allure_cpp { namespace service {
 
 	std::unique_ptr<ITestCaseJSONSerializer> ServicesFactory::buildTestCaseJSONSerializer() const
 	{
-		auto jsonAdapter = std::make_unique<systelab::json::rapidjson::JSONAdapter>();
-		return std::make_unique<TestCaseJSONSerializer>(std::move(jsonAdapter));
+		return std::make_unique<TestCaseJSONSerializer>();
 	}
 
 	std::unique_ptr<IContainerJSONSerializer> ServicesFactory::buildContainerJSONSerializer() const
 	{
-		auto jsonAdapter = std::make_unique<systelab::json::rapidjson::JSONAdapter>();
-		return std::make_unique<ContainerJSONSerializer>(std::move(jsonAdapter));
+		return std::make_unique<ContainerJSONSerializer>();
 	}
 
 	std::unique_ptr<ITestSuiteJSONSerializer> ServicesFactory::buildTestSuiteJSONSerializer() const
 	{
-		auto jsonAdapter = std::make_unique<systelab::json::rapidjson::JSONAdapter>();
-		return std::make_unique<TestSuiteJSONSerializer>(std::move(jsonAdapter));
+		return std::make_unique<TestSuiteJSONSerializer>();
 	}
 
 

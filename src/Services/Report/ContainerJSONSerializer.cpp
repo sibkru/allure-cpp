@@ -2,138 +2,125 @@
 
 #include "Model/Container.h"
 
-#include "JSONAdapterInterface/IJSONAdapter.h"
-#include "JSONAdapterInterface/IJSONDocument.h"
-#include "JSONAdapterInterface/IJSONValue.h"
-
 
 namespace allure_cpp { namespace service {
 
-	ContainerJSONSerializer::ContainerJSONSerializer(std::unique_ptr<systelab::json::IJSONAdapter> jsonAdapter)
-		:m_jsonAdapter(std::move(jsonAdapter))
-	{
-	}
-
 	std::string ContainerJSONSerializer::serialize(const model::Container& container) const
 	{
-		auto jsonDocument = m_jsonAdapter->buildEmptyDocument();
-		auto& jsonDocumentRoot = jsonDocument->getRootValue();
-		jsonDocumentRoot.setType(systelab::json::OBJECT_TYPE);
-
-		addContainerToJSON(container, jsonDocumentRoot);
-
-		return jsonDocument->serialize();
+		json j = json::object();
+		addContainerToJSON(container, j);
+		return j.dump();
 	}
 
-	void ContainerJSONSerializer::addContainerToJSON(const model::Container& container, systelab::json::IJSONValue& jsonParent) const
+	void ContainerJSONSerializer::addContainerToJSON(const model::Container& container, json& j) const
 	{
 		// Required fields
-		jsonParent.addMember("uuid", container.getUUID());
+		j["uuid"] = container.getUUID();
 
 		// Optional name field
 		if (!container.getName().empty())
 		{
-			jsonParent.addMember("name", container.getName());
+			j["name"] = container.getName();
 		}
 
-		// Convert timestamps from seconds to milliseconds for Allure 2 compatibility
-		jsonParent.addMember("start", container.getStart() * 1000LL);
-		jsonParent.addMember("stop", container.getStop() * 1000LL);
+		// Timestamps are already in milliseconds (from TimeService)
+		j["start"] = container.getStart();
+		j["stop"] = container.getStop();
 
 		// Add children array (UUIDs of test case result files)
-		addChildrenToJSON(container.getChildren(), jsonParent);
+		addChildrenToJSON(container.getChildren(), j);
 
 		// Add befores and afters (fixture steps)
-		addFixtureStepsToJSON(container.getBefores(), jsonParent, "befores");
-		addFixtureStepsToJSON(container.getAfters(), jsonParent, "afters");
+		addFixtureStepsToJSON(container.getBefores(), j, "befores");
+		addFixtureStepsToJSON(container.getAfters(), j, "afters");
 	}
 
-	void ContainerJSONSerializer::addChildrenToJSON(const std::vector<std::string>& children, systelab::json::IJSONValue& jsonParent) const
+	void ContainerJSONSerializer::addChildrenToJSON(const std::vector<std::string>& children, json& j) const
 	{
 		if (children.size() > 0)
 		{
-			auto jsonChildrenArray = jsonParent.buildValue(systelab::json::ARRAY_TYPE);
+			json childrenArray = json::array();
 			for (const auto& childUUID : children)
 			{
-				auto jsonStringValue = jsonParent.buildValue(systelab::json::STRING_TYPE);
-				jsonStringValue->setString(childUUID);
-				jsonChildrenArray->addArrayValue(std::move(jsonStringValue));
+				childrenArray.push_back(childUUID);
 			}
-			jsonParent.addMember("children", std::move(jsonChildrenArray));
+			j["children"] = childrenArray;
 		}
 	}
 
 	void ContainerJSONSerializer::addFixtureStepsToJSON(const std::vector<model::FixtureStep>& fixtureSteps,
-	                                                     systelab::json::IJSONValue& jsonParent,
+	                                                     json& j,
 	                                                     const std::string& fieldName) const
 	{
 		// Always include befores/afters arrays, even if empty (required by Allure 2)
-		auto jsonFixtureStepsArray = jsonParent.buildValue(systelab::json::ARRAY_TYPE);
+		json fixtureStepsArray = json::array();
 
 		for (const auto& fixtureStep : fixtureSteps)
 		{
-			auto jsonFixtureStep = jsonParent.buildValue(systelab::json::OBJECT_TYPE);
-			addFixtureStepToJSON(fixtureStep, *jsonFixtureStep);
-			jsonFixtureStepsArray->addArrayValue(std::move(jsonFixtureStep));
+			json fixtureStepObj = json::object();
+			addFixtureStepToJSON(fixtureStep, fixtureStepObj);
+			fixtureStepsArray.push_back(fixtureStepObj);
 		}
 
-		jsonParent.addMember(fieldName, std::move(jsonFixtureStepsArray));
+		j[fieldName] = fixtureStepsArray;
 	}
 
-	void ContainerJSONSerializer::addFixtureStepToJSON(const model::FixtureStep& fixtureStep, systelab::json::IJSONValue& jsonStep) const
+	void ContainerJSONSerializer::addFixtureStepToJSON(const model::FixtureStep& fixtureStep, json& j) const
 	{
-		jsonStep.addMember("name", fixtureStep.getName());
-		jsonStep.addMember("status", translateStatusToString(fixtureStep.getStatus()));
-		jsonStep.addMember("stage", translateStageToString(fixtureStep.getStage()));
+		j["name"] = fixtureStep.getName();
+		j["status"] = translateStatusToString(fixtureStep.getStatus());
+		j["stage"] = translateStageToString(fixtureStep.getStage());
 
-		// Convert timestamps from seconds to milliseconds
-		jsonStep.addMember("start", fixtureStep.getStart() * 1000LL);
-		jsonStep.addMember("stop", fixtureStep.getStop() * 1000LL);
+		// Timestamps are already in milliseconds (from TimeService)
+		j["start"] = fixtureStep.getStart();
+		j["stop"] = fixtureStep.getStop();
 
 		// Add parameters if present
 		const auto& parameters = fixtureStep.getParameters();
 		if (parameters.size() > 0)
 		{
-			auto jsonParametersArray = jsonStep.buildValue(systelab::json::ARRAY_TYPE);
+			json parametersArray = json::array();
 			for (const auto& parameter : parameters)
 			{
-				auto jsonParameter = jsonStep.buildValue(systelab::json::OBJECT_TYPE);
-				jsonParameter->addMember("name", parameter.getName());
-				jsonParameter->addMember("value", parameter.getValue());
-				jsonParametersArray->addArrayValue(std::move(jsonParameter));
+				json paramObj = {
+					{"name", parameter.getName()},
+					{"value", parameter.getValue()}
+				};
+				parametersArray.push_back(paramObj);
 			}
-			jsonStep.addMember("parameters", std::move(jsonParametersArray));
+			j["parameters"] = parametersArray;
 		}
 
 		// Add attachments if present
 		const auto& attachments = fixtureStep.getAttachments();
 		if (attachments.size() > 0)
 		{
-			auto jsonAttachmentsArray = jsonStep.buildValue(systelab::json::ARRAY_TYPE);
+			json attachmentsArray = json::array();
 			for (const auto& attachment : attachments)
 			{
-				auto jsonAttachment = jsonStep.buildValue(systelab::json::OBJECT_TYPE);
-				jsonAttachment->addMember("name", attachment.getName());
-				jsonAttachment->addMember("source", attachment.getSource());
-				jsonAttachment->addMember("type", attachment.getType());
-				jsonAttachmentsArray->addArrayValue(std::move(jsonAttachment));
+				json attachmentObj = {
+					{"name", attachment.getName()},
+					{"source", attachment.getSource()},
+					{"type", attachment.getType()}
+				};
+				attachmentsArray.push_back(attachmentObj);
 			}
-			jsonStep.addMember("attachments", std::move(jsonAttachmentsArray));
+			j["attachments"] = attachmentsArray;
 		}
 
 		// Add nested steps if present (recursive structure)
 		unsigned int nSteps = fixtureStep.getStepCount();
 		if (nSteps > 0)
 		{
-			auto jsonStepsArray = jsonStep.buildValue(systelab::json::ARRAY_TYPE);
+			json stepsArray = json::array();
 			for (unsigned int i = 0; i < nSteps; i++)
 			{
 				auto nestedStep = fixtureStep.getStep(i);
-				auto jsonNestedStep = jsonStep.buildValue(systelab::json::OBJECT_TYPE);
-				addFixtureStepToJSON(*nestedStep, *jsonNestedStep);
-				jsonStepsArray->addArrayValue(std::move(jsonNestedStep));
+				json nestedStepObj = json::object();
+				addFixtureStepToJSON(*nestedStep, nestedStepObj);
+				stepsArray.push_back(nestedStepObj);
 			}
-			jsonStep.addMember("steps", std::move(jsonStepsArray));
+			j["steps"] = stepsArray;
 		}
 	}
 

@@ -23,20 +23,15 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-# RapidJSON (header-only)
-set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "" FORCE)
-set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+# nlohmann/json (header-only)
+set(JSON_BuildTests OFF CACHE BOOL "" FORCE)
+set(JSON_Install OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(
-  rapidjson
-  GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
-  GIT_TAG v1.1.0
+  nlohmann_json
+  GIT_REPOSITORY https://github.com/nlohmann/json.git
+  GIT_TAG v3.11.3
 )
-FetchContent_MakeAvailable(rapidjson)
-
-# Note: Systelab JSON adapters are vendored in vendor/ directory
-# See vendor/THIRD_PARTY_LICENSES.md for attribution
-# See vendor/MODIFICATIONS.md for list of changes we made
+FetchContent_MakeAvailable(nlohmann_json)
 
 # Adjust compilation flags
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -46,8 +41,6 @@ endif()
 # Configure include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/test)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/vendor)
-include_directories(${rapidjson_SOURCE_DIR}/include)
 
 # Add main library (always built)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)

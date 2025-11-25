@@ -131,9 +131,11 @@ int main(int argc, const char* const* argv)
 
 **Test file** (`tests/MyTests.cpp`):
 
+**Note:** Include `AllureAPI.h` before `<CppUTest/TestHarness.h>` to avoid conflicts with CppUTest's memory leak detection macros.
+
 ```cpp
-#include <CppUTest/TestHarness.h>
 #include "AllureAPI.h"
+#include <CppUTest/TestHarness.h>
 
 TEST_GROUP(CalculatorTests)
 {

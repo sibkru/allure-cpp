@@ -5,8 +5,8 @@
 A framework-agnostic C++ library for generating [Allure 2](https://docs.qameta.io/allure/) C++ test reports.
 
 **Supported Test Frameworks:**
-- [GoogleTest](https://github.com/google/googletest)
-- [CppUTest](https://cpputest.github.io/)
+- [GoogleTest](https://github.com/google/googletest) - [View Example Report](https://sibkru.github.io/allure-cpp/googletest-example/)
+- [CppUTest](https://cpputest.github.io/) - [View Example Report](https://sibkru.github.io/allure-cpp/cpputest-example/)
 
 The library features a generic adapter interface that makes it easy to add support for additional C++ testing frameworks.
 

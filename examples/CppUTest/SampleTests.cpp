@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 
-#include "src/AllureAPI.h"
+#include "AllureAPI.h"
 #include "Framework/Adapters/CppUTest/AllureCppUTest.h"
 #include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"
 #include <CppUTest/CommandLineTestRunner.h>

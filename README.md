@@ -184,9 +184,6 @@ cd allure-cpp
 mkdir build && cd build
 cmake ..
 cmake --build .
-
-# Run tests
-ctest
 ```
 
 See [BUILD.md](BUILD.md) for detailed build options.

@@ -2,14 +2,10 @@
 
 #include "ITestSuiteJSONSerializer.h"
 
-#include <memory>
+#include <nlohmann/json.hpp>
 #include <vector>
 
-
-namespace systelab { namespace json {
-	class IJSONAdapter;
-	class IJSONValue;
-}}
+using json = nlohmann::json;
 
 namespace allure_cpp { namespace model {
 	class Action;
@@ -28,23 +24,20 @@ namespace allure_cpp { namespace service {
 	class TestSuiteJSONSerializer : public ITestSuiteJSONSerializer
 	{
 	public:
-		TestSuiteJSONSerializer(std::unique_ptr<systelab::json::IJSONAdapter>);
+		TestSuiteJSONSerializer() = default;
 		virtual ~TestSuiteJSONSerializer() = default;
 
 		std::string serialize(const model::TestSuite&) const override;
 
 	private:
-		void addTestSuiteToJSON(const model::TestSuite&, systelab::json::IJSONValue&) const;
-		void addLabelsToJSON(const model::TestSuite&, systelab::json::IJSONValue&) const;
-		void addLinksToJSON(const std::vector<model::Link>&, systelab::json::IJSONValue&) const;
-		void addTestCasesToJSON(const std::vector<model::TestCase>&, systelab::json::IJSONValue&) const;
-		void addTestCaseStepsToJSON(const model::TestCase& testCase, systelab::json::IJSONValue&) const;
+		void addTestSuiteToJSON(const model::TestSuite&, json&) const;
+		void addLabelsToJSON(const model::TestSuite&, json&) const;
+		void addLinksToJSON(const std::vector<model::Link>&, json&) const;
+		void addTestCasesToJSON(const std::vector<model::TestCase>&, json&) const;
+		void addTestCaseStepsToJSON(const model::TestCase& testCase, json&) const;
 
 		std::string translateStatusToString(model::Status) const;
 		std::string translateStageToString(model::Stage) const;
-
-	private:
-		std::unique_ptr<systelab::json::IJSONAdapter> m_jsonAdapter;
 	};
 
 }} // namespace allure_cpp::service

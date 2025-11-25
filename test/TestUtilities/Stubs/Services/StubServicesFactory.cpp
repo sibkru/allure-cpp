@@ -22,8 +22,6 @@
 #include "Services/System/TimeService.h"
 #include "Services/System/UUIDGeneratorService.h"
 
-#include "RapidJSONAdapter/JSONAdapter.h"
-
 
 using namespace testing;
 
@@ -145,15 +143,13 @@ namespace allure_cpp { namespace test_utility {
 	// Report services
 	allure_cpp::service::ITestProgramJSONBuilder* StubServicesFactory::buildTestProgramJSONBuilderStub() const
 	{
-		auto jsonAdapter1 = std::make_unique<systelab::json::rapidjson::JSONAdapter>();
 		std::unique_ptr<allure_cpp::service::ITestCaseJSONSerializer> testCaseJSONSerializer =
-			std::make_unique<allure_cpp::service::TestCaseJSONSerializer>(std::move(jsonAdapter1));
+			std::make_unique<allure_cpp::service::TestCaseJSONSerializer>();
 
-		auto jsonAdapter2 = std::make_unique<systelab::json::rapidjson::JSONAdapter>();
 		std::unique_ptr<allure_cpp::service::IContainerJSONSerializer> containerJSONSerializer =
-			std::make_unique<allure_cpp::service::ContainerJSONSerializer>(std::move(jsonAdapter2));
+			std::make_unique<allure_cpp::service::ContainerJSONSerializer>();
 
-		std::unique_ptr<allure_cpp::service::IFileService> fileService(buildFileServiceStub());
+		auto fileService = buildFileService();
 
 		return new allure_cpp::service::TestProgramJSONBuilder(std::move(testCaseJSONSerializer),
 		                                                        std::move(containerJSONSerializer),
@@ -162,20 +158,17 @@ namespace allure_cpp { namespace test_utility {
 
 	allure_cpp::service::ITestCaseJSONSerializer* StubServicesFactory::buildTestCaseJSONSerializerStub() const
 	{
-		auto jsonAdapter = std::make_unique<systelab::json::rapidjson::JSONAdapter>();
-		return new allure_cpp::service::TestCaseJSONSerializer(std::move(jsonAdapter));
+		return new allure_cpp::service::TestCaseJSONSerializer();
 	}
 
 	allure_cpp::service::IContainerJSONSerializer* StubServicesFactory::buildContainerJSONSerializerStub() const
 	{
-		auto jsonAdapter = std::make_unique<systelab::json::rapidjson::JSONAdapter>();
-		return new allure_cpp::service::ContainerJSONSerializer(std::move(jsonAdapter));
+		return new allure_cpp::service::ContainerJSONSerializer();
 	}
 
 	allure_cpp::service::ITestSuiteJSONSerializer* StubServicesFactory::buildTestSuiteJSONSerializerStub() const
 	{
-		auto jsonAdapter = std::make_unique<systelab::json::rapidjson::JSONAdapter>();
-		return new allure_cpp::service::TestSuiteJSONSerializer(std::move(jsonAdapter));
+		return new allure_cpp::service::TestSuiteJSONSerializer();
 	}
 
 

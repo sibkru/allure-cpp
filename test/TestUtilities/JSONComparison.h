@@ -1,29 +1,26 @@
 #pragma once
 
-#include "JSONAdapterInterface/IJSONAdapter.h"
-#include <rapidjson/document.h>
+#include <nlohmann/json.hpp>
 #include <string>
 
 namespace systelab { namespace json { namespace test_utility {
 
 	// Simple JSON string comparison for tests
-	// Note: This is a minimal implementation for GTestAllureUtilities tests
-	// For production use, consider Systelab's full JSONAdapterTestUtilities
-	inline bool compareJSONs(const std::string& expectedStr, const std::string& actualStr, const IJSONAdapter&)
+	// Note: This is a minimal implementation for allure-cpp tests
+	inline bool compareJSONs(const std::string& expectedStr, const std::string& actualStr)
 	{
-		::rapidjson::Document expected;
-		::rapidjson::Document actual;
+		try
+		{
+			nlohmann::json expected = nlohmann::json::parse(expectedStr);
+			nlohmann::json actual = nlohmann::json::parse(actualStr);
 
-		expected.Parse(expectedStr.c_str());
-		actual.Parse(actualStr.c_str());
-
-		if (expected.HasParseError() || actual.HasParseError())
+			// nlohmann::json has built-in comparison operators
+			return expected == actual;
+		}
+		catch (const nlohmann::json::exception&)
 		{
 			return false;
 		}
-
-		// Simple comparison
-		return expected == actual;
 	}
 
 }}} // namespace systelab::json::test_utility

@@ -23,6 +23,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 
 	void BaseIntegrationTest::SetUp()
 	{
+		AllureAPI::getTestProgram().clearTestSuites();
 		setUpServicesFactory();
 		m_eventListener = std::make_unique<StubEventListener>(*service::ServicesFactory::getInstance());
 	}
@@ -55,11 +56,6 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	StubFile BaseIntegrationTest::getSavedFile(unsigned int index) const
 	{
 		return m_savedFiles[index];
-	}
-
-	const json::IJSONAdapter& BaseIntegrationTest::getJSONAdapter() const
-	{
-		return m_jsonAdapter;
 	}
 
 	void BaseIntegrationTest::setUpServicesFactory()

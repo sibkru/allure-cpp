@@ -38,7 +38,7 @@ namespace systelab { namespace gtest_allure_utilities { namespace unit_test {
 
 	TEST_F(TestProgramEndEventHandlerTest, testHandleTestProgramEndBuildsTestProgramJSONs)
 	{
-		EXPECT_CALL(*m_testProgramJSONBuilder, buildJSONFiles(m_testProgram));
+		EXPECT_CALL(*m_testProgramJSONBuilder, buildMetadataFiles(m_testProgram));
 		m_service->handleTestProgramEnd();
 	}
 

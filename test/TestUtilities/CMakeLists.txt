@@ -9,7 +9,7 @@ file(GLOB_RECURSE TEST_UTILITIES_PROJECT_SRC "*.cpp")
 file(GLOB_RECURSE TEST_UTILITIES_PROJECT_HDR "*.h")
 
 add_library(${TEST_UTILITIES_PROJECT} STATIC ${TEST_UTILITIES_PROJECT_SRC} ${TEST_UTILITIES_PROJECT_HDR})
-target_link_libraries(${TEST_UTILITIES_PROJECT} GTestAllureUtilities gtest gmock)
+target_link_libraries(${TEST_UTILITIES_PROJECT} AllureCpp gtest gmock)
 
 # Configure source groups
 foreach(FILE ${TEST_UTILITIES_PROJECT_SRC} ${TEST_UTILITIES_PROJECT_HDR})

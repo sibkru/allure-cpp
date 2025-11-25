@@ -12,27 +12,27 @@
 
 namespace allure_cpp {
 namespace adapters {
-namespace googletest {
+namespace cpputest {
 
 	/**
-	 * @brief Main adapter class for GoogleTest framework integration.
+	 * @brief Main adapter class for CppUTest framework integration.
 	 *
 	 * This is the primary integration point between the framework-agnostic
-	 * Allure reporting system and GoogleTest. It implements the ITestFrameworkAdapter
+	 * Allure reporting system and CppUTest. It implements the ITestFrameworkAdapter
 	 * interface to provide:
 	 *
-	 * 1. Framework initialization - Registers GTestEventListener with GoogleTest
-	 * 2. Status provider creation - Creates GTestStatusProvider for runtime queries
-	 * 3. Capability reporting - Describes GoogleTest's features
+	 * 1. Framework initialization - Installs CppUTestPlugin with CppUTest
+	 * 2. Status provider creation - Creates CppUTestStatusProvider for runtime queries
+	 * 3. Capability reporting - Describes CppUTest's features
 	 *
 	 * The adapter stores references to event handlers and uses them to create
-	 * the GTestEventListener during initialization.
+	 * the CppUTestPlugin during initialization.
 	 *
-	 * GoogleTest Capabilities:
-	 * - Test Suites: Yes (TEST_F, test fixtures)
-	 * - Runtime Status: Yes (::testing::Test::HasFailure(), IsSkipped())
-	 * - Skipped Tests: Yes (DISABLED_ prefix, GTEST_SKIP())
-	 * - Parametric Tests: Yes (INSTANTIATE_TEST_SUITE_P)
+	 * CppUTest Capabilities:
+	 * - Test Suites: Yes (TEST_GROUP)
+	 * - Runtime Status: Limited (CppUTest has global TestResult access)
+	 * - Skipped Tests: Yes (IGNORE_TEST)
+	 * - Parametric Tests: No (not natively supported in CppUTest)
 	 *
 	 * Usage:
 	 * @code
@@ -42,7 +42,7 @@ namespace googletest {
 	 * // ... create other handlers ...
 	 *
 	 * // Create and initialize adapter
-	 * auto adapter = std::make_unique<GTestAdapter>(
+	 * auto adapter = std::make_unique<CppUTestAdapter>(
 	 *     programStartHandler.get(),
 	 *     programEndHandler.get(),
 	 *     suiteStartHandler.get(),
@@ -54,7 +54,7 @@ namespace googletest {
 	 *
 	 * // Query capabilities
 	 * auto caps = adapter->getCapabilities();
-	 * assert(caps.frameworkName == "GoogleTest");
+	 * assert(caps.frameworkName == "CppUTest");
 	 *
 	 * // Create status provider
 	 * auto statusProvider = adapter->createStatusProvider();
@@ -63,11 +63,11 @@ namespace googletest {
 	 * }
 	 * @endcode
 	 */
-	class GTestAdapter : public allure_cpp::ITestFrameworkAdapter
+	class CppUTestAdapter : public allure_cpp::ITestFrameworkAdapter
 	{
 	public:
 		/**
-		 * @brief Construct the GoogleTest adapter with event handlers.
+		 * @brief Construct the CppUTest adapter with event handlers.
 		 *
 		 * The adapter takes ownership of the event handlers and manages their lifetime.
 		 *
@@ -78,7 +78,7 @@ namespace googletest {
 		 * @param caseStartHandler Handler for test case start events (must not be null)
 		 * @param caseEndHandler Handler for test case end events (must not be null)
 		 */
-		GTestAdapter(
+		CppUTestAdapter(
 			std::unique_ptr<allure_cpp::service::ITestProgramStartEventHandler> programStartHandler,
 			std::unique_ptr<allure_cpp::service::ITestProgramEndEventHandler> programEndHandler,
 			std::unique_ptr<allure_cpp::service::ITestSuiteStartEventHandler> suiteStartHandler,
@@ -86,12 +86,16 @@ namespace googletest {
 			std::unique_ptr<allure_cpp::service::ITestCaseStartEventHandler> caseStartHandler,
 			std::unique_ptr<allure_cpp::service::ITestCaseEndEventHandler> caseEndHandler);
 
-		~GTestAdapter() override = default;
+		~CppUTestAdapter() override = default;
 
 		// ITestFrameworkAdapter implementation
 		void initialize() override;
 		std::unique_ptr<ITestStatusProvider> createStatusProvider() const override;
 		FrameworkCapabilities getCapabilities() const override;
+
+		// CppUTest-specific method to finalize reporting
+		// Call this after all tests complete to write JSON files
+		void finalize();
 
 	private:
 		// Event handler pointers (owned by this adapter)
@@ -103,4 +107,4 @@ namespace googletest {
 		std::unique_ptr<allure_cpp::service::ITestCaseEndEventHandler> m_caseEndHandler;
 	};
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure_cpp::adapters::cpputest

@@ -5,6 +5,8 @@
 
 #include "TestUtilities/Mocks/Services/System/MockTimeService.h"
 #include "TestUtilities/Mocks/Services/System/MockUUIDGeneratorService.h"
+#include "TestUtilities/Mocks/Services/Report/MockTestCaseJSONSerializer.h"
+#include "TestUtilities/Mocks/Services/System/MockFileService.h"
 
 
 using namespace testing;
@@ -20,8 +22,10 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 		{
 			setUpTestProgram();
 			auto timeService = buildTimeService();
+			auto testCaseJSONSerializer = buildTestCaseJSONSerializer();
+			auto fileService = buildFileService();
 
-			m_service = std::make_unique<service::TestCaseEndEventHandler>(m_testProgram, std::move(timeService));
+			m_service = std::make_unique<service::TestCaseEndEventHandler>(m_testProgram, std::move(timeService), std::move(testCaseJSONSerializer), std::move(fileService));
 		}
 
 		void setUpTestProgram()
@@ -62,10 +66,30 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 			return timeService;
 		}
 
+		std::unique_ptr<service::ITestCaseJSONSerializer> buildTestCaseJSONSerializer()
+		{
+			auto serializer = std::make_unique<MockTestCaseJSONSerializer>();
+			m_testCaseJSONSerializer = serializer.get();
+
+			ON_CALL(*m_testCaseJSONSerializer, serialize(_)).WillByDefault(Return("{}"));
+
+			return serializer;
+		}
+
+		std::unique_ptr<service::IFileService> buildFileService()
+		{
+			auto fileService = std::make_unique<MockFileService>();
+			m_fileService = fileService.get();
+
+			return fileService;
+		}
+
 	protected:
 		std::unique_ptr<service::TestCaseEndEventHandler> m_service;
 		model::TestProgram m_testProgram;
 		MockTimeService* m_timeService;
+		MockTestCaseJSONSerializer* m_testCaseJSONSerializer;
+		MockFileService* m_fileService;
 
 		model::TestCase* m_runningTestCase;
 		time_t m_currentTime;
@@ -96,6 +120,17 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 		m_testProgram.getTestSuite(1).setStage(model::Stage::FINISHED);
 		ASSERT_THROW(m_service->handleTestCaseEnd(model::Status::PASSED),
 					 service::ITestCaseEndEventHandler::NoRunningTestSuiteException);
+	}
+
+	TEST_F(TestCaseEndEventHandlerTest, testHandleTestCaseEndWritesTestCaseJSONImmediately)
+	{
+		// Expect JSON serializer to be called with the running test case
+		EXPECT_CALL(*m_testCaseJSONSerializer, serialize(_)).Times(1);
+
+		// Expect file service to save the JSON
+		EXPECT_CALL(*m_fileService, saveFile(_, _)).Times(1);
+
+		m_service->handleTestCaseEnd(model::Status::PASSED);
 	}
 
 

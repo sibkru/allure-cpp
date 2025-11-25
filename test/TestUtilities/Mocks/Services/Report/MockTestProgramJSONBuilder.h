@@ -13,6 +13,7 @@ namespace allure_cpp { namespace test_utility {
 		virtual ~MockTestProgramJSONBuilder();
 
 		MOCK_CONST_METHOD1(buildJSONFiles, void(const allure_cpp::model::TestProgram&));
+		MOCK_CONST_METHOD1(buildMetadataFiles, void(const allure_cpp::model::TestProgram&));
 	};
 
 }} // namespace allure_cpp::test_utility

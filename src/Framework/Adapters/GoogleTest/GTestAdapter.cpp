@@ -9,18 +9,18 @@ namespace adapters {
 namespace googletest {
 
 	GTestAdapter::GTestAdapter(
-		allure_cpp::service::ITestProgramStartEventHandler* programStartHandler,
-		allure_cpp::service::ITestProgramEndEventHandler* programEndHandler,
-		allure_cpp::service::ITestSuiteStartEventHandler* suiteStartHandler,
-		allure_cpp::service::ITestSuiteEndEventHandler* suiteEndHandler,
-		allure_cpp::service::ITestCaseStartEventHandler* caseStartHandler,
-		allure_cpp::service::ITestCaseEndEventHandler* caseEndHandler)
-		: m_programStartHandler(programStartHandler)
-		, m_programEndHandler(programEndHandler)
-		, m_suiteStartHandler(suiteStartHandler)
-		, m_suiteEndHandler(suiteEndHandler)
-		, m_caseStartHandler(caseStartHandler)
-		, m_caseEndHandler(caseEndHandler)
+		std::unique_ptr<allure_cpp::service::ITestProgramStartEventHandler> programStartHandler,
+		std::unique_ptr<allure_cpp::service::ITestProgramEndEventHandler> programEndHandler,
+		std::unique_ptr<allure_cpp::service::ITestSuiteStartEventHandler> suiteStartHandler,
+		std::unique_ptr<allure_cpp::service::ITestSuiteEndEventHandler> suiteEndHandler,
+		std::unique_ptr<allure_cpp::service::ITestCaseStartEventHandler> caseStartHandler,
+		std::unique_ptr<allure_cpp::service::ITestCaseEndEventHandler> caseEndHandler)
+		: m_programStartHandler(std::move(programStartHandler))
+		, m_programEndHandler(std::move(programEndHandler))
+		, m_suiteStartHandler(std::move(suiteStartHandler))
+		, m_suiteEndHandler(std::move(suiteEndHandler))
+		, m_caseStartHandler(std::move(caseStartHandler))
+		, m_caseEndHandler(std::move(caseEndHandler))
 	{
 	}
 
@@ -28,12 +28,12 @@ namespace googletest {
 	{
 		// Create the GoogleTest event listener
 		auto listener = new GTestEventListener(
-			m_programStartHandler,
-			m_programEndHandler,
-			m_suiteStartHandler,
-			m_suiteEndHandler,
-			m_caseStartHandler,
-			m_caseEndHandler
+			m_programStartHandler.get(),
+			m_programEndHandler.get(),
+			m_suiteStartHandler.get(),
+			m_suiteEndHandler.get(),
+			m_caseStartHandler.get(),
+			m_caseEndHandler.get()
 		);
 
 		// Register with GoogleTest

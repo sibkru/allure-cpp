@@ -8,7 +8,9 @@
 
 ## Build steps
 
-This project uses CMake with FetchContent to automatically download and build dependencies (GoogleTest and nlohmann/json). No package manager required!
+This project uses CMake with FetchContent to automatically download and build dependencies. No package manager required!
+
+By default, no test framework adapters are enabled. You must explicitly enable the adapters you need via CMake options.
 
 ### All Platforms
 
@@ -36,6 +38,21 @@ ctest
 
 ### Build Options
 
+#### Framework Selection
+
+```bash
+# Build with GoogleTest support
+cmake -DALLURE_ENABLE_GOOGLETEST=ON ..
+
+# Build with CppUTest support
+cmake -DALLURE_ENABLE_CPPUTEST=ON -DALLURE_ENABLE_GOOGLETEST=OFF ..
+
+# Build with both frameworks
+cmake -DALLURE_ENABLE_GOOGLETEST=ON -DALLURE_ENABLE_CPPUTEST=ON ..
+```
+
+#### Build Type
+
 ```bash
 # Debug build
 cmake -DCMAKE_BUILD_TYPE=Debug ..
@@ -47,10 +64,27 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake -G Ninja ..
 ```
 
+### Running Examples
+
+Examples are only built if you enable the corresponding adapter.
+
+```bash
+# GoogleTest example (requires ALLURE_ENABLE_GOOGLETEST=ON)
+./bin/GoogleTestAllureExample
+
+# CppUTest example (requires ALLURE_ENABLE_CPPUTEST=ON)
+./bin/CppUTestAllureExample
+```
+
 ## Dependencies
 
-All dependencies are automatically fetched and built by CMake:
-- **GoogleTest** (v1.14.0) - for unit testing and mocking
-- **nlohmann/json** (v3.11.3) - for JSON serialization
+Dependencies are automatically fetched based on enabled frameworks:
+
+**Core (always required):**
+- **nlohmann/json** (v3.11.3) - JSON serialization
+
+**Optional (controlled by CMake options):**
+- **GoogleTest** (v1.14.0) - when `ALLURE_ENABLE_GOOGLETEST=ON`
+- **CppUTest** (v4.0) - when `ALLURE_ENABLE_CPPUTEST=ON`
 
 No manual installation or package managers (Conan, vcpkg, etc.) required!

@@ -1,17 +1,30 @@
 #include "TestSuiteEndEventHandler.h"
 
 #include "Model/TestProgram.h"
+#include "Model/Container.h"
 #include "Services/System/ITimeService.h"
+#include "Services/Report/IContainerJSONSerializer.h"
+#include "Services/System/IFileService.h"
 
 #include <regex>
+
+#ifdef _WIN32
+	#define PATH_SEPARATOR "\\"
+#else
+	#define PATH_SEPARATOR "/"
+#endif
 
 
 namespace allure_cpp { namespace service {
 
 	TestSuiteEndEventHandler::TestSuiteEndEventHandler(model::TestProgram& testProgram,
-													   std::unique_ptr<ITimeService> timeService)
+													   std::unique_ptr<ITimeService> timeService,
+													   std::unique_ptr<IContainerJSONSerializer> containerJSONSerializer,
+													   std::unique_ptr<IFileService> fileService)
 		:m_testProgram(testProgram)
 		,m_timeService(std::move(timeService))
+		,m_containerJSONSerializer(std::move(containerJSONSerializer))
+		,m_fileService(std::move(fileService))
 	{
 	}
 
@@ -22,6 +35,30 @@ namespace allure_cpp { namespace service {
 		testSuite.setStage(model::Stage::FINISHED);
 		testSuite.setStatus(status);
 		addTMSLink(testSuite);
+
+		// Write container JSON immediately after suite completes
+		writeContainerJSON(testSuite);
+	}
+
+	void TestSuiteEndEventHandler::writeContainerJSON(const model::TestSuite& testSuite) const
+	{
+		// Create container from test suite
+		model::Container container;
+		container.setUUID(testSuite.getUUID());
+		container.setName(testSuite.getName());
+		container.setStart(testSuite.getStart());
+		container.setStop(testSuite.getStop());
+
+		// Add test case UUIDs as children by iterating through them
+		for (const auto& testCase : testSuite.getTestCases())
+		{
+			container.addChild(testCase.getUUID());
+		}
+
+		// Write container file: {uuid}-container.json
+		std::string filepath = m_testProgram.getOutputFolder() + PATH_SEPARATOR + container.getUUID() + "-container.json";
+		std::string content = m_containerJSONSerializer->serialize(container);
+		m_fileService->saveFile(filepath, content);
 	}
 
 	model::TestSuite& TestSuiteEndEventHandler::getRunningTestSuite() const

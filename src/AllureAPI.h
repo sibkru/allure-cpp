@@ -5,7 +5,6 @@
 #include "Framework/ITestStatusProvider.h"
 
 #include <functional>
-#include <gtest/gtest.h>
 #include <memory>
 
 
@@ -22,15 +21,15 @@ namespace allure_cpp {
 	class AllureAPI
 	{
 	public:
-		static std::unique_ptr<::testing::TestEventListener> buildListener();
-
-		static void initializeGoogleTest();
 		static std::unique_ptr<allure_cpp::ITestStatusProvider> getStatusProvider();
+		static void setFrameworkAdapter(std::shared_ptr<allure_cpp::ITestFrameworkAdapter>);
 
 		static model::TestProgram& getTestProgram();
+		static void cleanup();
 		static void setTestProgramName(const std::string&);
 		static void setOutputFolder(const std::string&);
 		static void setTMSLinksPattern(const std::string&);
+		static void setFrameworkName(const std::string&);
 		static void setFormat(model::Format format);
 
 		static void setTMSId(const std::string&);
@@ -87,8 +86,8 @@ namespace allure_cpp {
 
 	private:
 		static model::TestProgram m_testProgram;
-		static service::IServicesFactory* m_servicesFactory;
-		static std::unique_ptr<allure_cpp::ITestFrameworkAdapter> m_frameworkAdapter;
+		static std::unique_ptr<service::IServicesFactory> m_servicesFactory;
+		static std::shared_ptr<allure_cpp::ITestFrameworkAdapter> m_frameworkAdapter;
 	};
 
 } // namespace allure_cpp

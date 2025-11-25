@@ -255,6 +255,31 @@ namespace allure_cpp { namespace model {
 		m_attachments.push_back(attachment);
 	}
 
+	void TestCase::clearSteps()
+	{
+		m_steps.clear();
+	}
+
+	void TestCase::clearParameters()
+	{
+		m_parameters.clear();
+	}
+
+	void TestCase::clearLabels()
+	{
+		m_labels.clear();
+	}
+
+	void TestCase::clearLinks()
+	{
+		m_links.clear();
+	}
+
+	void TestCase::clearAttachments()
+	{
+		m_attachments.clear();
+	}
+
 	TestCase& TestCase::operator= (const TestCase& other)
 	{
 		m_uuid = other.m_uuid;

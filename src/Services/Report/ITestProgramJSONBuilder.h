@@ -14,6 +14,7 @@ namespace allure_cpp { namespace service {
 		virtual ~ITestProgramJSONBuilder() = default;
 
 		virtual void buildJSONFiles(const model::TestProgram&) const = 0;
+		virtual void buildMetadataFiles(const model::TestProgram&) const = 0;
 	};
 
 }} // namespace allure_cpp::service

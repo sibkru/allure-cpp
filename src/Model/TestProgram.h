@@ -10,17 +10,22 @@ namespace allure_cpp { namespace model {
 	{
 	public:
 		TestProgram();
-		TestProgram(const TestProgram&);
-		virtual ~TestProgram() = default;
+		TestProgram(const TestProgram& other);
+		~TestProgram() = default;
 
 		std::string getName() const;
-		std::string getOutputFolder() const;
-		std::string getTMSLinksPattern() const;
-		Format getFormat() const;
-
 		void setName(const std::string&);
+
+		std::string getOutputFolder() const;
 		void setOutputFolder(const std::string&);
+
+		std::string getTMSLinksPattern() const;
 		void setTMSLinksPattern(const std::string&);
+
+		std::string getFrameworkName() const;
+		void setFrameworkName(const std::string&);
+
+		Format getFormat() const;
 		void setFormat(Format);
 
 		size_t getTestSuitesCount() const;
@@ -29,13 +34,13 @@ namespace allure_cpp { namespace model {
 		void addTestSuite(const TestSuite&);
 		void clearTestSuites();
 
-		// Helper methods to access currently running test components
 		TestSuite* getRunningTestSuite();
 		const TestSuite* getRunningTestSuite() const;
+
 		TestCase* getRunningTestCase();
 		const TestCase* getRunningTestCase() const;
 
-		virtual TestProgram& operator= (const TestProgram&);
+		TestProgram& operator= (const TestProgram&);
 		friend bool operator== (const TestProgram& lhs, const TestProgram& rhs);
 		friend bool operator!= (const TestProgram& lhs, const TestProgram& rhs);
 
@@ -43,8 +48,9 @@ namespace allure_cpp { namespace model {
 		std::string m_name;
 		std::string m_outputFolder;
 		std::string m_tmsLinksPattern;
-		std::vector<TestSuite> m_testSuites;
+		std::string m_frameworkName;
 		Format m_format;
+		std::vector<TestSuite> m_testSuites;
 	};
 
 }} // namespace allure_cpp::model

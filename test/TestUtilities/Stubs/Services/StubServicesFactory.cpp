@@ -112,13 +112,17 @@ namespace allure_cpp { namespace test_utility {
 	allure_cpp::service::ITestCaseEndEventHandler* StubServicesFactory::buildTestCaseEndEventHandlerStub() const
 	{
 		auto timeService = buildTimeService();
-		return new allure_cpp::service::TestCaseEndEventHandler(m_testProgram, std::move(timeService));
+		auto testCaseJSONSerializer = std::unique_ptr<allure_cpp::service::ITestCaseJSONSerializer>(buildTestCaseJSONSerializerStub());
+		auto fileService = buildFileService();
+		return new allure_cpp::service::TestCaseEndEventHandler(m_testProgram, std::move(timeService), std::move(testCaseJSONSerializer), std::move(fileService));
 	}
 
 	allure_cpp::service::ITestSuiteEndEventHandler* StubServicesFactory::buildTestSuiteEndEventHandlerStub() const
 	{
 		auto timeService = buildTimeService();
-		return new allure_cpp::service::TestSuiteEndEventHandler(m_testProgram, std::move(timeService));
+		auto containerJSONSerializer = std::unique_ptr<allure_cpp::service::IContainerJSONSerializer>(buildContainerJSONSerializerStub());
+		auto fileService = buildFileService();
+		return new allure_cpp::service::TestSuiteEndEventHandler(m_testProgram, std::move(timeService), std::move(containerJSONSerializer), std::move(fileService));
 	}
 
 	allure_cpp::service::ITestProgramEndEventHandler* StubServicesFactory::buildTestProgramEndEventHandlerStub() const

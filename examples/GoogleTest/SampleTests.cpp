@@ -1,7 +1,12 @@
 #include "AllureAPI.h"
 #include <gtest/gtest.h>
-#include <thread>
 #include <chrono>
+#include <cstring>
+#include <stdexcept>
+#include <string>
+#include <thread>
+#include <vector>
+#include <strings.h>
 
 using namespace allure_cpp;
 
@@ -214,6 +219,133 @@ TEST_F(FailureExamplesTestSuite, testAnotherFailure)
 		std::string expected = "World";
 		EXPECT_EQ(actual, expected) << "String mismatch - product defect";
 	});
+}
+
+TEST_F(FailureExamplesTestSuite, testCheckFailure)
+{
+	AllureAPI::setTestCaseName("Generic check failure");
+	EXPECT_TRUE(false) << "Expected condition to be true";
+}
+
+TEST_F(FailureExamplesTestSuite, testCheckTextFailure)
+{
+	AllureAPI::setTestCaseName("Check with message failure");
+	EXPECT_TRUE(false) << "CheckText message should appear";
+}
+
+TEST_F(FailureExamplesTestSuite, testCheckFalseFailure)
+{
+	AllureAPI::setTestCaseName("Check false failure");
+	EXPECT_FALSE(true) << "Expected condition to be false";
+}
+
+TEST_F(FailureExamplesTestSuite, testCheckEqualFailure)
+{
+	AllureAPI::setTestCaseName("Check equal failure");
+	EXPECT_EQ(10, 20);
+}
+
+TEST_F(FailureExamplesTestSuite, testCheckCompareFailure)
+{
+	AllureAPI::setTestCaseName("Check compare failure");
+	int a = 5;
+	int b = 1;
+	EXPECT_LT(a, b);
+}
+
+TEST_F(FailureExamplesTestSuite, testCheckThrowsFailure)
+{
+	AllureAPI::setTestCaseName("Check throws failure");
+	EXPECT_THROW([]() { /* no throw */ }(), std::runtime_error);
+}
+
+TEST_F(FailureExamplesTestSuite, testStrnCmpEqualFailure)
+{
+	AllureAPI::setTestCaseName("STRNCMP failure");
+	EXPECT_EQ(0, strncmp("Hello", "Help", 4));
+}
+
+TEST_F(FailureExamplesTestSuite, testStrCmpNoCaseFailure)
+{
+	AllureAPI::setTestCaseName("STRCMP no-case failure");
+	EXPECT_EQ(0, strcasecmp("Allure", "aLLuRe?"));
+}
+
+TEST_F(FailureExamplesTestSuite, testStrCmpContainsFailure)
+{
+	AllureAPI::setTestCaseName("STRCMP contains failure");
+	std::string actual = "haystack";
+	EXPECT_NE(actual.find("needle"), std::string::npos);
+}
+
+TEST_F(FailureExamplesTestSuite, testLongsEqualFailure)
+{
+	AllureAPI::setTestCaseName("Longs comparison failure");
+	EXPECT_EQ(123, 321);
+}
+
+TEST_F(FailureExamplesTestSuite, testUnsignedLongsEqualFailure)
+{
+	AllureAPI::setTestCaseName("Unsigned longs failure");
+	unsigned long a = 1;
+	unsigned long b = 2;
+	EXPECT_EQ(a, b);
+}
+
+TEST_F(FailureExamplesTestSuite, testDoublesEqualFailure)
+{
+	AllureAPI::setTestCaseName("Double comparison failure");
+	EXPECT_NEAR(1.0, 1.123, 0.01);
+}
+
+TEST_F(FailureExamplesTestSuite, testBytesEqualFailure)
+{
+	AllureAPI::setTestCaseName("Byte comparison failure");
+	uint8_t expected = static_cast<uint8_t>('A');
+	uint8_t actual = static_cast<uint8_t>('B');
+	EXPECT_EQ(expected, actual);
+}
+
+TEST_F(FailureExamplesTestSuite, testMemcmpEqualFailure)
+{
+	AllureAPI::setTestCaseName("Memory comparison failure");
+	const char expected[] = "foo";
+	const char actual[] = "f0o";
+	EXPECT_EQ(0, memcmp(expected, actual, sizeof(expected) - 1));
+}
+
+TEST_F(FailureExamplesTestSuite, testPointersEqualFailure)
+{
+	AllureAPI::setTestCaseName("Pointer comparison failure");
+	int x = 0;
+	int y = 0;
+	int* px = &x;
+	int* py = &y;
+	EXPECT_EQ(px, py) << "Pointers should match";
+}
+
+void expectedFunction() {}
+void actualFunction() {}
+
+TEST_F(FailureExamplesTestSuite, testFunctionPointersEqualFailure)
+{
+	AllureAPI::setTestCaseName("Function pointer comparison failure");
+	EXPECT_EQ(&expectedFunction, &actualFunction);
+}
+
+TEST_F(FailureExamplesTestSuite, testBitsEqualFailure)
+{
+	AllureAPI::setTestCaseName("Bits comparison failure");
+	uint8_t expected = 0b11110000;
+	uint8_t actual = 0b11000011;
+	uint8_t mask = 0xFF;
+	EXPECT_EQ(expected & mask, actual & mask);
+}
+
+TEST_F(FailureExamplesTestSuite, testExplicitFail)
+{
+	AllureAPI::setTestCaseName("Explicit fail");
+	GTEST_FAIL() << "Forced failure";
 }
 
 

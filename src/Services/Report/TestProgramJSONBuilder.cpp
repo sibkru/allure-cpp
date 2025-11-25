@@ -30,6 +30,12 @@ namespace allure_cpp { namespace service {
 
 	void TestProgramJSONBuilder::buildJSONFiles(const model::TestProgram& testProgram) const
 	{
+		// NOTE: This method is kept for backwards compatibility but is no longer the recommended approach.
+		// For better memory management (especially with CppUTest's leak detection), use the new approach where:
+		// - TestCaseEndEventHandler writes test case JSON immediately after each test
+		// - TestSuiteEndEventHandler writes container JSON immediately after each suite
+		// - TestProgramEndEventHandler writes only metadata files
+
 		unsigned int nTestSuites = (unsigned int) testProgram.getTestSuitesCount();
 		for (unsigned int i = 0; i < nTestSuites; i++)
 		{
@@ -55,7 +61,21 @@ namespace allure_cpp { namespace service {
 		}
 
 		// Generate metadata files for Allure 2 compatibility
-		generateMetadataFiles(testProgram);
+		buildMetadataFiles(testProgram);
+	}
+
+	void TestProgramJSONBuilder::buildMetadataFiles(const model::TestProgram& testProgram) const
+	{
+		const std::string outputFolder = testProgram.getOutputFolder();
+
+		// Generate environment.properties
+		generateEnvironmentProperties(outputFolder, testProgram);
+
+		// Generate executor.json
+		generateExecutorJson(outputFolder, testProgram);
+
+		// Generate categories.json
+		generateCategoriesJson(outputFolder);
 	}
 
 	model::Container TestProgramJSONBuilder::createContainerFromTestSuite(const model::TestSuite& testSuite) const
@@ -79,21 +99,7 @@ namespace allure_cpp { namespace service {
 		return container;
 	}
 
-	void TestProgramJSONBuilder::generateMetadataFiles(const model::TestProgram& testProgram) const
-	{
-		const std::string outputFolder = testProgram.getOutputFolder();
-
-		// Generate environment.properties
-		generateEnvironmentProperties(outputFolder);
-
-		// Generate executor.json
-		generateExecutorJson(outputFolder);
-
-		// Generate categories.json
-		generateCategoriesJson(outputFolder);
-	}
-
-	void TestProgramJSONBuilder::generateEnvironmentProperties(const std::string& outputFolder) const
+	void TestProgramJSONBuilder::generateEnvironmentProperties(const std::string& outputFolder, const model::TestProgram& testProgram) const
 	{
 		std::string filepath = outputFolder + PATH_SEPARATOR + "environment.properties";
 		std::string content;
@@ -120,13 +126,13 @@ namespace allure_cpp { namespace service {
 			content += "Architecture=Unknown\n";
 		#endif
 
-		content += "Framework=GoogleTest\n";
+		content += "Framework=" + testProgram.getFrameworkName() + "\n";
 		content += "Language=C++\n";
 
 		m_fileService->saveFile(filepath, content);
 	}
 
-	void TestProgramJSONBuilder::generateExecutorJson(const std::string& outputFolder) const
+	void TestProgramJSONBuilder::generateExecutorJson(const std::string& outputFolder, const model::TestProgram& testProgram) const
 	{
 		std::string filepath = outputFolder + PATH_SEPARATOR + "executor.json";
 
@@ -136,7 +142,7 @@ namespace allure_cpp { namespace service {
 		auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
 
 		std::string content = "{\n"
-		                      "  \"name\": \"Local\",\n"
+		                      "  \"name\": \"" + testProgram.getFrameworkName() + "\",\n"
 		                      "  \"type\": \"local\",\n"
 		                      "  \"buildName\": \"Manual Run\",\n"
 		                      "  \"buildOrder\": " + std::to_string(millis) + "\n"

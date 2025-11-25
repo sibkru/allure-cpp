@@ -77,6 +77,13 @@ namespace allure_cpp { namespace model {
 		const std::vector<Attachment>& getAttachments() const;
 		void addAttachment(const Attachment&);
 
+		// Clear methods to free memory after persisting to JSON
+		void clearSteps();
+		void clearParameters();
+		void clearLabels();
+		void clearLinks();
+		void clearAttachments();
+
 		virtual TestCase& operator= (const TestCase&);
 		friend bool operator== (const TestCase& lhs, const TestCase& rhs);
 		friend bool operator!= (const TestCase& lhs, const TestCase& rhs);

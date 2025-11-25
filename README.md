@@ -2,11 +2,17 @@
 
 > **DISCLAIMER**: This is **NOT** an official Allure project. This is an independent library for generating Allure reports from C++ Tests. For official Allure framework implementations, please visit [https://github.com/allure-framework](https://github.com/allure-framework).
 
-A framework-agnostic C++ library for generating [Allure 2](https://docs.qameta.io/allure/) reports from C++ test frameworks.
+A framework-agnostic C++ library for generating [Allure 2](https://docs.qameta.io/allure/) C++ test reports.
 
-Currently supports [GoogleTest](https://github.com/google/googletest), with a generic interface designed for extending to other C++ testing frameworks.
+**Supported Test Frameworks:**
+- [GoogleTest](https://github.com/google/googletest)
+- [CppUTest](https://cpputest.github.io/)
+
+The library features a generic adapter interface that makes it easy to add support for additional C++ testing frameworks.
 
 ## Quick Start
+
+### GoogleTest
 
 Add to your `CMakeLists.txt`:
 
@@ -19,34 +25,62 @@ set(CMAKE_CXX_STANDARD 14)  # Minimum C++14 required
 # Fetch allure-cpp
 include(FetchContent)
 FetchContent_Declare(
-  GTestAllureUtilities
+  AllureCpp
   GIT_REPOSITORY https://github.com/sibkru/allure-cpp.git
   GIT_TAG        main
 )
-FetchContent_MakeAvailable(GTestAllureUtilities)
+# Enable GoogleTest support (default is OFF, must be opted in)
+set(ALLURE_ENABLE_GOOGLETEST ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(AllureCpp)
 
 # Your test executable
 add_executable(MyTests tests/MyTests.cpp)
-target_link_libraries(MyTests PRIVATE GTestAllureUtilities gtest gtest_main)
+target_link_libraries(MyTests PRIVATE AllureCpp gtest gtest_main)
+```
+
+### CppUTest
+
+Add to your `CMakeLists.txt`:
+
+```cmake
+cmake_minimum_required(VERSION 3.14)
+project(MyTestProject)
+
+set(CMAKE_CXX_STANDARD 14)  # Minimum C++14 required
+
+# Fetch allure-cpp
+include(FetchContent)
+FetchContent_Declare(
+  AllureCpp
+  GIT_REPOSITORY https://github.com/sibkru/allure-cpp.git
+  GIT_TAG        main
+)
+# Enable CppUTest support (adapters are OFF by default)
+set(ALLURE_ENABLE_CPPUTEST ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(AllureCpp)
+
+# Your test executable
+add_executable(MyTests tests/MyTests.cpp)
+target_link_libraries(MyTests PRIVATE AllureCpp CppUTest)
 ```
 
 ## Basic Usage
+
+### GoogleTest
 
 **Main file** (`main.cpp`):
 
 ```cpp
 #include <gtest/gtest.h>
-#include "GTestAllureUtilities/AllureAPI.h"
-
-using namespace allure_cpp;
+#include "Framework/Adapters/GoogleTest/AllureGTest.h"
 
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
-
-    // Initialize Allure reporting
-    AllureAPI::initializeGoogleTest();
-    AllureAPI::setOutputFolder("./allure-results");
+    
+    // Create a single helper object.
+    // Its constructor sets up Allure, and its destructor finalizes the report.
+    allure::AllureGTest allureHelper;
 
     return RUN_ALL_TESTS();
 }
@@ -56,48 +90,69 @@ int main(int argc, char* argv[])
 
 ```cpp
 #include <gtest/gtest.h>
-#include "GTestAllureUtilities/AllureAPI.h"
-
-using namespace allure_cpp;
+#include "allure/AllureAPI.h" // Include for advanced API usage
 
 class CalculatorTests : public ::testing::Test
 {
 protected:
+    // Per-test-suite set-up.
     static void SetUpTestSuite()
     {
-        AllureAPI::setTestSuiteName("Calculator Test Suite");
-        AllureAPI::setTestSuiteDescription("Tests for basic calculator operations");
+        allure::AllureAPI::setTestSuiteName("Calculator Test Suite");
+        allure::AllureAPI::setTestSuiteDescription("Tests for basic calculator operations");
     }
 };
 
 TEST_F(CalculatorTests, AdditionTest)
 {
-    AllureAPI::setTestCaseName("Verify addition of two numbers");
-    AllureAPI::addSeverity("critical");
-    AllureAPI::addFeature("Arithmetic Operations");
+    allure::AllureAPI::setTestCaseName("Verify addition of two numbers");
+    allure::AllureAPI::addSeverity("critical");
+    allure::AllureAPI::addFeature("Arithmetic Operations");
 
-    AllureAPI::addAction("Perform addition", []() {
+    allure::AllureAPI::step("Perform addition", []() {
         int result = 2 + 3;
         EXPECT_EQ(5, result);
     });
 }
+```
 
-TEST_F(CalculatorTests, MultiStepTest)
+### CppUTest
+
+**Main file** (`main.cpp`):
+
+```cpp
+#include <CppUTest/CommandLineTestRunner.h>
+#include "Framework/Adapters/CppUTest/AllureCppUTest.h"
+#include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"
+
+int main(int argc, const char* const* argv)
 {
-    AllureAPI::setTestCaseName("Complex calculation with multiple steps");
+    // Initializes Allure (output folder + framework name) and runs tests with
+    // the Allure-enabled runner. No custom output: uses CppUTest defaults.
+    allure_cpp::adapters::cpputest::AllureCppUTest allureHelper;
+    return allure_cpp::adapters::cpputest::RunAllureEnabledTests(argc, argv);
+}
+```
 
-    int value = 10;
+**Test file** (`tests/MyTests.cpp`):
 
-    AllureAPI::addAction("Initialize value", [&value]() {
-        EXPECT_EQ(10, value);
-    });
+```cpp
+#include <CppUTest/TestHarness.h>
+#include "allure/AllureAPI.h" // Include for advanced API usage
 
-    AllureAPI::addAction("Multiply by 2", [&value]() {
-        value *= 2;
-    });
+TEST_GROUP(CalculatorTests)
+{
+};
 
-    AllureAPI::addExpectedResult("Value should be 20", [value]() {
-        EXPECT_EQ(20, value);
+TEST(CalculatorTests, AdditionTest)
+{
+    allure::AllureAPI::setTestCaseName("Verify addition of two numbers");
+    allure::AllureAPI::addSeverity("critical");
+    allure::AllureAPI::addFeature("Arithmetic Operations");
+
+    allure::AllureAPI::step("Perform addition", []() {
+        int result = 2 + 3;
+        CHECK_EQUAL(5, result);
     });
 }
 ```

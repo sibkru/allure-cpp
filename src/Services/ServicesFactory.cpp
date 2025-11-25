@@ -9,8 +9,10 @@
 #include "Services/EventHandlers/TestStepStartEventHandler.h"
 #include "Services/EventHandlers/TestSuiteEndEventHandler.h"
 #include "Services/EventHandlers/TestSuiteStartEventHandler.h"
+#ifdef ALLURE_GOOGLETEST_ENABLED
 #include "Services/GoogleTest/GTestEventListener.h"
 #include "Services/GoogleTest/GTestStatusChecker.h"
+#endif
 #include "Services/Property/TestCasePropertySetter.h"
 #include "Services/Property/TestSuitePropertySetter.h"
 #include "Services/System/FileService.h"
@@ -31,6 +33,7 @@ namespace allure_cpp { namespace service {
 
 
 	// GTest services
+#ifdef ALLURE_GOOGLETEST_ENABLED
 	std::unique_ptr<::testing::TestEventListener> ServicesFactory::buildGTestEventListener() const
 	{
 		auto testProgramStartEventHandler = buildTestProgramStartEventHandler();
@@ -49,6 +52,7 @@ namespace allure_cpp { namespace service {
 	{
 		return std::make_unique<GTestStatusChecker>();
 	}
+#endif
 
 
 	// Lifecycle events handling services
@@ -86,13 +90,17 @@ namespace allure_cpp { namespace service {
 	std::unique_ptr<ITestCaseEndEventHandler> ServicesFactory::buildTestCaseEndEventHandler() const
 	{
 		auto timeService = buildTimeService();
-		return std::make_unique<TestCaseEndEventHandler>(m_testProgram, std::move(timeService));
+		auto testCaseJSONSerializer = buildTestCaseJSONSerializer();
+		auto fileService = buildFileService();
+		return std::make_unique<TestCaseEndEventHandler>(m_testProgram, std::move(timeService), std::move(testCaseJSONSerializer), std::move(fileService));
 	}
 
 	std::unique_ptr<ITestSuiteEndEventHandler> ServicesFactory::buildTestSuiteEndEventHandler() const
 	{
 		auto timeService = buildTimeService();
-		return std::make_unique<TestSuiteEndEventHandler>(m_testProgram, std::move(timeService));
+		auto containerJSONSerializer = buildContainerJSONSerializer();
+		auto fileService = buildFileService();
+		return std::make_unique<TestSuiteEndEventHandler>(m_testProgram, std::move(timeService), std::move(containerJSONSerializer), std::move(fileService));
 	}
 
 	std::unique_ptr<ITestProgramEndEventHandler> ServicesFactory::buildTestProgramEndEventHandler() const

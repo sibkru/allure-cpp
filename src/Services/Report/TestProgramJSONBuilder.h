@@ -26,12 +26,12 @@ namespace allure_cpp {
 		virtual ~TestProgramJSONBuilder() = default;
 
 		virtual void buildJSONFiles(const model::TestProgram&) const;
+		virtual void buildMetadataFiles(const model::TestProgram&) const;
 
 	private:
 		model::Container createContainerFromTestSuite(const model::TestSuite&) const;
-		void generateMetadataFiles(const model::TestProgram&) const;
-		void generateEnvironmentProperties(const std::string& outputFolder) const;
-		void generateExecutorJson(const std::string& outputFolder) const;
+		void generateEnvironmentProperties(const std::string& outputFolder, const model::TestProgram& testProgram) const;
+		void generateExecutorJson(const std::string& outputFolder, const model::TestProgram& testProgram) const;
 		void generateCategoriesJson(const std::string& outputFolder) const;
 
 	private:

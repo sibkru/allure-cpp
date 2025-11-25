@@ -8,12 +8,10 @@
 #include "Services/ServicesFactory.h"
 #include "Services/EventHandlers/ITestStepStartEventHandler.h"
 #include "Services/EventHandlers/ITestStepEndEventHandler.h"
-#include "Services/GoogleTest/IGTestStatusChecker.h"
 #include "Services/Property/ITestCasePropertySetter.h"
 #include "Services/Property/ITestSuitePropertySetter.h"
 #include "Services/System/IUUIDGeneratorService.h"
-#include "Framework/Adapters/GoogleTest/GTestAdapter.h"
-#include "Framework/Adapters/GoogleTest/GTestStatusProvider.h"
+#include "Model/Status.h"
 #include "Framework/ITestFrameworkAdapter.h"
 #include "Framework/ITestStatusProvider.h"
 
@@ -22,36 +20,32 @@
 
 
 namespace allure_cpp {
+	namespace {
+		// Fallback provider used when no framework adapter is registered.
+		class NullStatusProvider : public ITestStatusProvider
+		{
+		public:
+			bool isCurrentTestFailed() const override { return false; }
+			bool isCurrentTestSkipped() const override { return false; }
+		};
+
+		model::Status convertStatus(const ITestStatusProvider& provider)
+		{
+			if (provider.isCurrentTestSkipped())
+			{
+				return model::Status::SKIPPED;
+			}
+			if (provider.isCurrentTestFailed())
+			{
+				return model::Status::FAILED;
+			}
+			return model::Status::PASSED;
+		}
+	}
 
 	model::TestProgram AllureAPI::m_testProgram = model::TestProgram();
-	service::IServicesFactory* AllureAPI::m_servicesFactory = new service::ServicesFactory(m_testProgram);
-	std::unique_ptr<allure_cpp::ITestFrameworkAdapter> AllureAPI::m_frameworkAdapter = nullptr;
-
-	std::unique_ptr<::testing::TestEventListener> AllureAPI::buildListener()
-	{
-		return getServicesFactory()->buildGTestEventListener();
-	}
-
-	void AllureAPI::initializeGoogleTest()
-	{
-		auto servicesFactory = getServicesFactory();
-
-		// Create the GoogleTest adapter using the new Phase 2 classes
-		auto adapter = std::make_unique<allure_cpp::adapters::googletest::GTestAdapter>(
-			servicesFactory->buildTestProgramStartEventHandler().release(),
-			servicesFactory->buildTestProgramEndEventHandler().release(),
-			servicesFactory->buildTestSuiteStartEventHandler().release(),
-			servicesFactory->buildTestSuiteEndEventHandler().release(),
-			servicesFactory->buildTestCaseStartEventHandler().release(),
-			servicesFactory->buildTestCaseEndEventHandler().release()
-		);
-
-		// Initialize the adapter (registers with GoogleTest)
-		adapter->initialize();
-
-		// Store the adapter for later use (e.g., for status provider)
-		m_frameworkAdapter = std::move(adapter);
-	}
+	std::unique_ptr<service::IServicesFactory> AllureAPI::m_servicesFactory = std::make_unique<service::ServicesFactory>(m_testProgram);
+	std::shared_ptr<allure_cpp::ITestFrameworkAdapter> AllureAPI::m_frameworkAdapter = nullptr;
 
 	std::unique_ptr<allure_cpp::ITestStatusProvider> AllureAPI::getStatusProvider()
 	{
@@ -60,13 +54,25 @@ namespace allure_cpp {
 			return m_frameworkAdapter->createStatusProvider();
 		}
 
-		// Fallback: If using old API, create GoogleTest status provider directly
-		return std::make_unique<allure_cpp::adapters::googletest::GTestStatusProvider>();
+		// Fallback: no adapter registered, return a no-op provider
+		return std::make_unique<NullStatusProvider>();
+	}
+
+	void AllureAPI::setFrameworkAdapter(std::shared_ptr<allure_cpp::ITestFrameworkAdapter> adapter)
+	{
+		m_frameworkAdapter = std::move(adapter);
 	}
 
 	model::TestProgram& AllureAPI::getTestProgram()
 	{
 		return m_testProgram;
+	}
+
+	void AllureAPI::cleanup()
+	{
+		// Clear all test program data to prevent memory leak reports
+		// especially important for frameworks like CppUTest that check leaks after each test
+		m_testProgram.clearTestSuites();
 	}
 
 	void AllureAPI::setTestProgramName(const std::string& name)
@@ -82,6 +88,11 @@ namespace allure_cpp {
 	void AllureAPI::setTMSLinksPattern(const std::string& tmsLinkPattern)
 	{
 		m_testProgram.setTMSLinksPattern(tmsLinkPattern);
+	}
+
+	void AllureAPI::setFrameworkName(const std::string& name)
+	{
+		m_testProgram.setFrameworkName(name);
 	}
 
 	void AllureAPI::setFormat(model::Format format)
@@ -144,8 +155,8 @@ namespace allure_cpp {
 
 		stepFunction();
 
-		auto statusChecker = getServicesFactory()->buildGTestStatusChecker();
-		auto currentStatus = statusChecker->getCurrentTestStatus();
+		auto statusProvider = getStatusProvider();
+		auto currentStatus = convertStatus(*statusProvider);
 
 		auto stepEndEventHandler = getServicesFactory()->buildTestStepEndEventHandler();
 		stepEndEventHandler->handleTestStepEnd(currentStatus);
@@ -159,8 +170,8 @@ namespace allure_cpp {
 
 	void AllureAPI::endSubStep()
 	{
-		auto statusChecker = getServicesFactory()->buildGTestStatusChecker();
-		auto currentStatus = statusChecker->getCurrentTestStatus();
+		auto statusProvider = getStatusProvider();
+		auto currentStatus = convertStatus(*statusProvider);
 
 		auto stepEndEventHandler = getServicesFactory()->buildTestStepEndEventHandler();
 		stepEndEventHandler->handleTestStepEnd(currentStatus);
@@ -403,7 +414,7 @@ namespace allure_cpp {
 		}
 		else
 		{
-			return m_servicesFactory;
+			return m_servicesFactory.get();
 		}
 	}
 

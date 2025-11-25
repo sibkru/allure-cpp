@@ -19,8 +19,10 @@ namespace allure_cpp { namespace service {
 		virtual ~ServicesFactory() = default;
 
 		// GTest services
+#ifdef ALLURE_GOOGLETEST_ENABLED
 		std::unique_ptr<::testing::TestEventListener> buildGTestEventListener() const override;
 		std::unique_ptr<IGTestStatusChecker> buildGTestStatusChecker() const override;
+#endif
 
 		// Lifecycle events handling services
 		std::unique_ptr<ITestProgramStartEventHandler> buildTestProgramStartEventHandler() const override;

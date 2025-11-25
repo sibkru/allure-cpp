@@ -57,7 +57,7 @@ endif()
 add_library(${ALLURE_CPP} STATIC ${ALLURE_CORE_SRC} ${ALLURE_CORE_HDR})
 
 target_include_directories(${ALLURE_CPP} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # Link dependencies

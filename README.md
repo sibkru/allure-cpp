@@ -77,11 +77,7 @@ target_link_libraries(MyTests PRIVATE AllureCpp CppUTest)
 int main(int argc, char* argv[])
 {
     ::testing::InitGoogleTest(&argc, argv);
-    
-    // Create a single helper object.
-    // Its constructor sets up Allure, and its destructor finalizes the report.
-    allure::AllureGTest allureHelper;
-
+    allure_cpp::adapters::googletest::AllureGTest allureHelper;
     return RUN_ALL_TESTS();
 }
 ```
@@ -90,26 +86,25 @@ int main(int argc, char* argv[])
 
 ```cpp
 #include <gtest/gtest.h>
-#include "allure/AllureAPI.h" // Include for advanced API usage
+#include "AllureAPI.h"
 
 class CalculatorTests : public ::testing::Test
 {
 protected:
-    // Per-test-suite set-up.
     static void SetUpTestSuite()
     {
-        allure::AllureAPI::setTestSuiteName("Calculator Test Suite");
-        allure::AllureAPI::setTestSuiteDescription("Tests for basic calculator operations");
+        allure_cpp::AllureAPI::setTestSuiteName("Calculator Test Suite");
+        allure_cpp::AllureAPI::setTestSuiteDescription("Tests for basic calculator operations");
     }
 };
 
 TEST_F(CalculatorTests, AdditionTest)
 {
-    allure::AllureAPI::setTestCaseName("Verify addition of two numbers");
-    allure::AllureAPI::addSeverity("critical");
-    allure::AllureAPI::addFeature("Arithmetic Operations");
+    allure_cpp::AllureAPI::setTestCaseName("Verify addition of two numbers");
+    allure_cpp::AllureAPI::addSeverity("critical");
+    allure_cpp::AllureAPI::addFeature("Arithmetic Operations");
 
-    allure::AllureAPI::step("Perform addition", []() {
+    allure_cpp::AllureAPI::addAction("Perform addition", []() {
         int result = 2 + 3;
         EXPECT_EQ(5, result);
     });
@@ -138,7 +133,7 @@ int main(int argc, const char* const* argv)
 
 ```cpp
 #include <CppUTest/TestHarness.h>
-#include "allure/AllureAPI.h" // Include for advanced API usage
+#include "AllureAPI.h"
 
 TEST_GROUP(CalculatorTests)
 {
@@ -146,11 +141,11 @@ TEST_GROUP(CalculatorTests)
 
 TEST(CalculatorTests, AdditionTest)
 {
-    allure::AllureAPI::setTestCaseName("Verify addition of two numbers");
-    allure::AllureAPI::addSeverity("critical");
-    allure::AllureAPI::addFeature("Arithmetic Operations");
+    allure_cpp::AllureAPI::setTestCaseName("Verify addition of two numbers");
+    allure_cpp::AllureAPI::addSeverity("critical");
+    allure_cpp::AllureAPI::addFeature("Arithmetic Operations");
 
-    allure::AllureAPI::step("Perform addition", []() {
+    allure_cpp::AllureAPI::addAction("Perform addition", []() {
         int result = 2 + 3;
         CHECK_EQUAL(5, result);
     });

@@ -5,6 +5,8 @@ project(CppUTestAllureExample)
 # Create executable
 add_executable(${PROJECT_NAME}
     SampleTests.cpp
+    CalculatorTests.cpp
+    ../shared/Calculator.cpp
     main.cpp
 )
 

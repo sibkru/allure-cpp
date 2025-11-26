@@ -1,6 +1,7 @@
 # allure-cpp
 
 > **DISCLAIMER**: This is **NOT** an official Allure project. This is an independent library for generating Allure reports from C++ Tests. For official Allure framework implementations, please visit [https://github.com/allure-framework](https://github.com/allure-framework).
+> **Status:** This project is under active development; APIs and examples may evolve.
 
 A framework-agnostic C++ library for generating [Allure 2](https://docs.qameta.io/allure/) C++ test reports.
 

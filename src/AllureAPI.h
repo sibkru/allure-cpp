@@ -31,6 +31,8 @@ namespace allure_cpp {
 		static void setTMSLinksPattern(const std::string&);
 		static void setFrameworkName(const std::string&);
 		static void setFormat(model::Format format);
+		static void setExecutorBuildName(const std::string&);
+		static void setExecutorBuildOrder(const std::string&);
 
 		static void setTMSId(const std::string&);
 		static void setTestSuiteName(const std::string&);

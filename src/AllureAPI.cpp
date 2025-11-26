@@ -100,6 +100,16 @@ namespace allure_cpp {
 		m_testProgram.setFormat(format);
 	}
 
+	void AllureAPI::setExecutorBuildName(const std::string& buildName)
+	{
+		m_testProgram.setExecutorBuildName(buildName);
+	}
+
+	void AllureAPI::setExecutorBuildOrder(const std::string& buildOrder)
+	{
+		m_testProgram.setExecutorBuildOrder(buildOrder);
+	}
+
 	void AllureAPI::setTMSId(const std::string& value)
 	{
 		auto testSuitePropertySetter = getServicesFactory()->buildTestSuitePropertySetter();

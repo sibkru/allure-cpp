@@ -36,6 +36,9 @@ namespace allure_cpp { namespace service {
 
 		// Write JSON immediately after test completes
 		writeTestCaseJSON(testCase);
+
+		// Clear the test case cache since it's no longer running
+		m_testProgram.setRunningTestCase(nullptr);
 	}
 
 	void TestCaseEndEventHandler::handleTestCaseEnd(model::Status status,
@@ -61,6 +64,9 @@ namespace allure_cpp { namespace service {
 
 		// Write JSON immediately after test completes
 		writeTestCaseJSON(testCase);
+
+		// Clear the test case cache since it's no longer running
+		m_testProgram.setRunningTestCase(nullptr);
 	}
 
 	void TestCaseEndEventHandler::writeTestCaseJSON(const model::TestCase& testCase) const
@@ -73,31 +79,22 @@ namespace allure_cpp { namespace service {
 
 	model::TestCase& TestCaseEndEventHandler::getRunningTestCase() const
 	{
-		auto& testSuite = getRunningTestSuite();
-		for (model::TestCase& testCase : testSuite.getTestCases())
+		model::TestCase* testCase = m_testProgram.getRunningTestCase();
+		if (!testCase)
 		{
-			if (testCase.getStage() == model::Stage::RUNNING)
-			{
-				return testCase;
-			}
+			throw NoRunningTestCaseException();
 		}
-
-		throw NoRunningTestCaseException();
+		return *testCase;
 	}
 
 	model::TestSuite& TestCaseEndEventHandler::getRunningTestSuite() const
 	{
-		unsigned int nTestSuites = (unsigned int) m_testProgram.getTestSuitesCount();
-		for (unsigned int i = 0; i < nTestSuites; i++)
+		model::TestSuite* testSuite = m_testProgram.getRunningTestSuite();
+		if (!testSuite)
 		{
-			model::TestSuite& testSuite = m_testProgram.getTestSuite(i);
-			if (testSuite.getStage() == model::Stage::RUNNING)
-			{
-				return testSuite;
-			}
+			throw NoRunningTestSuiteException();
 		}
-
-		throw NoRunningTestSuiteException();
+		return *testSuite;
 	}
 
 }} // namespace allure_cpp::service

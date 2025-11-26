@@ -42,26 +42,52 @@ FetchContent_MakeAvailable(fmt)
 # GoogleTest - optional
 if(ALLURE_ENABLE_GOOGLETEST)
   message(STATUS "Allure-Cpp: GoogleTest adapter enabled")
-  FetchContent_Declare(
-    googletest
-    GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG v1.14.0
-  )
-  # For Windows: Prevent overriding the parent project's compiler/linker settings
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-  FetchContent_MakeAvailable(googletest)
+  if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    FetchContent_Declare(
+      googletest
+      GIT_REPOSITORY https://github.com/google/googletest.git
+      GIT_TAG v1.14.0
+    )
+    # For Windows: Prevent overriding the parent project's compiler/linker settings
+    set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googletest)
+  else()
+    find_package(GTest CONFIG REQUIRED)
+    if(TARGET GTest::gtest AND NOT TARGET gtest)
+      add_library(gtest ALIAS GTest::gtest)
+    endif()
+    if(TARGET GTest::gmock AND NOT TARGET gmock)
+      add_library(gmock ALIAS GTest::gmock)
+    endif()
+    if(TARGET GTest::gtest_main AND NOT TARGET gtest_main)
+      add_library(gtest_main ALIAS GTest::gtest_main)
+    endif()
+    if(TARGET GTest::gmock_main AND NOT TARGET gmock_main)
+      add_library(gmock_main ALIAS GTest::gmock_main)
+    endif()
+  endif()
 endif()
 
 # CppUTest - optional
 if(ALLURE_ENABLE_CPPUTEST)
   message(STATUS "Allure-Cpp: CppUTest adapter enabled")
-  FetchContent_Declare(
-    cpputest
-    GIT_REPOSITORY https://github.com/cpputest/cpputest.git
-    GIT_TAG v4.0
-  )
-  set(TESTS OFF CACHE BOOL "" FORCE)
-  FetchContent_MakeAvailable(cpputest)
+  if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    FetchContent_Declare(
+      cpputest
+      GIT_REPOSITORY https://github.com/cpputest/cpputest.git
+      GIT_TAG v4.0
+    )
+    set(TESTS OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(cpputest)
+  else()
+    find_package(CppUTest CONFIG REQUIRED)
+    if(TARGET CppUTest::CppUTest AND NOT TARGET CppUTest)
+      add_library(CppUTest ALIAS CppUTest::CppUTest)
+    endif()
+    if(TARGET CppUTest::CppUTestExt AND NOT TARGET CppUTestExt)
+      add_library(CppUTestExt ALIAS CppUTest::CppUTestExt)
+    endif()
+  endif()
 endif()
 
 # Adjust compilation flags
@@ -71,7 +97,6 @@ endif()
 
 # Configure include directories
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 # Add main library (always built)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -83,6 +108,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     if(ALLURE_ENABLE_GOOGLETEST)
         if(ALLURE_BUILD_UNIT_TESTS OR ALLURE_BUILD_INTEGRATION_TESTS)
+            include_directories(${CMAKE_CURRENT_SOURCE_DIR}/test)
             add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/TestUtilities)
         endif()
 

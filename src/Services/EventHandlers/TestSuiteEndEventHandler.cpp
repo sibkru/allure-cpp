@@ -38,6 +38,10 @@ namespace allure_cpp { namespace service {
 
 		// Write container JSON immediately after suite completes
 		writeContainerJSON(testSuite);
+
+		// Clear the cache since the test suite is no longer running
+		m_testProgram.setRunningTestSuite(nullptr);
+		m_testProgram.setRunningTestCase(nullptr);
 	}
 
 	void TestSuiteEndEventHandler::writeContainerJSON(const model::TestSuite& testSuite) const
@@ -63,17 +67,12 @@ namespace allure_cpp { namespace service {
 
 	model::TestSuite& TestSuiteEndEventHandler::getRunningTestSuite() const
 	{
-		unsigned int nTestSuites = (unsigned int) m_testProgram.getTestSuitesCount();
-		for (unsigned int i = 0; i < nTestSuites; i++)
+		model::TestSuite* testSuite = m_testProgram.getRunningTestSuite();
+		if (!testSuite)
 		{
-			model::TestSuite& testSuite = m_testProgram.getTestSuite(i);
-			if (testSuite.getStage() == model::Stage::RUNNING)
-			{
-				return testSuite;
-			}
+			throw NoRunningTestSuiteException();
 		}
-
-		throw NoRunningTestSuiteException();
+		return *testSuite;
 	}
 
 	void TestSuiteEndEventHandler::addTMSLink(model::TestSuite& testSuite) const

@@ -1,6 +1,8 @@
 # GoogleTest Allure example
 add_executable(GoogleTestAllureExample
 	SampleTests.cpp
+	CalculatorTests.cpp
+	../shared/Calculator.cpp
 	main.cpp
 )
 

@@ -2,7 +2,9 @@
 
 #include "ITestProgramJSONBuilder.h"
 
+#include <chrono>
 #include <memory>
+#include <string>
 
 
 namespace allure_cpp {
@@ -33,6 +35,19 @@ namespace allure_cpp {
 		void generateEnvironmentProperties(const std::string& outputFolder, const model::TestProgram& testProgram) const;
 		void generateExecutorJson(const std::string& outputFolder, const model::TestProgram& testProgram) const;
 		void generateCategoriesJson(const std::string& outputFolder) const;
+		std::string resolveBuildOrder(const model::TestProgram& testProgram, long long currentMillis, const std::string& outputFolder) const;
+		std::string resolveBuildName(const model::TestProgram& testProgram, const std::chrono::system_clock::time_point& now) const;
+		std::string resolveExecutorName(const model::TestProgram& testProgram) const;
+		std::string formatTimestamp(const std::chrono::system_clock::time_point& now) const;
+		std::string buildCiName() const;
+		std::string escapeJsonString(const std::string& value) const;
+		bool shouldPreserveExistingExecutor(const std::string& filepath) const;
+		bool fileExists(const std::string& filepath) const;
+		std::string getEnvVar(const std::string& name) const;
+		bool isTruthy(const std::string& value) const;
+		bool isNumeric(const std::string& value) const;
+		long long nextBuildOrderFromHistory(const std::string& outputFolder) const;
+		std::string historyFilepath(const std::string& outputFolder) const;
 
 	private:
 		std::unique_ptr<ITestCaseJSONSerializer> m_testCaseJSONSerializer;

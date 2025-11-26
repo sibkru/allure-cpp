@@ -59,6 +59,9 @@ namespace allure_cpp { namespace service {
 		testSuite.setStatus(model::Status::UNKNOWN);
 
 		m_testProgram.addTestSuite(testSuite);
+
+		// Update cache pointer to the newly added test suite
+		m_testProgram.setRunningTestSuite(&m_testProgram.getTestSuite(m_testProgram.getTestSuitesCount() - 1));
 	}
 
 }} // namespace allure_cpp::service

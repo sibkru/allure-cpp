@@ -7,6 +7,7 @@
 #include <thread>
 #include <vector>
 #include <strings.h>
+#include "../shared/Calculator.h"
 
 using namespace allure_cpp;
 
@@ -24,7 +25,7 @@ public:
 	{
 		AllureAPI::setTestSuiteName("Basic Test Suite");
 		AllureAPI::setTestSuiteDescription("A simple test suite to verify API compatibility");
-		AllureAPI::setTestSuiteEpic("Phase 3 Validation");
+		AllureAPI::setTestSuiteEpic("Core Functionality");
 		AllureAPI::setTestSuiteSeverity("critical");
 		AllureAPI::setTMSId("API-COMPAT-001");
 	}
@@ -33,6 +34,8 @@ public:
 TEST_F(BasicTestSuite, testSimplePass)
 {
 	AllureAPI::setTestCaseName("Simple passing test");
+	AllureAPI::addFeature("Basic Operations");
+	AllureAPI::addStory("User can execute simple tests");
 	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	EXPECT_TRUE(true);
 	EXPECT_EQ(1, 1);
@@ -41,6 +44,8 @@ TEST_F(BasicTestSuite, testSimplePass)
 TEST_F(BasicTestSuite, testWithSteps)
 {
 	AllureAPI::setTestCaseName("Test with multiple steps");
+	AllureAPI::addFeature("Step-by-Step Execution");
+	AllureAPI::addStory("User can track test execution with detailed steps");
 
 	int result = 0;
 
@@ -92,7 +97,8 @@ TEST_P(ParametricTestSuite, testWithParameter)
 	int param = GetParam();
 	AllureAPI::setTestCaseName("Test with parameter: " + std::to_string(param));
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(30));
+	// Keep a tiny pause to demonstrate timing without slowing the suite
+	std::this_thread::sleep_for(std::chrono::milliseconds(5));
 	EXPECT_GE(param, 0);
 	EXPECT_LT(param, 100);
 }
@@ -111,7 +117,7 @@ public:
 	{
 		AllureAPI::setTestSuiteName("Complex Test Suite");
 		AllureAPI::setTestSuiteDescription("Complex scenarios with nested steps");
-		AllureAPI::setTestSuiteEpic("Phase 3 Validation");
+		AllureAPI::setTestSuiteEpic("Advanced Features");
 		AllureAPI::setTestSuiteSeverity("high");
 		AllureAPI::setTestSuiteLabel("feature", "api-compatibility");
 		AllureAPI::setTestSuiteLabel("component", "allure-reporting");
@@ -121,6 +127,8 @@ public:
 TEST_F(ComplexTestSuite, testNestedSteps)
 {
 	AllureAPI::setTestCaseName("Test with nested operations");
+	AllureAPI::addFeature("Data Structures");
+	AllureAPI::addStory("User can manipulate collections with validation");
 
 	std::vector<int> numbers;
 
@@ -154,6 +162,8 @@ TEST_F(ComplexTestSuite, testNestedSteps)
 TEST_F(ComplexTestSuite, testMultipleAssertions)
 {
 	AllureAPI::setTestCaseName("Test with multiple assertions");
+	AllureAPI::addFeature("String Operations");
+	AllureAPI::addStory("User can validate string properties");
 
 	std::string text = "Hello, Allure!";
 

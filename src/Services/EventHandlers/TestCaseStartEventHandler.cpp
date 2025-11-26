@@ -96,6 +96,10 @@ namespace allure_cpp { namespace service {
 		addCommonLabels(testCase, testSuite.getName());
 
 		testSuite.addTestCase(testCase);
+
+		// Update cache pointer to the newly added test case
+		auto& testCases = testSuite.getTestCases();
+		m_testProgram.setRunningTestCase(&testCases[testCases.size() - 1]);
 	}
 
 	void TestCaseStartEventHandler::handleTestCaseStart(const ITestMetadata& metadata) const
@@ -140,6 +144,10 @@ namespace allure_cpp { namespace service {
 		addCommonLabels(testCase, metadata.getSuiteName());
 
 		testSuite.addTestCase(testCase);
+
+		// Update cache pointer to the newly added test case
+		auto& testCases = testSuite.getTestCases();
+		m_testProgram.setRunningTestCase(&testCases[testCases.size() - 1]);
 	}
 
 	void TestCaseStartEventHandler::addCommonLabels(model::TestCase& testCase, const std::string& suiteName) const
@@ -184,17 +192,12 @@ namespace allure_cpp { namespace service {
 
 	model::TestSuite& TestCaseStartEventHandler::getRunningTestSuite() const
 	{
-		unsigned int nTestSuites = (unsigned int) m_testProgram.getTestSuitesCount();
-		for (unsigned int i = 0; i < nTestSuites; i++)
+		model::TestSuite* testSuite = m_testProgram.getRunningTestSuite();
+		if (!testSuite)
 		{
-			model::TestSuite& testSuite = m_testProgram.getTestSuite(i);
-			if (testSuite.getStage() == model::Stage::RUNNING)
-			{
-				return testSuite;
-			}
+			throw NoRunningTestSuiteException();
 		}
-
-		throw NoRunningTestSuiteException();
+		return *testSuite;
 	}
 
 }} // namespace allure_cpp::service

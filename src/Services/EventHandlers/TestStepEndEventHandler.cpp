@@ -37,31 +37,22 @@ namespace allure_cpp { namespace service {
 
 	model::TestCase& TestStepEndEventHandler::getRunningTestCase() const
 	{
-		auto& testSuite = getRunningTestSuite();
-		for (model::TestCase& testCase : testSuite.getTestCases())
+		model::TestCase* testCase = m_testProgram.getRunningTestCase();
+		if (!testCase)
 		{
-			if (testCase.getStage() == model::Stage::RUNNING)
-			{
-				return testCase;
-			}
+			throw NoRunningTestCaseException();
 		}
-
-		throw NoRunningTestCaseException();
+		return *testCase;
 	}
 
 	model::TestSuite& TestStepEndEventHandler::getRunningTestSuite() const
 	{
-		unsigned int nTestSuites = (unsigned int) m_testProgram.getTestSuitesCount();
-		for (unsigned int i = 0; i < nTestSuites; i++)
+		model::TestSuite* testSuite = m_testProgram.getRunningTestSuite();
+		if (!testSuite)
 		{
-			model::TestSuite& testSuite = m_testProgram.getTestSuite(i);
-			if (testSuite.getStage() == model::Stage::RUNNING)
-			{
-				return testSuite;
-			}
+			throw NoRunningTestSuiteException();
 		}
-
-		throw NoRunningTestSuiteException();
+		return *testSuite;
 	}
 
 }} // namespace allure_cpp::service

@@ -4,7 +4,8 @@
 #include <thread>
 #include <chrono>
 
-#include "src/AllureAPI.h"
+#include "AllureAPI.h"
+#include "../shared/Calculator.h"
 #include "Framework/Adapters/CppUTest/AllureCppUTest.h"
 #include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"
 #include <CppUTest/CommandLineTestRunner.h>
@@ -37,6 +38,8 @@ TEST(BasicTestSuite, testSimplePass)
 TEST(BasicTestSuite, testWithSteps)
 {
 	allure_cpp::AllureAPI::setTestCaseName("Test with multiple steps");
+	allure_cpp::AllureAPI::addFeature("Step-by-Step Execution");
+	allure_cpp::AllureAPI::addStory("User can track test execution with detailed steps");
 
 	int result = 0;
 
@@ -92,7 +95,8 @@ TEST(ParametricTestSuite, testWithParameter)
     {
         allure_cpp::AllureAPI::setTestCaseName("Test with parameter: " + std::to_string(param));
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        // Keep a tiny pause to demonstrate timing without slowing the suite
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
         CHECK_TRUE(param >= 0);
         CHECK_TRUE(param < 100);
     }
@@ -118,6 +122,8 @@ TEST_GROUP(ComplexTestSuite)
 TEST(ComplexTestSuite, testNestedSteps)
 {
 	allure_cpp::AllureAPI::setTestCaseName("Test with nested operations");
+	allure_cpp::AllureAPI::addFeature("Data Structures");
+	allure_cpp::AllureAPI::addStory("User can manipulate collections with validation");
 
 	std::vector<int> numbers;
 
@@ -151,6 +157,8 @@ TEST(ComplexTestSuite, testNestedSteps)
 TEST(ComplexTestSuite, testMultipleAssertions)
 {
 	allure_cpp::AllureAPI::setTestCaseName("Test with multiple assertions");
+	allure_cpp::AllureAPI::addFeature("String Operations");
+	allure_cpp::AllureAPI::addStory("User can validate string properties");
 
 	std::string text = "Hello, Allure!";
 

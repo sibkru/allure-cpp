@@ -7,8 +7,12 @@ namespace allure_cpp { namespace model {
 		:m_name("")
 		,m_outputFolder("allure-results")
 		,m_tmsLinksPattern("http://{}")
+		,m_executorBuildOrder("")
+		,m_executorBuildName("")
 		,m_frameworkName("unknown")
 		,m_format(Format::DEFAULT)
+		,m_runningTestSuite(nullptr)
+		,m_runningTestCase(nullptr)
 	{
 	}
 
@@ -16,9 +20,13 @@ namespace allure_cpp { namespace model {
 		:m_name(other.m_name)
 		,m_outputFolder(other.m_outputFolder)
 		,m_tmsLinksPattern(other.m_tmsLinksPattern)
+		,m_executorBuildOrder(other.m_executorBuildOrder)
+		,m_executorBuildName(other.m_executorBuildName)
 		,m_frameworkName(other.m_frameworkName)
 		,m_format(other.m_format)
 		,m_testSuites(other.m_testSuites)
+		,m_runningTestSuite(nullptr)
+		,m_runningTestCase(nullptr)
 	{
 	}
 
@@ -50,6 +58,26 @@ namespace allure_cpp { namespace model {
 	void TestProgram::setTMSLinksPattern(const std::string& tmsLinksPattern)
 	{
 		m_tmsLinksPattern = tmsLinksPattern;
+	}
+
+	std::string TestProgram::getExecutorBuildOrder() const
+	{
+		return m_executorBuildOrder;
+	}
+
+	void TestProgram::setExecutorBuildOrder(const std::string& buildOrder)
+	{
+		m_executorBuildOrder = buildOrder;
+	}
+
+	std::string TestProgram::getExecutorBuildName() const
+	{
+		return m_executorBuildName;
+	}
+
+	void TestProgram::setExecutorBuildName(const std::string& buildName)
+	{
+		m_executorBuildName = buildName;
 	}
 
 	std::string TestProgram::getFrameworkName() const
@@ -99,64 +127,32 @@ namespace allure_cpp { namespace model {
 
 	TestSuite* TestProgram::getRunningTestSuite()
 	{
-		for (auto& testSuite : m_testSuites)
-		{
-			if (testSuite.getStage() == Stage::RUNNING)
-			{
-				return &testSuite;
-			}
-		}
-		return nullptr;
+		return m_runningTestSuite;
 	}
 
 	const TestSuite* TestProgram::getRunningTestSuite() const
 	{
-		for (const auto& testSuite : m_testSuites)
-		{
-			if (testSuite.getStage() == Stage::RUNNING)
-			{
-				return &testSuite;
-			}
-		}
-		return nullptr;
+		return m_runningTestSuite;
 	}
 
 	TestCase* TestProgram::getRunningTestCase()
 	{
-		TestSuite* runningSuite = getRunningTestSuite();
-		if (!runningSuite)
-		{
-			return nullptr;
-		}
-
-		auto& testCases = runningSuite->getTestCases();
-		for (auto& testCase : testCases)
-		{
-			if (testCase.getStage() == Stage::RUNNING)
-			{
-				return &testCase;
-			}
-		}
-		return nullptr;
+		return m_runningTestCase;
 	}
 
 	const TestCase* TestProgram::getRunningTestCase() const
 	{
-		const TestSuite* runningSuite = getRunningTestSuite();
-		if (!runningSuite)
-		{
-			return nullptr;
-		}
+		return m_runningTestCase;
+	}
 
-		const auto& testCases = runningSuite->getTestCases();
-		for (const auto& testCase : testCases)
-		{
-			if (testCase.getStage() == Stage::RUNNING)
-			{
-				return &testCase;
-			}
-		}
-		return nullptr;
+	void TestProgram::setRunningTestSuite(TestSuite* testSuite)
+	{
+		m_runningTestSuite = testSuite;
+	}
+
+	void TestProgram::setRunningTestCase(TestCase* testCase)
+	{
+		m_runningTestCase = testCase;
 	}
 
 	TestProgram& TestProgram::operator= (const TestProgram& other)
@@ -164,6 +160,8 @@ namespace allure_cpp { namespace model {
 		m_name = other.m_name;
 		m_outputFolder = other.m_outputFolder;
 		m_tmsLinksPattern = other.m_tmsLinksPattern;
+		m_executorBuildOrder = other.m_executorBuildOrder;
+		m_executorBuildName = other.m_executorBuildName;
 		m_frameworkName = other.m_frameworkName;
 		m_format = other.m_format;
 		m_testSuites = other.m_testSuites;
@@ -175,6 +173,8 @@ namespace allure_cpp { namespace model {
 		return (lhs.m_name == rhs.m_name) &&
 			   (lhs.m_outputFolder == rhs.m_outputFolder) &&
 			   (lhs.m_tmsLinksPattern == rhs.m_tmsLinksPattern) &&
+			   (lhs.m_executorBuildOrder == rhs.m_executorBuildOrder) &&
+			   (lhs.m_executorBuildName == rhs.m_executorBuildName) &&
 			   (lhs.m_frameworkName == rhs.m_frameworkName) &&
 			   (lhs.m_testSuites == rhs.m_testSuites) &&
 			   (lhs.m_format == rhs.m_format);

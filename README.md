@@ -37,6 +37,8 @@ FetchContent_MakeAvailable(AllureCpp)
 add_executable(MyTests tests/MyTests.cpp)
 target_link_libraries(MyTests PRIVATE AllureCpp gtest gtest_main)
 ```
+Bring your own GoogleTest/CppUTest targets; allure-cpp links against the ones
+you provide and only fetches them when building this repo standalone.
 
 ### CppUTest
 

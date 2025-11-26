@@ -5,7 +5,7 @@
 #include <thread>
 
 
-using namespace allure_cpp;
+using namespace allure;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 

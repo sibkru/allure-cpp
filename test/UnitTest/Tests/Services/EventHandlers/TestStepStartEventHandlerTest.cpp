@@ -8,8 +8,8 @@
 
 
 using namespace testing;
-using namespace allure_cpp;
-using namespace allure_cpp::test_utility;
+using namespace allure;
+using namespace allure::test_utility;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 
@@ -38,6 +38,8 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 			m_testProgram.addTestSuite(runningTestSuite);
 
 			m_runningTestCase = &(m_testProgram.getTestSuite(1).getTestCases()[1]);
+			m_testProgram.setRunningTestSuite(&m_testProgram.getTestSuite(1));
+			m_testProgram.setRunningTestCase(m_runningTestCase);
 		}
 
 		model::TestCase buildTestCase(const std::string& name, model::Stage stage)
@@ -106,13 +108,16 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	TEST_F(TestStepStartEventHandlerTest, testHandleTestStepStartThrowsExceptionWhenNoRunningTestSuite)
 	{
 		m_testProgram.clearTestSuites();
+		m_testProgram.setRunningTestSuite(nullptr);
+		m_testProgram.setRunningTestCase(nullptr);
 		ASSERT_THROW(m_service->handleTestStepStart("StartedStep", true),
-					 service::TestStepStartEventHandler::NoRunningTestSuiteException);
+					 service::TestStepStartEventHandler::NoRunningTestCaseException);
 	}
 
 	TEST_F(TestStepStartEventHandlerTest, testHandleTestStepStartThrowsExceptionWhenNoRunningTestCase)
 	{
 		m_testProgram.getTestSuite(1).clearTestCases();
+		m_testProgram.setRunningTestCase(nullptr);
 		ASSERT_THROW(m_service->handleTestStepStart("StartedStep", true),
 			service::TestStepStartEventHandler::NoRunningTestCaseException);
 	}

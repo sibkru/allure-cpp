@@ -15,7 +15,7 @@
 #endif
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TestSuiteEndEventHandler::TestSuiteEndEventHandler(model::TestProgram& testProgram,
 													   std::unique_ptr<ITimeService> timeService,
@@ -88,4 +88,4 @@ namespace allure_cpp { namespace service {
 		testSuite.addLink(tmsLink);
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

@@ -3,7 +3,7 @@
 #include "Step.h"
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	class Action : public Step
 	{
@@ -17,4 +17,4 @@ namespace allure_cpp { namespace model {
 
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

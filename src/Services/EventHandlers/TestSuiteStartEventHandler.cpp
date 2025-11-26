@@ -10,7 +10,7 @@
 #include <iomanip>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	namespace {
 		// Simple hash function for generating historyId
@@ -64,4 +64,4 @@ namespace allure_cpp { namespace service {
 		m_testProgram.setRunningTestSuite(&m_testProgram.getTestSuite(m_testProgram.getTestSuitesCount() - 1));
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

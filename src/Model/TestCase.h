@@ -13,7 +13,7 @@
 #include <vector>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	class TestCase
 	{
@@ -113,4 +113,4 @@ namespace allure_cpp { namespace model {
 		std::vector<Attachment> m_attachments;
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	class Link
 	{
@@ -30,4 +30,4 @@ namespace allure_cpp { namespace model {
 		std::string m_type;
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

@@ -4,9 +4,9 @@
 
 using namespace testing;
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	StubEventListener::StubEventListener(allure_cpp::service::IServicesFactory& servicesFactory)
+	StubEventListener::StubEventListener(allure::service::IServicesFactory& servicesFactory)
 		:m_servicesFactory(servicesFactory)
 	{
 		m_testProgramStartEventHandler = m_servicesFactory.buildTestProgramStartEventHandler();
@@ -32,12 +32,12 @@ namespace allure_cpp { namespace test_utility {
 		m_testCaseStartEventHandler->handleTestCaseStart(testCaseName);
 	}
 
-	void StubEventListener::onTestEnd(allure_cpp::model::Status status) const
+	void StubEventListener::onTestEnd(allure::model::Status status) const
 	{
 		m_testCaseEndEventHandler->handleTestCaseEnd(status);
 	}
 
-	void StubEventListener::onTestSuiteEnd(allure_cpp::model::Status status) const
+	void StubEventListener::onTestSuiteEnd(allure::model::Status status) const
 	{
 		m_testSuiteEndEventHandler->handleTestSuiteEnd(status);
 	}
@@ -47,5 +47,5 @@ namespace allure_cpp { namespace test_utility {
 		m_testProgramEndEventHandler->handleTestProgramEnd();
 	}
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

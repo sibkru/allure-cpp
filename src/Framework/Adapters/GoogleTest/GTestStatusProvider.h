@@ -4,7 +4,7 @@
 #include <gtest/gtest.h>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace googletest {
 
@@ -29,7 +29,7 @@ namespace googletest {
 	 * }
 	 * @endcode
 	 */
-	class GTestStatusProvider : public allure_cpp::ITestStatusProvider
+	class GTestStatusProvider : public allure::ITestStatusProvider
 	{
 	public:
 		/**
@@ -46,4 +46,4 @@ namespace googletest {
 		bool isCurrentTestSkipped() const override;
 	};
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure::adapters::googletest

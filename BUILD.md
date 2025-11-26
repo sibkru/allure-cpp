@@ -3,7 +3,7 @@
 ## Prerequisites
   - [Git](https://git-scm.com/)
   - [CMake](https://cmake.org/) (version 3.14 or higher)
-  - A C++14 compiler or newer (GCC, Clang, MSVC)
+  - A C++17 compiler or newer (GCC, Clang, MSVC)
   - Internet connection (for downloading dependencies)
 
 ## Build steps
@@ -24,16 +24,11 @@ cmake --build .
 
 ### Running Tests
 
-After building, you can run the tests:
+After building, run the test executables from the build directory:
 
 ```bash
-# From the build directory
-ctest
-
-# Or run individual test executables
 ./bin/UnitTest
 ./bin/IntegrationTest
-./bin/SampleTestProject
 ```
 
 ### Build Options
@@ -51,28 +46,15 @@ cmake -DALLURE_ENABLE_CPPUTEST=ON -DALLURE_ENABLE_GOOGLETEST=OFF ..
 cmake -DALLURE_ENABLE_GOOGLETEST=ON -DALLURE_ENABLE_CPPUTEST=ON ..
 ```
 
-#### Build Type
-
-```bash
-# Debug build
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-
-# Release build
-cmake -DCMAKE_BUILD_TYPE=Release ..
-
-# Using a specific generator (e.g., Ninja)
-cmake -G Ninja ..
-```
-
 ### Running Examples
 
-Examples are only built if you enable the corresponding adapter.
+Examples are built only if you enable the corresponding adapter and set `-DALLURE_BUILD_EXAMPLES=ON`.
 
 ```bash
-# GoogleTest example (requires ALLURE_ENABLE_GOOGLETEST=ON)
+# GoogleTest example (requires ALLURE_ENABLE_GOOGLETEST=ON and ALLURE_BUILD_EXAMPLES=ON)
 ./bin/GoogleTestAllureExample
 
-# CppUTest example (requires ALLURE_ENABLE_CPPUTEST=ON)
+# CppUTest example (requires ALLURE_ENABLE_CPPUTEST=ON and ALLURE_BUILD_EXAMPLES=ON)
 ./bin/CppUTestAllureExample
 ```
 
@@ -82,9 +64,8 @@ Dependencies are automatically fetched based on enabled frameworks:
 
 **Core (always required):**
 - **nlohmann/json** (v3.11.3) - JSON serialization
+- **fmt** (v10.2.1) - string formatting
 
 **Optional (controlled by CMake options):**
 - **GoogleTest** (v1.14.0) - when `ALLURE_ENABLE_GOOGLETEST=ON`
 - **CppUTest** (v4.0) - when `ALLURE_ENABLE_CPPUTEST=ON`
-
-No manual installation or package managers (Conan, vcpkg, etc.) required!

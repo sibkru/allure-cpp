@@ -2,9 +2,9 @@
 #include "MockTestCaseJSONSerializer.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
 	MockTestCaseJSONSerializer::MockTestCaseJSONSerializer() = default;
 	MockTestCaseJSONSerializer::~MockTestCaseJSONSerializer() = default;
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility

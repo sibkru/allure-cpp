@@ -3,11 +3,11 @@
 #include "IServicesFactory.h"
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 	class TestProgram;
-}} // namespace allure_cpp::model
+}} // namespace allure::model
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITestCaseJSONSerializer;
 	class IContainerJSONSerializer;
@@ -58,4 +58,4 @@ namespace allure_cpp { namespace service {
 		static std::unique_ptr<IServicesFactory> m_instance;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

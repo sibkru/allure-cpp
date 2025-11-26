@@ -7,7 +7,7 @@ namespace testing { class TestEventListener; }
 #endif
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class IFileService;
 	class IGTestStatusChecker;
@@ -61,4 +61,4 @@ namespace allure_cpp { namespace service {
 		virtual std::unique_ptr<ITimeService> buildTimeService() const = 0;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

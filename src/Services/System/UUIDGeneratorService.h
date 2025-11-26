@@ -3,7 +3,7 @@
 #include "IUUIDGeneratorService.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class UUIDGeneratorService : public IUUIDGeneratorService
 	{
@@ -18,4 +18,4 @@ namespace allure_cpp { namespace service {
 		unsigned char generateRandomChar() const;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

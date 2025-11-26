@@ -1,27 +1,31 @@
 #include "../shared/Calculator.h"
-#include "AllureAPI.h"
+#include "allure-cpp.h"
 #include <CppUTest/TestHarness.h>
 
+using namespace allure;
+
 /**
- * Tests that use the Calculator class - some will fail initially and pass after BUGS_FIXED is defined
+ * Tests that use the Calculator class - demonstrates modern API usage
  */
 
 TEST_GROUP(CalculatorTestSuite)
 {
     void setup() override
     {
-        allure_cpp::AllureAPI::setTestSuiteName("Calculator Test Suite");
-        allure_cpp::AllureAPI::setTestSuiteDescription("Tests for calculator functionality - demonstrates trend history");
-        allure_cpp::AllureAPI::setTestSuiteEpic("Calculator Module");
-        allure_cpp::AllureAPI::setTestSuiteSeverity("critical");
+        suite()
+			.name("Calculator Test Suite")
+			.description("Tests for calculator functionality - demonstrates trend history")
+			.epic("Calculator Module")
+			.severity("critical");
     }
 };
 
 TEST(CalculatorTestSuite, testAddition)
 {
-    allure_cpp::AllureAPI::setTestCaseName("Test addition operation");
-    allure_cpp::AllureAPI::addFeature("Arithmetic");
-    allure_cpp::AllureAPI::addStory("User can add two numbers");
+    test()
+		.name("Test addition operation")
+		.feature("Arithmetic")
+		.story("User can add two numbers");
 
     int result = Calculator::add(2, 3);
     CHECK_EQUAL(5, result);
@@ -29,9 +33,10 @@ TEST(CalculatorTestSuite, testAddition)
 
 TEST(CalculatorTestSuite, testSubtraction)
 {
-    allure_cpp::AllureAPI::setTestCaseName("Test subtraction operation");
-    allure_cpp::AllureAPI::addFeature("Arithmetic");
-    allure_cpp::AllureAPI::addStory("User can subtract two numbers");
+    test()
+		.name("Test subtraction operation")
+		.feature("Arithmetic")
+		.story("User can subtract two numbers");
 
     int result = Calculator::subtract(10, 4);
     CHECK_EQUAL(6, result);
@@ -39,9 +44,10 @@ TEST(CalculatorTestSuite, testSubtraction)
 
 TEST(CalculatorTestSuite, testMultiplication)
 {
-    allure_cpp::AllureAPI::setTestCaseName("Test multiplication operation");
-    allure_cpp::AllureAPI::addFeature("Arithmetic");
-    allure_cpp::AllureAPI::addStory("User can multiply two numbers");
+    test()
+		.name("Test multiplication operation")
+		.feature("Arithmetic")
+		.story("User can multiply two numbers");
 
     int result = Calculator::multiply(5, 0);
     CHECK_EQUAL(0, result);
@@ -49,9 +55,10 @@ TEST(CalculatorTestSuite, testMultiplication)
 
 TEST(CalculatorTestSuite, testDivision)
 {
-    allure_cpp::AllureAPI::setTestCaseName("Test division operation");
-    allure_cpp::AllureAPI::addFeature("Arithmetic");
-    allure_cpp::AllureAPI::addStory("User can divide two numbers");
+    test()
+		.name("Test division operation")
+		.feature("Arithmetic")
+		.story("User can divide two numbers");
 
     int result = Calculator::divide(10, 2);
     CHECK_EQUAL(5, result);
@@ -59,9 +66,10 @@ TEST(CalculatorTestSuite, testDivision)
 
 TEST(CalculatorTestSuite, testPrimeCheck)
 {
-    allure_cpp::AllureAPI::setTestCaseName("Test prime number detection");
-    allure_cpp::AllureAPI::addFeature("Number Theory");
-    allure_cpp::AllureAPI::addStory("User can check if a number is prime");
+    test()
+		.name("Test prime number detection")
+		.feature("Number Theory")
+		.story("User can check if a number is prime");
 
     CHECK_TRUE(Calculator::isPrime(7));
     CHECK_FALSE(Calculator::isPrime(4));
@@ -70,9 +78,10 @@ TEST(CalculatorTestSuite, testPrimeCheck)
 
 TEST(CalculatorTestSuite, testFibonacci)
 {
-    allure_cpp::AllureAPI::setTestCaseName("Test Fibonacci sequence");
-    allure_cpp::AllureAPI::addFeature("Number Theory");
-    allure_cpp::AllureAPI::addStory("User can calculate Fibonacci numbers");
+    test()
+		.name("Test Fibonacci sequence")
+		.feature("Number Theory")
+		.story("User can calculate Fibonacci numbers");
 
     CHECK_EQUAL(0, Calculator::fibonacci(0));
     CHECK_EQUAL(1, Calculator::fibonacci(1));

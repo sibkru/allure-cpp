@@ -3,7 +3,7 @@
 #include "Model/TestProgram.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TestProgramStartEventHandler::TestProgramStartEventHandler(model::TestProgram& testProgram)
 		:m_testProgram(testProgram)
@@ -17,4 +17,4 @@ namespace allure_cpp { namespace service {
 		m_testProgram.clearTestSuites();
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

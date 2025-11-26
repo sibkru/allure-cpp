@@ -3,9 +3,9 @@
 #include "Services/EventHandlers/ITestSuiteStartEventHandler.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockTestSuiteStartEventHandler : public allure_cpp::service::ITestSuiteStartEventHandler
+	class MockTestSuiteStartEventHandler : public allure::service::ITestSuiteStartEventHandler
 	{
 	public:
 		MockTestSuiteStartEventHandler();
@@ -14,5 +14,5 @@ namespace allure_cpp { namespace test_utility {
 		MOCK_CONST_METHOD1(handleTestSuiteStart, void(const std::string&));
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

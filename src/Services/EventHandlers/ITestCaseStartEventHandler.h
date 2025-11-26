@@ -4,7 +4,7 @@
 #include <string>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITestCaseStartEventHandler
 	{
@@ -15,4 +15,4 @@ namespace allure_cpp { namespace service {
 		virtual void handleTestCaseStart(const ITestMetadata& metadata) const = 0;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

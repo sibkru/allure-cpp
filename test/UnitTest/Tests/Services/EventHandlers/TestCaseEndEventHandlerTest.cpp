@@ -10,8 +10,8 @@
 
 
 using namespace testing;
-using namespace allure_cpp;
-using namespace allure_cpp::test_utility;
+using namespace allure;
+using namespace allure::test_utility;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 
@@ -43,6 +43,8 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 			m_testProgram.addTestSuite(runningTestSuite);
 
 			m_runningTestCase = &m_testProgram.getTestSuite(1).getTestCases()[1];
+			m_testProgram.setRunningTestSuite(&m_testProgram.getTestSuite(1));
+			m_testProgram.setRunningTestCase(m_runningTestCase);
 		}
 
 		model::TestCase buildTestCase(const std::string& name, model::Stage stage)
@@ -111,6 +113,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	TEST_F(TestCaseEndEventHandlerTest, testHandleTestCaseEndThrowsExceptionWhenNoRunningTestCase)
 	{
 		m_runningTestCase->setStage(model::Stage::FINISHED);
+		m_testProgram.setRunningTestCase(nullptr);
 		ASSERT_THROW(m_service->handleTestCaseEnd(model::Status::PASSED),
 					 service::ITestCaseEndEventHandler::NoRunningTestCaseException);
 	}
@@ -118,8 +121,10 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	TEST_F(TestCaseEndEventHandlerTest, testHandleTestCaseEndThrowsExceptionWhenNoRunningTestSuite)
 	{
 		m_testProgram.getTestSuite(1).setStage(model::Stage::FINISHED);
+		m_testProgram.setRunningTestSuite(nullptr);
+		m_testProgram.setRunningTestCase(nullptr);
 		ASSERT_THROW(m_service->handleTestCaseEnd(model::Status::PASSED),
-					 service::ITestCaseEndEventHandler::NoRunningTestSuiteException);
+					 service::ITestCaseEndEventHandler::NoRunningTestCaseException);
 	}
 
 	TEST_F(TestCaseEndEventHandlerTest, testHandleTestCaseEndWritesTestCaseJSONImmediately)

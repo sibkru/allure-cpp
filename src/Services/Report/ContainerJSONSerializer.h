@@ -7,14 +7,14 @@
 
 using json = nlohmann::json;
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 	class Container;
 	class FixtureStep;
 	enum class Status;
 	enum class Stage;
-}} // namespace allure_cpp::model
+}} // namespace allure::model
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ContainerJSONSerializer : public IContainerJSONSerializer
 	{
@@ -34,4 +34,4 @@ namespace allure_cpp { namespace service {
 		std::string translateStageToString(model::Stage) const;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

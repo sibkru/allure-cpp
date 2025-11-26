@@ -2,7 +2,7 @@
 
 #include <CppUTest/CommandLineTestRunner.h>
 
-namespace allure_cpp { namespace adapters { namespace cpputest {
+namespace allure { namespace adapters { namespace cpputest {
 
 class AllureCppUTestCommandLineTestRunner : public CommandLineTestRunner
 {
@@ -30,8 +30,8 @@ TestOutput* WrapAllureOutput(TestOutput* innerOutput);
 // 2) Run all tests with Allure enabled while preserving the stock CppUTest CLI.
 int RunAllureEnabledTests(int ac, const char *const *av, TestOutput* preferredOutput = nullptr);
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest
 
 namespace allure {
-using AllureCppUTestCommandLineTestRunner = allure_cpp::adapters::cpputest::AllureCppUTestCommandLineTestRunner;
+using AllureCppUTestCommandLineTestRunner = allure::adapters::cpputest::AllureCppUTestCommandLineTestRunner;
 }

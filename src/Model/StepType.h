@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	enum class StepType
 	{
@@ -9,4 +9,4 @@ namespace allure_cpp { namespace model {
 		EXPECTED_RESULT_STEP = 1
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

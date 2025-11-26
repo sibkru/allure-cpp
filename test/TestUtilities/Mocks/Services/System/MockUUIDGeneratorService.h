@@ -3,9 +3,9 @@
 #include "Services/System/IUUIDGeneratorService.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockUUIDGeneratorService:  public allure_cpp::service::IUUIDGeneratorService
+	class MockUUIDGeneratorService:  public allure::service::IUUIDGeneratorService
 	{
 	public:
 		MockUUIDGeneratorService();
@@ -14,5 +14,5 @@ namespace allure_cpp { namespace test_utility {
 		MOCK_CONST_METHOD0(generateUUID, std::string());
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

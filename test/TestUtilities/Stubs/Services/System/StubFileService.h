@@ -4,7 +4,7 @@
 
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
 	struct StubFile
 	{
@@ -24,5 +24,5 @@ namespace allure_cpp { namespace test_utility {
 		std::vector<StubFile>& m_filesSaved;
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

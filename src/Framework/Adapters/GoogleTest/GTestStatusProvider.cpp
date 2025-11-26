@@ -1,7 +1,7 @@
 #include "Framework/Adapters/GoogleTest/GTestStatusProvider.h"
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace googletest {
 
@@ -18,4 +18,4 @@ namespace googletest {
 		return ::testing::Test::IsSkipped();
 	}
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure::adapters::googletest

@@ -6,7 +6,7 @@
 
 using namespace testing;
 using namespace systelab::json::test_utility;
-using namespace allure_cpp;
+using namespace allure;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 
@@ -26,11 +26,12 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	};
 
 
-	TEST_F(BasicTestCaseIntegrationTest, testProgramWithSingleTestSuite)
-	{
-		AllureAPI::setOutputFolder("IntegrationTest\\OutputFolder");
-		AllureAPI::setTestProgramName("TestProgramName");
-		AllureAPI::setTMSLinksPattern("https://mytms.webpage.com/{}/refresh");
+TEST_F(BasicTestCaseIntegrationTest, testProgramWithSingleTestSuite)
+{
+	auto& testProgram = detail::Core::instance().getTestProgram();
+	testProgram.setOutputFolder("IntegrationTest\\OutputFolder");
+	testProgram.setName("TestProgramName");
+	testProgram.setTMSLinksPattern("https://mytms.webpage.com/{}/refresh");
 
 		auto& listener = getEventListener();
 		listener.onProgramStart();
@@ -39,9 +40,10 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 		setNextUUIDToGenerate("suite-uuid-1");
 		listener.onTestSuiteStart("SingleTestSuite");
 
-		setCurrentTime(222);
-		setNextUUIDToGenerate("test-uuid-1");
-		listener.onTestStart("SingleTestCase");
+	setCurrentTime(222);
+	setNextUUIDToGenerate("test-uuid-1");
+	listener.onTestStart("SingleTestCase");
+	test().name("SingleTestCase");
 
 		setCurrentTime(333);
 		listener.onTestEnd(model::Status::PASSED);
@@ -133,9 +135,10 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 
 	TEST_F(BasicTestCaseIntegrationTest, testProgramWithCoupleOfTestSuites)
 	{
-		AllureAPI::setOutputFolder("IntegrationTest\\OutputFolder");
-		AllureAPI::setTestProgramName("CoupleOfBasicTestSuites");
-		AllureAPI::setTMSLinksPattern("http://{}");
+		auto& testProgram = detail::Core::instance().getTestProgram();
+		testProgram.setOutputFolder("IntegrationTest\\OutputFolder");
+		testProgram.setName("CoupleOfBasicTestSuites");
+		testProgram.setTMSLinksPattern("http://{}");
 
 		auto& listener = getEventListener();
 		listener.onProgramStart();
@@ -145,6 +148,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 		listener.onTestSuiteStart("TestSuite1");
 		setNextUUIDToGenerate("test-uuid-1");
 		listener.onTestStart("TestCase1");
+		test().name("TestCase1");
 		setCurrentTime(201);
 		listener.onTestEnd(model::Status::FAILED);
 		listener.onTestSuiteEnd(model::Status::FAILED);
@@ -154,14 +158,17 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 		listener.onTestSuiteStart("TestSuite2");
 		setNextUUIDToGenerate("test-uuid-2-1");
 		listener.onTestStart("TestCase2.1");
+		test().name("TestCase2.1");
 		setCurrentTime(401);
 		listener.onTestEnd(model::Status::PASSED);
 		setNextUUIDToGenerate("test-uuid-2-2");
 		listener.onTestStart("TestCase2.2");
+		test().name("TestCase2.2");
 		setCurrentTime(501);
 		listener.onTestEnd(model::Status::PASSED);
 		setNextUUIDToGenerate("test-uuid-2-3");
 		listener.onTestStart("TestCase2.3");
+		test().name("TestCase2.3");
 		setCurrentTime(601);
 		listener.onTestEnd(model::Status::SKIPPED);
 		listener.onTestSuiteEnd(model::Status::PASSED);
@@ -255,9 +262,10 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 
 	TEST_F(BasicTestCaseIntegrationTest, testProgramWithSingleComplexTestSuite)
 	{
-		AllureAPI::setOutputFolder("IntegrationTest\\OutputFolder");
-		AllureAPI::setTestProgramName("ComplexTestProgram");
-		AllureAPI::setTMSLinksPattern("https://mytms.webpage.com/{}/refresh");
+		auto& testProgram = detail::Core::instance().getTestProgram();
+		testProgram.setOutputFolder("IntegrationTest\\OutputFolder");
+		testProgram.setName("ComplexTestProgram");
+		testProgram.setTMSLinksPattern("https://mytms.webpage.com/{}/refresh");
 
 		auto& listener = getEventListener();
 		listener.onProgramStart();
@@ -266,12 +274,13 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 		setNextUUIDToGenerate("UUID-Complex");
 		listener.onTestSuiteStart("SingleComplexTestSuite");
 
-		AllureAPI::setTMSId("UTILS-TC-0001");
-		AllureAPI::setTestSuiteEpic("Complex Epic");
-		AllureAPI::setTestSuiteName("MyComplexTestSuite");
-		AllureAPI::setTestSuiteDescription("Description of complex test suite");
-		AllureAPI::setTestSuiteSeverity("high");
-		AllureAPI::setTestSuiteLabel("tag", "ThisIsMyTag");
+		suite()
+			.label("tmsId", "UTILS-TC-0001")
+			.epic("Complex Epic")
+			.name("MyComplexTestSuite")
+			.description("Description of complex test suite")
+			.severity("high")
+			.label("tag", "ThisIsMyTag");
 
 		for (unsigned int i = 1; i <= 3; i++)
 		{
@@ -279,8 +288,8 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 			setNextUUIDToGenerate("test-uuid-" + std::to_string(i));
 			listener.onTestStart("ParametricTest/" + std::to_string(i));
 
-			AllureAPI::setTestCaseName("Description of action for scenario " + std::to_string(i));
-			AllureAPI::addExpectedResult("Description of expectation for scenario " + std::to_string(i), [](){});
+			test().name("Description of action for scenario " + std::to_string(i));
+			step("Description of expectation for scenario " + std::to_string(i), [](){});
 
 			setCurrentTime(190 + (100 * i));
 			listener.onTestEnd(model::Status::PASSED);
@@ -314,7 +323,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 				ASSERT_EQ(200, actual["start"]);
 				ASSERT_EQ(290, actual["stop"]);
 				ASSERT_EQ(1, actual["steps"].size());
-				ASSERT_EQ("Description of expectation for scenario 1", actual["steps"][0]["name"]);
+				ASSERT_EQ("Action: Description of expectation for scenario 1", actual["steps"][0]["name"]);
 			}
 			else if (file.m_path.find("test-uuid-2-result.json") != std::string::npos)
 			{
@@ -326,7 +335,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 				ASSERT_EQ(300, actual["start"]);
 				ASSERT_EQ(390, actual["stop"]);
 				ASSERT_EQ(1, actual["steps"].size());
-				ASSERT_EQ("Description of expectation for scenario 2", actual["steps"][0]["name"]);
+				ASSERT_EQ("Action: Description of expectation for scenario 2", actual["steps"][0]["name"]);
 			}
 			else if (file.m_path.find("test-uuid-3-result.json") != std::string::npos)
 			{
@@ -338,7 +347,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 				ASSERT_EQ(400, actual["start"]);
 				ASSERT_EQ(490, actual["stop"]);
 				ASSERT_EQ(1, actual["steps"].size());
-				ASSERT_EQ("Description of expectation for scenario 3", actual["steps"][0]["name"]);
+				ASSERT_EQ("Action: Description of expectation for scenario 3", actual["steps"][0]["name"]);
 			}
 			else if (file.m_path.find("UUID-Complex-container.json") != std::string::npos)
 			{

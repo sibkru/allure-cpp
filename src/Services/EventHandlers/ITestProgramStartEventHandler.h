@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITestProgramStartEventHandler
 	{
@@ -11,4 +11,4 @@ namespace allure_cpp { namespace service {
 		virtual void handleTestProgramStart() const = 0;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

@@ -4,17 +4,17 @@
 #include "Services/Report/ITestProgramJSONBuilder.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockTestProgramJSONBuilder : public allure_cpp::service::ITestProgramJSONBuilder
+	class MockTestProgramJSONBuilder : public allure::service::ITestProgramJSONBuilder
 	{
 	public:
 		MockTestProgramJSONBuilder();
 		virtual ~MockTestProgramJSONBuilder();
 
-		MOCK_CONST_METHOD1(buildJSONFiles, void(const allure_cpp::model::TestProgram&));
-		MOCK_CONST_METHOD1(buildMetadataFiles, void(const allure_cpp::model::TestProgram&));
+		MOCK_CONST_METHOD1(buildJSONFiles, void(const allure::model::TestProgram&));
+		MOCK_CONST_METHOD1(buildMetadataFiles, void(const allure::model::TestProgram&));
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

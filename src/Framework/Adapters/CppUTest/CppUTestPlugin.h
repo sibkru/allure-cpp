@@ -11,7 +11,7 @@
 #include <CppUTest/TestPlugin.h>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
@@ -57,7 +57,7 @@ namespace cpputest {
 	 * @endcode
 	 */
 	class CppUTestPlugin : public TestPlugin,
-	                       public allure_cpp::TestLifecycleListenerBase
+	                       public allure::TestLifecycleListenerBase
 	{
 	public:
 		/**
@@ -73,12 +73,12 @@ namespace cpputest {
 		 * @param caseEndHandler Handler for test case end events (must not be null)
 		 */
 		CppUTestPlugin(
-			allure_cpp::service::ITestProgramStartEventHandler* programStartHandler,
-			allure_cpp::service::ITestProgramEndEventHandler* programEndHandler,
-			allure_cpp::service::ITestSuiteStartEventHandler* suiteStartHandler,
-			allure_cpp::service::ITestSuiteEndEventHandler* suiteEndHandler,
-			allure_cpp::service::ITestCaseStartEventHandler* caseStartHandler,
-			allure_cpp::service::ITestCaseEndEventHandler* caseEndHandler);
+			allure::service::ITestProgramStartEventHandler* programStartHandler,
+			allure::service::ITestProgramEndEventHandler* programEndHandler,
+			allure::service::ITestSuiteStartEventHandler* suiteStartHandler,
+			allure::service::ITestSuiteEndEventHandler* suiteEndHandler,
+			allure::service::ITestCaseStartEventHandler* caseStartHandler,
+			allure::service::ITestCaseEndEventHandler* caseEndHandler);
 
 		~CppUTestPlugin() override = default;
 
@@ -92,4 +92,4 @@ namespace cpputest {
 		int m_initialFailureCount;
 	};
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest

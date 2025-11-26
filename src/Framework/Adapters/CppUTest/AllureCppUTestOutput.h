@@ -3,7 +3,7 @@
 #include <CppUTest/TestOutput.h>
 #include <string>
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
@@ -25,4 +25,4 @@ private:
 
 } // namespace cpputest
 } // namespace adapters
-} // namespace allure_cpp
+} // namespace allure

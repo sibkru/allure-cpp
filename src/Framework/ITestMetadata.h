@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace allure_cpp {
+namespace allure {
 
 	/**
 	 * @brief Framework-agnostic interface for accessing test metadata.

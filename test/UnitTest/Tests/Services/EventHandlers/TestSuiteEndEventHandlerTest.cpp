@@ -10,8 +10,8 @@
 
 
 using namespace testing;
-using namespace allure_cpp;
-using namespace allure_cpp::test_utility;
+using namespace allure;
+using namespace allure::test_utility;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 
@@ -39,6 +39,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 			m_testProgram.addTestSuite(runningTestSuite);
 
 			m_runningTestSuite = &m_testProgram.getTestSuite(1);
+			m_testProgram.setRunningTestSuite(m_runningTestSuite);
 		}
 
 		std::unique_ptr<service::ITimeService> buildTimeService()
@@ -124,6 +125,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	TEST_F(TestSuiteEndEventHandlerTest, testHandleTestSuiteEndThrowsExceptionWhenNoRunningTestSuite)
 	{
 		m_runningTestSuite->setStage(model::Stage::FINISHED);
+		m_testProgram.setRunningTestSuite(nullptr);
 		ASSERT_THROW(m_service->handleTestSuiteEnd(model::Status::PASSED), service::ITestSuiteEndEventHandler::NoRunningTestSuiteException);
 	}
 

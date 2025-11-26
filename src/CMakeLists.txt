@@ -10,7 +10,7 @@ set(ALLURE_CPP AllureCpp)
 file(GLOB ALLURE_CORE_SRC_FILES
     "Model/*.cpp"
     "Framework/TestLifecycleListenerBase.cpp"
-    "AllureAPI.cpp"
+    "API/*.cpp"
     "Services/ServicesFactory.cpp"
     "Services/EventHandlers/*.cpp"
     "Services/Property/*.cpp"
@@ -20,7 +20,8 @@ file(GLOB ALLURE_CORE_SRC_FILES
 file(GLOB ALLURE_CORE_HDR_FILES
     "Model/*.h"
     "Framework/*.h"
-    "AllureAPI.h"
+    "API/*.h"
+    "allure-cpp.h"
     "Services/ServicesFactory.h"
     "Services/IServicesFactory.h"
     "Services/EventHandlers/*.h"
@@ -61,7 +62,10 @@ target_include_directories(${ALLURE_CPP} PUBLIC
 )
 
 # Link dependencies
-target_link_libraries(${ALLURE_CPP} PUBLIC nlohmann_json::nlohmann_json)
+target_link_libraries(${ALLURE_CPP} PUBLIC nlohmann_json::nlohmann_json fmt::fmt)
+
+# Require C++17
+target_compile_features(${ALLURE_CPP} PUBLIC cxx_std_17)
 
 if(ALLURE_ENABLE_GOOGLETEST)
     target_link_libraries(${ALLURE_CPP} PUBLIC gtest)

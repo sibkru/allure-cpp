@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace allure_cpp { namespace adapters { namespace googletest {
+namespace allure { namespace adapters { namespace googletest {
 
 class AllureGTest
 {
@@ -21,8 +21,8 @@ private:
     std::unique_ptr<Impl> m_impl;
 };
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure::adapters::googletest
 
 namespace allure {
-using AllureGTest = allure_cpp::adapters::googletest::AllureGTest;
+using AllureGTest = allure::adapters::googletest::AllureGTest;
 }

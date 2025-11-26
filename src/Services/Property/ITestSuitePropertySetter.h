@@ -4,7 +4,7 @@
 #include <stdexcept>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITestSuitePropertySetter
 	{
@@ -22,4 +22,4 @@ namespace allure_cpp { namespace service {
 		};
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

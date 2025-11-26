@@ -19,7 +19,7 @@
 #include <vector>
 
 
-namespace allure_cpp {
+namespace allure {
 	namespace {
 		// Fallback provider used when no framework adapter is registered.
 		class NullStatusProvider : public ITestStatusProvider
@@ -45,9 +45,9 @@ namespace allure_cpp {
 
 	model::TestProgram AllureAPI::m_testProgram = model::TestProgram();
 	std::unique_ptr<service::IServicesFactory> AllureAPI::m_servicesFactory = std::make_unique<service::ServicesFactory>(m_testProgram);
-	std::shared_ptr<allure_cpp::ITestFrameworkAdapter> AllureAPI::m_frameworkAdapter = nullptr;
+	std::shared_ptr<allure::ITestFrameworkAdapter> AllureAPI::m_frameworkAdapter = nullptr;
 
-	std::unique_ptr<allure_cpp::ITestStatusProvider> AllureAPI::getStatusProvider()
+	std::unique_ptr<allure::ITestStatusProvider> AllureAPI::getStatusProvider()
 	{
 		if (m_frameworkAdapter)
 		{
@@ -58,7 +58,7 @@ namespace allure_cpp {
 		return std::make_unique<NullStatusProvider>();
 	}
 
-	void AllureAPI::setFrameworkAdapter(std::shared_ptr<allure_cpp::ITestFrameworkAdapter> adapter)
+	void AllureAPI::setFrameworkAdapter(std::shared_ptr<allure::ITestFrameworkAdapter> adapter)
 	{
 		m_frameworkAdapter = std::move(adapter);
 	}
@@ -428,4 +428,4 @@ namespace allure_cpp {
 		}
 	}
 
-} // namespace allure_cpp
+} // namespace allure

@@ -3,15 +3,15 @@
 #include <stdexcept>
 
 
-namespace allure_cpp {
+namespace allure {
 
 	TestLifecycleListenerBase::TestLifecycleListenerBase(
-		allure_cpp::service::ITestProgramStartEventHandler* programStartHandler,
-		allure_cpp::service::ITestProgramEndEventHandler* programEndHandler,
-		allure_cpp::service::ITestSuiteStartEventHandler* suiteStartHandler,
-		allure_cpp::service::ITestSuiteEndEventHandler* suiteEndHandler,
-		allure_cpp::service::ITestCaseStartEventHandler* caseStartHandler,
-		allure_cpp::service::ITestCaseEndEventHandler* caseEndHandler)
+		allure::service::ITestProgramStartEventHandler* programStartHandler,
+		allure::service::ITestProgramEndEventHandler* programEndHandler,
+		allure::service::ITestSuiteStartEventHandler* suiteStartHandler,
+		allure::service::ITestSuiteEndEventHandler* suiteEndHandler,
+		allure::service::ITestCaseStartEventHandler* caseStartHandler,
+		allure::service::ITestCaseEndEventHandler* caseEndHandler)
 		: m_programStartHandler(programStartHandler)
 		, m_programEndHandler(programEndHandler)
 		, m_suiteStartHandler(suiteStartHandler)
@@ -47,14 +47,14 @@ namespace allure_cpp {
 	}
 
 	void TestLifecycleListenerBase::onTestEnd(const ITestMetadata& metadata,
-	                                          allure_cpp::model::Status status)
+	                                          allure::model::Status status)
 	{
 		// Delegate to existing handler with status
 		// Note: metadata is available but current handler doesn't use it
 		m_caseEndHandler->handleTestCaseEnd(status);
 	}
 
-	void TestLifecycleListenerBase::onTestSuiteEnd(allure_cpp::model::Status status)
+	void TestLifecycleListenerBase::onTestSuiteEnd(allure::model::Status status)
 	{
 		m_suiteEndHandler->handleTestSuiteEnd(status);
 	}
@@ -65,7 +65,7 @@ namespace allure_cpp {
 	}
 
 	void TestLifecycleListenerBase::onTestEnd(const ITestMetadata& metadata,
-	                                          allure_cpp::model::Status status,
+	                                          allure::model::Status status,
 	                                          const std::string& statusMessage,
 	                                          const std::string& statusTrace)
 	{

@@ -1,22 +1,20 @@
 #include "Framework/Adapters/CppUTest/AllureCppUTest.h"
 
-#include "AllureAPI.h"
+#include "API/Core.h"
 
-namespace allure_cpp { namespace adapters { namespace cpputest {
+namespace allure { namespace adapters { namespace cpputest {
 
 class AllureCppUTest::Impl
 {
 public:
 	explicit Impl(const std::string& outputFolder)
 	{
-		AllureAPI::setOutputFolder(outputFolder);
-		AllureAPI::setFrameworkName("CppUTest");
+		auto& testProgram = detail::Core::instance().getTestProgram();
+		testProgram.setOutputFolder(outputFolder);
+		testProgram.setFrameworkName("CppUTest");
 	}
 
-	~Impl()
-	{
-		AllureAPI::cleanup();
-	}
+	~Impl() = default;
 };
 
 AllureCppUTest::AllureCppUTest(const std::string& outputFolder)
@@ -26,4 +24,4 @@ AllureCppUTest::AllureCppUTest(const std::string& outputFolder)
 
 AllureCppUTest::~AllureCppUTest() = default;
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest

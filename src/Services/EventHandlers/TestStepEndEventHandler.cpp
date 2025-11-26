@@ -4,7 +4,7 @@
 #include "Services/System/ITimeService.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TestStepEndEventHandler::TestStepEndEventHandler(model::TestProgram& testProgram,
 													 std::unique_ptr<ITimeService> timeService)
@@ -55,4 +55,4 @@ namespace allure_cpp { namespace service {
 		return *testSuite;
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

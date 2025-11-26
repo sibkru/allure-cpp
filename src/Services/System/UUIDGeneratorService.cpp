@@ -9,7 +9,7 @@
 #include <functional>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	UUIDGeneratorService::UUIDGeneratorService()
 	{
@@ -53,4 +53,4 @@ namespace allure_cpp { namespace service {
 		return static_cast<unsigned char>(dis(gen));
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

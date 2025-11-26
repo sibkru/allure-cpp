@@ -11,7 +11,7 @@
 #endif
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	FileService::FileService()
 	{
@@ -116,4 +116,4 @@ namespace allure_cpp { namespace service {
 		}
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	enum class Stage
 	{
@@ -12,4 +12,4 @@ namespace allure_cpp { namespace model {
 		INTERRUPTED = 4
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

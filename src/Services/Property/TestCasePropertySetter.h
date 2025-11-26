@@ -5,13 +5,13 @@
 #include <memory>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 	class TestProgram;
 	class TestSuite;
 	class TestCase;
-}} // namespace allure_cpp::service
+}} // namespace allure::service
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class TestCasePropertySetter : public ITestCasePropertySetter
 	{
@@ -29,4 +29,4 @@ namespace allure_cpp { namespace service {
 		model::TestProgram& m_testProgram;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

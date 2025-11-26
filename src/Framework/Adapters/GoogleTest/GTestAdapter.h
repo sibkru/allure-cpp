@@ -10,7 +10,7 @@
 #include <memory>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace googletest {
 
@@ -63,7 +63,7 @@ namespace googletest {
 	 * }
 	 * @endcode
 	 */
-	class GTestAdapter : public allure_cpp::ITestFrameworkAdapter
+	class GTestAdapter : public allure::ITestFrameworkAdapter
 	{
 	public:
 		/**
@@ -79,12 +79,12 @@ namespace googletest {
 		 * @param caseEndHandler Handler for test case end events (must not be null)
 		 */
 		GTestAdapter(
-			std::unique_ptr<allure_cpp::service::ITestProgramStartEventHandler> programStartHandler,
-			std::unique_ptr<allure_cpp::service::ITestProgramEndEventHandler> programEndHandler,
-			std::unique_ptr<allure_cpp::service::ITestSuiteStartEventHandler> suiteStartHandler,
-			std::unique_ptr<allure_cpp::service::ITestSuiteEndEventHandler> suiteEndHandler,
-			std::unique_ptr<allure_cpp::service::ITestCaseStartEventHandler> caseStartHandler,
-			std::unique_ptr<allure_cpp::service::ITestCaseEndEventHandler> caseEndHandler);
+			std::unique_ptr<allure::service::ITestProgramStartEventHandler> programStartHandler,
+			std::unique_ptr<allure::service::ITestProgramEndEventHandler> programEndHandler,
+			std::unique_ptr<allure::service::ITestSuiteStartEventHandler> suiteStartHandler,
+			std::unique_ptr<allure::service::ITestSuiteEndEventHandler> suiteEndHandler,
+			std::unique_ptr<allure::service::ITestCaseStartEventHandler> caseStartHandler,
+			std::unique_ptr<allure::service::ITestCaseEndEventHandler> caseEndHandler);
 
 		~GTestAdapter() override = default;
 
@@ -95,12 +95,12 @@ namespace googletest {
 
 	private:
 		// Event handler pointers (owned by this adapter)
-		std::unique_ptr<allure_cpp::service::ITestProgramStartEventHandler> m_programStartHandler;
-		std::unique_ptr<allure_cpp::service::ITestProgramEndEventHandler> m_programEndHandler;
-		std::unique_ptr<allure_cpp::service::ITestSuiteStartEventHandler> m_suiteStartHandler;
-		std::unique_ptr<allure_cpp::service::ITestSuiteEndEventHandler> m_suiteEndHandler;
-		std::unique_ptr<allure_cpp::service::ITestCaseStartEventHandler> m_caseStartHandler;
-		std::unique_ptr<allure_cpp::service::ITestCaseEndEventHandler> m_caseEndHandler;
+		std::unique_ptr<allure::service::ITestProgramStartEventHandler> m_programStartHandler;
+		std::unique_ptr<allure::service::ITestProgramEndEventHandler> m_programEndHandler;
+		std::unique_ptr<allure::service::ITestSuiteStartEventHandler> m_suiteStartHandler;
+		std::unique_ptr<allure::service::ITestSuiteEndEventHandler> m_suiteEndHandler;
+		std::unique_ptr<allure::service::ITestCaseStartEventHandler> m_caseStartHandler;
+		std::unique_ptr<allure::service::ITestCaseEndEventHandler> m_caseEndHandler;
 	};
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure::adapters::googletest

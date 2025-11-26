@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace allure_cpp { namespace model { namespace test_property {
+namespace allure { namespace model { namespace test_property {
 
 	static const std::string TMS_ID_PROPERTY = "TMS_ID";
 	static const std::string NAME_PROPERTY = "NAME";
@@ -11,4 +11,4 @@ namespace allure_cpp { namespace model { namespace test_property {
 	static const std::string FEATURE_PROPERTY = "feature";
 	static const std::string SEVERITY_PROPERTY = "severity";
 
-}}} // namespace allure_cpp::model::test_property
+}}} // namespace allure::model::test_property

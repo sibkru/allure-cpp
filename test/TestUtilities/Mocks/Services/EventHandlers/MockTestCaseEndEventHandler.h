@@ -3,16 +3,16 @@
 #include "Services/EventHandlers/ITestCaseEndEventHandler.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockTestCaseEndEventHandler : public allure_cpp::service::ITestCaseEndEventHandler
+	class MockTestCaseEndEventHandler : public allure::service::ITestCaseEndEventHandler
 	{
 	public:
 		MockTestCaseEndEventHandler();
 		virtual ~MockTestCaseEndEventHandler();
 
-		MOCK_CONST_METHOD1(handleTestCaseEnd, void(allure_cpp::model::Status));
+		MOCK_CONST_METHOD1(handleTestCaseEnd, void(allure::model::Status));
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

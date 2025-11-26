@@ -2,7 +2,7 @@
 #include <CppUTest/TestFailure.h>
 #include <sstream>
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
@@ -131,4 +131,4 @@ void AllureCppUTestOutput::flush()
 
 } // namespace cpputest
 } // namespace adapters
-} // namespace allure_cpp
+} // namespace allure

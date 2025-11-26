@@ -9,8 +9,8 @@
 
 
 using namespace testing;
-using namespace allure_cpp;
-using namespace allure_cpp::test_utility;
+using namespace allure;
+using namespace allure::test_utility;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 
@@ -50,7 +50,9 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 			runningTestSuite.addTestCase(buildTestCase("TC-2.2", model::Stage::RUNNING));
 			m_testProgram.addTestSuite(runningTestSuite);
 
-			m_runningTestStep = m_testProgram.getTestSuite(1).getTestCases()[1].getStep(1);
+			m_testProgram.setRunningTestSuite(&m_testProgram.getTestSuite(1));
+			m_testProgram.setRunningTestCase(&m_testProgram.getTestSuite(1).getTestCases()[1]);
+			m_runningTestStep = m_testProgram.getRunningTestCase()->getStep(1);
 		}
 
 		model::TestCase buildTestCase(const std::string& name, model::Stage stage)
@@ -113,6 +115,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	TEST_F(TestStepEndEventHandlerTest, testHandleTestStepEndThrowsExceptionWhenNoRunningTestCase)
 	{
 		m_testProgram.getTestSuite(1).getTestCases()[1].setStage(model::Stage::FINISHED);
+		m_testProgram.setRunningTestCase(nullptr);
 		ASSERT_THROW(m_service->handleTestStepEnd(model::Status::PASSED),
 					 service::ITestStepEndEventHandler::NoRunningTestCaseException);
 	}
@@ -120,8 +123,10 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	TEST_F(TestStepEndEventHandlerTest, testHandleTestStepEndThrowsExceptionWhenNoRunningTestSuite)
 	{
 		m_testProgram.getTestSuite(1).setStage(model::Stage::FINISHED);
+		m_testProgram.setRunningTestSuite(nullptr);
+		m_testProgram.setRunningTestCase(nullptr);
 		ASSERT_THROW(m_service->handleTestStepEnd(model::Status::PASSED),
-					 service::ITestStepEndEventHandler::NoRunningTestSuiteException);
+					 service::ITestStepEndEventHandler::NoRunningTestCaseException);
 	}
 
 

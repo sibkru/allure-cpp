@@ -6,14 +6,14 @@
 #include <stdexcept>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 	class Step;
 	class TestProgram;
 	class TestSuite;
 	class TestCase;
-}} // namespace allure_cpp::service
+}} // namespace allure::service
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITimeService;
 
@@ -51,4 +51,4 @@ namespace allure_cpp { namespace service {
 		std::unique_ptr<ITimeService> m_timeService;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

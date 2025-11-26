@@ -4,15 +4,15 @@
 #include "Services/Report/IContainerJSONSerializer.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockContainerJSONSerializer : public allure_cpp::service::IContainerJSONSerializer
+	class MockContainerJSONSerializer : public allure::service::IContainerJSONSerializer
 	{
 	public:
 		MockContainerJSONSerializer();
 		virtual ~MockContainerJSONSerializer();
 
-		MOCK_CONST_METHOD1(serialize, std::string(const allure_cpp::model::Container&));
+		MOCK_CONST_METHOD1(serialize, std::string(const allure::model::Container&));
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility

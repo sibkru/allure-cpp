@@ -4,7 +4,7 @@
 #include "Model/TestProperty.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TestCasePropertySetter::TestCasePropertySetter(model::TestProgram& testProgram)
 		:m_testProgram(testProgram)
@@ -55,4 +55,4 @@ namespace allure_cpp { namespace service {
 		throw NoRunningTestSuiteException();
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

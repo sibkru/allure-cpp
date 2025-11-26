@@ -8,7 +8,7 @@
 #include <regex>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TestSuitePropertySetter::TestSuitePropertySetter(model::TestProgram& testProgram)
 		:m_testProgram(testProgram)
@@ -52,4 +52,4 @@ namespace allure_cpp { namespace service {
 		throw NoRunningTestSuiteException();
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

@@ -3,9 +3,9 @@
 #include "Services/System/ITimeService.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockTimeService:  public allure_cpp::service::ITimeService
+	class MockTimeService:  public allure::service::ITimeService
 	{
 	public:
 		MockTimeService();
@@ -14,5 +14,5 @@ namespace allure_cpp { namespace test_utility {
 		MOCK_CONST_METHOD0(getCurrentTime, time_t());
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

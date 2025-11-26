@@ -4,16 +4,16 @@
 #include "Services/Report/ITestSuiteJSONSerializer.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockTestSuiteJSONSerializer : public allure_cpp::service::ITestSuiteJSONSerializer
+	class MockTestSuiteJSONSerializer : public allure::service::ITestSuiteJSONSerializer
 	{
 	public:
 		MockTestSuiteJSONSerializer();
 		virtual ~MockTestSuiteJSONSerializer();
 
-		MOCK_CONST_METHOD1(serialize, std::string(const allure_cpp::model::TestSuite&));
+		MOCK_CONST_METHOD1(serialize, std::string(const allure::model::TestSuite&));
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

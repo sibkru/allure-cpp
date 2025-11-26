@@ -1,4 +1,4 @@
-#include "AllureAPI.h"
+#include "allure-cpp.h"
 #include <gtest/gtest.h>
 #include <chrono>
 #include <cstring>
@@ -9,13 +9,16 @@
 #include <strings.h>
 #include "../shared/Calculator.h"
 
-using namespace allure_cpp;
+using namespace allure;
 
 /**
- * @brief Sample test suite to demonstrate Allure reporting
+ * @brief Sample test suite to demonstrate Allure reporting with the new modern API
  *
- * This file contains the same tests that will be run with both the old and new API
- * to verify they produce identical Allure reports.
+ * This file showcases all features of the modern allure-cpp API including:
+ * - RAII-based step guards (automatic cleanup)
+ * - Fluent metadata builders (no .apply() needed)
+ * - Simplified attachment API
+ * - Modern C++17 style with string formatting
  */
 
 class BasicTestSuite : public testing::Test
@@ -23,19 +26,22 @@ class BasicTestSuite : public testing::Test
 public:
 	static void SetUpTestSuite()
 	{
-		AllureAPI::setTestSuiteName("Basic Test Suite");
-		AllureAPI::setTestSuiteDescription("A simple test suite to verify API compatibility");
-		AllureAPI::setTestSuiteEpic("Core Functionality");
-		AllureAPI::setTestSuiteSeverity("critical");
-		AllureAPI::setTMSId("API-COMPAT-001");
+		suite()
+			.name("Basic Test Suite")
+			.description("A simple test suite to verify API compatibility")
+			.epic("Core Functionality")
+			.severity("critical")
+			.label("tmsId", "API-COMPAT-001");
 	}
 };
 
 TEST_F(BasicTestSuite, testSimplePass)
 {
-	AllureAPI::setTestCaseName("Simple passing test");
-	AllureAPI::addFeature("Basic Operations");
-	AllureAPI::addStory("User can execute simple tests");
+	test()
+		.name("Simple passing test")
+		.feature("Basic Operations")
+		.story("User can execute simple tests");
+
 	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	EXPECT_TRUE(true);
 	EXPECT_EQ(1, 1);
@@ -43,38 +49,39 @@ TEST_F(BasicTestSuite, testSimplePass)
 
 TEST_F(BasicTestSuite, testWithSteps)
 {
-	AllureAPI::setTestCaseName("Test with multiple steps");
-	AllureAPI::addFeature("Step-by-Step Execution");
-	AllureAPI::addStory("User can track test execution with detailed steps");
+	test()
+		.name("Test with multiple steps")
+		.feature("Step-by-Step Execution")
+		.story("User can track test execution with detailed steps");
 
 	int result = 0;
 
-	AllureAPI::addAction("Initialize value to 5", [&result]() {
+	step("Initialize value to 5", [&]() {
 		result = 5;
 	});
 
-	AllureAPI::addExpectedResult("Value should be 5", [result]() {
+	step("Value should be 5", [&]() {
 		EXPECT_EQ(5, result);
 	});
 
-	AllureAPI::addAction("Add 3 to value", [&result]() {
+	step("Add 3 to value", [&]() {
 		result += 3;
 	});
 
-	AllureAPI::addExpectedResult("Value should be 8", [result]() {
+	step("Value should be 8", [&]() {
 		EXPECT_EQ(8, result);
 	});
 }
 
 TEST_F(BasicTestSuite, testWithStatusQuery)
 {
-	AllureAPI::setTestCaseName("Test demonstrating status provider");
+	test().name("Test demonstrating status provider");
 
 	// Perform some assertions
 	EXPECT_TRUE(true);
 
-	// Query status (new API feature)
-	auto statusProvider = AllureAPI::getStatusProvider();
+	// Query status (still available via Core)
+	auto statusProvider = detail::Core::instance().getStatusProvider();
 	EXPECT_FALSE(statusProvider->isCurrentTestFailed());
 	EXPECT_FALSE(statusProvider->isCurrentTestSkipped());
 }
@@ -85,17 +92,18 @@ class ParametricTestSuite : public testing::TestWithParam<int>
 public:
 	static void SetUpTestSuite()
 	{
-		AllureAPI::setTestSuiteName("Parametric Test Suite");
-		AllureAPI::setTestSuiteDescription("Tests with parameters");
-		AllureAPI::setTestSuiteEpic("Phase 3 Validation");
-		AllureAPI::setTestSuiteSeverity("normal");
+		suite()
+			.name("Parametric Test Suite")
+			.description("Tests with parameters")
+			.epic("Phase 3 Validation")
+			.severity("normal");
 	}
 };
 
 TEST_P(ParametricTestSuite, testWithParameter)
 {
 	int param = GetParam();
-	AllureAPI::setTestCaseName("Test with parameter: " + std::to_string(param));
+	test().name("Test with parameter: " + std::to_string(param));
 
 	// Keep a tiny pause to demonstrate timing without slowing the suite
 	std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -115,42 +123,44 @@ class ComplexTestSuite : public testing::Test
 public:
 	static void SetUpTestSuite()
 	{
-		AllureAPI::setTestSuiteName("Complex Test Suite");
-		AllureAPI::setTestSuiteDescription("Complex scenarios with nested steps");
-		AllureAPI::setTestSuiteEpic("Advanced Features");
-		AllureAPI::setTestSuiteSeverity("high");
-		AllureAPI::setTestSuiteLabel("feature", "api-compatibility");
-		AllureAPI::setTestSuiteLabel("component", "allure-reporting");
+		suite()
+			.name("Complex Test Suite")
+			.description("Complex scenarios with nested steps")
+			.epic("Advanced Features")
+			.severity("high")
+			.label("feature", "api-compatibility")
+			.label("component", "allure-reporting");
 	}
 };
 
 TEST_F(ComplexTestSuite, testNestedSteps)
 {
-	AllureAPI::setTestCaseName("Test with nested operations");
-	AllureAPI::addFeature("Data Structures");
-	AllureAPI::addStory("User can manipulate collections with validation");
+	test()
+		.name("Test with nested operations")
+		.feature("Data Structures")
+		.story("User can manipulate collections with validation");
 
 	std::vector<int> numbers;
 
-	AllureAPI::addAction("Initialize empty vector", [&numbers]() {
+	step("Initialize empty vector", [&]() {
 		numbers.clear();
 	});
 
-	AllureAPI::addExpectedResult("Vector should be empty", [&numbers]() {
+	step("Vector should be empty", [&]() {
 		EXPECT_EQ(0, numbers.size());
 	});
 
-	AllureAPI::addAction("Add three numbers", [&numbers]() {
+	step("Add three numbers", [&]() {
 		numbers.push_back(1);
 		numbers.push_back(2);
 		numbers.push_back(3);
 	});
 
-	AllureAPI::addExpectedResult("Vector should have 3 elements", [&numbers]() {
+	step("Vector should have 3 elements", [&]() {
 		EXPECT_EQ(3, numbers.size());
 	});
 
-	AllureAPI::addExpectedResult("Sum should be 6", [&numbers]() {
+	step("Sum should be 6", [&]() {
 		int sum = 0;
 		for (int n : numbers) {
 			sum += n;
@@ -161,21 +171,22 @@ TEST_F(ComplexTestSuite, testNestedSteps)
 
 TEST_F(ComplexTestSuite, testMultipleAssertions)
 {
-	AllureAPI::setTestCaseName("Test with multiple assertions");
-	AllureAPI::addFeature("String Operations");
-	AllureAPI::addStory("User can validate string properties");
+	test()
+		.name("Test with multiple assertions")
+		.feature("String Operations")
+		.story("User can validate string properties");
 
 	std::string text = "Hello, Allure!";
 
-	AllureAPI::addExpectedResult("Text should not be empty", [&text]() {
+	step("Text should not be empty", [&]() {
 		EXPECT_FALSE(text.empty());
 	});
 
-	AllureAPI::addExpectedResult("Text should contain 'Allure'", [&text]() {
+	step("Text should contain 'Allure'", [&]() {
 		EXPECT_NE(text.find("Allure"), std::string::npos);
 	});
 
-	AllureAPI::addExpectedResult("Text length should be 14", [&text]() {
+	step("Text length should be 14", [&]() {
 		EXPECT_EQ(14, text.length());
 	});
 }
@@ -187,31 +198,32 @@ class FailureExamplesTestSuite : public testing::Test
 public:
 	static void SetUpTestSuite()
 	{
-		AllureAPI::setTestSuiteName("Failure Examples");
-		AllureAPI::setTestSuiteDescription("Examples of different failure types for category testing");
-		AllureAPI::setTestSuiteEpic("Testing");
-		AllureAPI::setTestSuiteSeverity("normal");
+		suite()
+			.name("Failure Examples")
+			.description("Examples of different failure types for category testing")
+			.epic("Testing")
+			.severity("normal");
 	}
 };
 
 TEST_F(FailureExamplesTestSuite, testProductDefect)
 {
-	AllureAPI::setTestCaseName("Product defect - calculation error");
+	test().name("Product defect - calculation error");
 
-	AllureAPI::addAction("Perform calculation", []() {
+	step("Perform calculation", []() {
 		// Intentional failure to demonstrate category
 	});
 
-	AllureAPI::addExpectedResult("Result should be correct", []() {
+	step("Result should be correct", []() {
 		EXPECT_EQ(2 + 2, 5) << "Calculation failed - this is a product defect";
 	});
 }
 
 TEST_F(FailureExamplesTestSuite, testBrokenTest)
 {
-	AllureAPI::setTestCaseName("Broken test - runtime error");
+	test().name("Broken test - runtime error");
 
-	AllureAPI::addAction("Access invalid pointer", []() {
+	step("Access invalid pointer", []() {
 		// Simulate a test defect (broken test infrastructure)
 		std::string* ptr = nullptr;
 		if (ptr == nullptr) {
@@ -222,9 +234,9 @@ TEST_F(FailureExamplesTestSuite, testBrokenTest)
 
 TEST_F(FailureExamplesTestSuite, testAnotherFailure)
 {
-	AllureAPI::setTestCaseName("Another product failure");
+	test().name("Another product failure");
 
-	AllureAPI::addExpectedResult("String comparison should work", []() {
+	step("String comparison should work", []() {
 		std::string actual = "Hello";
 		std::string expected = "World";
 		EXPECT_EQ(actual, expected) << "String mismatch - product defect";
@@ -233,31 +245,31 @@ TEST_F(FailureExamplesTestSuite, testAnotherFailure)
 
 TEST_F(FailureExamplesTestSuite, testCheckFailure)
 {
-	AllureAPI::setTestCaseName("Generic check failure");
+	test().name("Generic check failure");
 	EXPECT_TRUE(false) << "Expected condition to be true";
 }
 
 TEST_F(FailureExamplesTestSuite, testCheckTextFailure)
 {
-	AllureAPI::setTestCaseName("Check with message failure");
+	test().name("Check with message failure");
 	EXPECT_TRUE(false) << "CheckText message should appear";
 }
 
 TEST_F(FailureExamplesTestSuite, testCheckFalseFailure)
 {
-	AllureAPI::setTestCaseName("Check false failure");
+	test().name("Check false failure");
 	EXPECT_FALSE(true) << "Expected condition to be false";
 }
 
 TEST_F(FailureExamplesTestSuite, testCheckEqualFailure)
 {
-	AllureAPI::setTestCaseName("Check equal failure");
+	test().name("Check equal failure");
 	EXPECT_EQ(10, 20);
 }
 
 TEST_F(FailureExamplesTestSuite, testCheckCompareFailure)
 {
-	AllureAPI::setTestCaseName("Check compare failure");
+	test().name("Check compare failure");
 	int a = 5;
 	int b = 1;
 	EXPECT_LT(a, b);
@@ -265,38 +277,38 @@ TEST_F(FailureExamplesTestSuite, testCheckCompareFailure)
 
 TEST_F(FailureExamplesTestSuite, testCheckThrowsFailure)
 {
-	AllureAPI::setTestCaseName("Check throws failure");
+	test().name("Check throws failure");
 	EXPECT_THROW([]() { /* no throw */ }(), std::runtime_error);
 }
 
 TEST_F(FailureExamplesTestSuite, testStrnCmpEqualFailure)
 {
-	AllureAPI::setTestCaseName("STRNCMP failure");
+	test().name("STRNCMP failure");
 	EXPECT_EQ(0, strncmp("Hello", "Help", 4));
 }
 
 TEST_F(FailureExamplesTestSuite, testStrCmpNoCaseFailure)
 {
-	AllureAPI::setTestCaseName("STRCMP no-case failure");
+	test().name("STRCMP no-case failure");
 	EXPECT_EQ(0, strcasecmp("Allure", "aLLuRe?"));
 }
 
 TEST_F(FailureExamplesTestSuite, testStrCmpContainsFailure)
 {
-	AllureAPI::setTestCaseName("STRCMP contains failure");
+	test().name("STRCMP contains failure");
 	std::string actual = "haystack";
 	EXPECT_NE(actual.find("needle"), std::string::npos);
 }
 
 TEST_F(FailureExamplesTestSuite, testLongsEqualFailure)
 {
-	AllureAPI::setTestCaseName("Longs comparison failure");
+	test().name("Longs comparison failure");
 	EXPECT_EQ(123, 321);
 }
 
 TEST_F(FailureExamplesTestSuite, testUnsignedLongsEqualFailure)
 {
-	AllureAPI::setTestCaseName("Unsigned longs failure");
+	test().name("Unsigned longs failure");
 	unsigned long a = 1;
 	unsigned long b = 2;
 	EXPECT_EQ(a, b);
@@ -304,13 +316,13 @@ TEST_F(FailureExamplesTestSuite, testUnsignedLongsEqualFailure)
 
 TEST_F(FailureExamplesTestSuite, testDoublesEqualFailure)
 {
-	AllureAPI::setTestCaseName("Double comparison failure");
+	test().name("Double comparison failure");
 	EXPECT_NEAR(1.0, 1.123, 0.01);
 }
 
 TEST_F(FailureExamplesTestSuite, testBytesEqualFailure)
 {
-	AllureAPI::setTestCaseName("Byte comparison failure");
+	test().name("Byte comparison failure");
 	uint8_t expected = static_cast<uint8_t>('A');
 	uint8_t actual = static_cast<uint8_t>('B');
 	EXPECT_EQ(expected, actual);
@@ -318,7 +330,7 @@ TEST_F(FailureExamplesTestSuite, testBytesEqualFailure)
 
 TEST_F(FailureExamplesTestSuite, testMemcmpEqualFailure)
 {
-	AllureAPI::setTestCaseName("Memory comparison failure");
+	test().name("Memory comparison failure");
 	const char expected[] = "foo";
 	const char actual[] = "f0o";
 	EXPECT_EQ(0, memcmp(expected, actual, sizeof(expected) - 1));
@@ -326,7 +338,7 @@ TEST_F(FailureExamplesTestSuite, testMemcmpEqualFailure)
 
 TEST_F(FailureExamplesTestSuite, testPointersEqualFailure)
 {
-	AllureAPI::setTestCaseName("Pointer comparison failure");
+	test().name("Pointer comparison failure");
 	int x = 0;
 	int y = 0;
 	int* px = &x;
@@ -339,13 +351,13 @@ void actualFunction() {}
 
 TEST_F(FailureExamplesTestSuite, testFunctionPointersEqualFailure)
 {
-	AllureAPI::setTestCaseName("Function pointer comparison failure");
+	test().name("Function pointer comparison failure");
 	EXPECT_EQ(&expectedFunction, &actualFunction);
 }
 
 TEST_F(FailureExamplesTestSuite, testBitsEqualFailure)
 {
-	AllureAPI::setTestCaseName("Bits comparison failure");
+	test().name("Bits comparison failure");
 	uint8_t expected = 0b11110000;
 	uint8_t actual = 0b11000011;
 	uint8_t mask = 0xFF;
@@ -354,122 +366,148 @@ TEST_F(FailureExamplesTestSuite, testBitsEqualFailure)
 
 TEST_F(FailureExamplesTestSuite, testExplicitFail)
 {
-	AllureAPI::setTestCaseName("Explicit fail");
+	test().name("Explicit fail");
 	GTEST_FAIL() << "Forced failure";
 }
 
 
-// Test Suite demonstrating new features: substeps and test marking
+// Test Suite demonstrating new features: nested steps with RAII and test marking
 class NewFeaturesTestSuite : public testing::Test
 {
 public:
 	static void SetUpTestSuite()
 	{
-		AllureAPI::setTestSuiteName("New Features Demo");
-		AllureAPI::setTestSuiteDescription("Demonstrating substeps and test marking features");
-		AllureAPI::setTestSuiteEpic("Phase 3 Features");
-		AllureAPI::setTestSuiteSeverity("high");
+		suite()
+			.name("New Features Demo")
+			.description("Demonstrating RAII steps and test marking features")
+			.epic("Phase 3 Features")
+			.severity("high");
 	}
 };
 
-TEST_F(NewFeaturesTestSuite, testWithManualSubsteps)
+TEST_F(NewFeaturesTestSuite, testWithNestedSteps)
 {
-	AllureAPI::setTestCaseName("Test with manual substeps");
+	test().name("Test with nested steps (RAII - automatic cleanup)");
 
-	AllureAPI::addAction("Process user registration", []() {
-		AllureAPI::beginSubStep("Validate user input");
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-		AllureAPI::endSubStep();
+	step("Process user registration", []() {
+		step("Validate user input", []() {
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		});
 
-		AllureAPI::beginSubStep("Check username availability");
-		std::this_thread::sleep_for(std::chrono::milliseconds(15));
-		AllureAPI::endSubStep();
+		step("Check username availability", []() {
+			std::this_thread::sleep_for(std::chrono::milliseconds(15));
+		});
 
-		AllureAPI::beginSubStep("Hash password");
-		std::this_thread::sleep_for(std::chrono::milliseconds(20));
-		AllureAPI::endSubStep();
+		step("Hash password", []() {
+			std::this_thread::sleep_for(std::chrono::milliseconds(20));
+		});
 
-		AllureAPI::beginSubStep("Save to database");
-		std::this_thread::sleep_for(std::chrono::milliseconds(25));
-		AllureAPI::endSubStep();
+		step("Save to database", []() {
+			std::this_thread::sleep_for(std::chrono::milliseconds(25));
+		});
 	});
 
-	AllureAPI::addExpectedResult("User should be registered", []() {
+	step("User should be registered", []() {
 		EXPECT_TRUE(true);
 	});
 }
 
-TEST_F(NewFeaturesTestSuite, testWithNestedSubsteps)
+TEST_F(NewFeaturesTestSuite, testWithDeeplyNestedSteps)
 {
-	AllureAPI::setTestCaseName("Test with nested substeps");
+	test().name("Test with deeply nested substeps");
 
-	AllureAPI::addAction("Execute complex workflow", []() {
-		AllureAPI::beginSubStep("Phase 1: Initialize");
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	step("Execute complex workflow", []() {
+		step("Phase 1: Initialize", []() {
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
-		AllureAPI::beginSubStep("Load configuration");
-		std::this_thread::sleep_for(std::chrono::milliseconds(5));
-		AllureAPI::endSubStep();
+			step("Load configuration", []() {
+				std::this_thread::sleep_for(std::chrono::milliseconds(5));
+			});
 
-		AllureAPI::beginSubStep("Connect to services");
-		std::this_thread::sleep_for(std::chrono::milliseconds(8));
-		AllureAPI::endSubStep();
+			step("Connect to services", []() {
+				std::this_thread::sleep_for(std::chrono::milliseconds(8));
+			});
+		});
 
-		AllureAPI::endSubStep();
+		step("Phase 2: Process data", []() {
+			std::this_thread::sleep_for(std::chrono::milliseconds(15));
 
-		AllureAPI::beginSubStep("Phase 2: Process data");
-		std::this_thread::sleep_for(std::chrono::milliseconds(15));
+			step("Fetch data", []() {
+				std::this_thread::sleep_for(std::chrono::milliseconds(7));
+			});
 
-		AllureAPI::beginSubStep("Fetch data");
-		std::this_thread::sleep_for(std::chrono::milliseconds(7));
-		AllureAPI::endSubStep();
-
-		AllureAPI::beginSubStep("Transform data");
-		std::this_thread::sleep_for(std::chrono::milliseconds(12));
-		AllureAPI::endSubStep();
-
-		AllureAPI::endSubStep();
+			step("Transform data", []() {
+				std::this_thread::sleep_for(std::chrono::milliseconds(12));
+			});
+		});
 	});
 
-	AllureAPI::addExpectedResult("Workflow should complete successfully", []() {
+	step("Workflow should complete successfully", []() {
 		EXPECT_TRUE(true);
 	});
 }
 
 TEST_F(NewFeaturesTestSuite, testMarkedAsFlaky)
 {
-	AllureAPI::setTestCaseName("Flaky test example");
-	AllureAPI::markTestAsFlaky();
+	test()
+		.name("Flaky test example")
+		.flaky();
 
 	// Simulate a test that sometimes passes, sometimes fails
 	// In this example, we'll make it pass, but it's marked as flaky
-	AllureAPI::addAction("Execute unreliable operation", []() {
+	step("Execute unreliable operation", []() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(20));
 	});
 
-	AllureAPI::addExpectedResult("Operation should succeed (but is unreliable)", []() {
+	step("Operation should succeed (but is unreliable)", []() {
 		EXPECT_TRUE(true);
 	});
 }
 
 TEST_F(NewFeaturesTestSuite, testMarkedAsKnown)
 {
-	AllureAPI::setTestCaseName("Known issue test");
-	AllureAPI::markTestAsKnown();
+	test()
+		.name("Known issue test")
+		.known();
 
 	// This test demonstrates a known issue that has been documented
-	AllureAPI::addExpectedResult("Known issue: will fail until bug #123 is fixed", []() {
+	step("Known issue: will fail until bug #123 is fixed", []() {
 		EXPECT_EQ(2 + 2, 5) << "This is a known issue - see ticket BUG-123";
 	});
 }
 
 TEST_F(NewFeaturesTestSuite, testMarkedAsMuted)
 {
-	AllureAPI::setTestCaseName("Muted test example");
-	AllureAPI::markTestAsMuted();
+	test()
+		.name("Muted test example")
+		.muted();
 
 	// This test is muted - failures are expected and ignored
-	AllureAPI::addExpectedResult("This failure is muted", []() {
+	step("This failure is muted", []() {
 		EXPECT_TRUE(false) << "This test is temporarily disabled";
+	});
+}
+
+TEST_F(NewFeaturesTestSuite, testWithFormattedSteps)
+{
+	test()
+		.name("Test with formatted step names")
+		.feature("Modern C++17 API")
+		.story("User can use format strings in step names");
+
+	std::string username = "testuser";
+	int userId = 12345;
+
+	// New feature: formatted step names with fmt syntax
+	step("Login as user: {}", username, [&]() {
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+	});
+
+	step("User ID should be: {}", userId, [&]() {
+		EXPECT_EQ(userId, 12345);
+	});
+
+	step("Process {} items for user {}", 42, username, [&]() {
+		EXPECT_TRUE(true);
 	});
 }

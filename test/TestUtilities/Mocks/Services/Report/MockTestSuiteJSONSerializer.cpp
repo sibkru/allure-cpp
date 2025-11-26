@@ -2,10 +2,10 @@
 #include "MockTestSuiteJSONSerializer.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
 	MockTestSuiteJSONSerializer::MockTestSuiteJSONSerializer() = default;
 	MockTestSuiteJSONSerializer::~MockTestSuiteJSONSerializer() = default;
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

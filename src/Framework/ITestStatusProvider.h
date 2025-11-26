@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace allure_cpp {
+namespace allure {
 
 	/**
 	 * @brief Framework-agnostic interface for querying test execution status.

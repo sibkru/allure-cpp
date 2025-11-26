@@ -1,4 +1,4 @@
-#include "AllureAPI.h"
+#include "allure-cpp.h"
 #include "Model/TestSuite.h"
 
 #include "TestUtilities/Stubs/Services/StubEventListener.h"
@@ -7,8 +7,8 @@
 
 
 using namespace testing;
-using namespace allure_cpp;
-using namespace allure_cpp::test_utility;
+using namespace allure;
+using namespace allure::test_utility;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 

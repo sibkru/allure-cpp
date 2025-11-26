@@ -3,16 +3,16 @@
 #include "Services/EventHandlers/ITestSuiteEndEventHandler.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockTestSuiteEndEventHandler : public allure_cpp::service::ITestSuiteEndEventHandler
+	class MockTestSuiteEndEventHandler : public allure::service::ITestSuiteEndEventHandler
 	{
 	public:
 		MockTestSuiteEndEventHandler();
 		virtual ~MockTestSuiteEndEventHandler();
 
-		MOCK_CONST_METHOD1(handleTestSuiteEnd, void(allure_cpp::model::Status));
+		MOCK_CONST_METHOD1(handleTestSuiteEnd, void(allure::model::Status));
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

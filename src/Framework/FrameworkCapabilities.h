@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace allure_cpp {
+namespace allure {
 
 	/**
 	 * @brief Describes the capabilities and features of a test framework.

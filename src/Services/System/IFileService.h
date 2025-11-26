@@ -4,7 +4,7 @@
 #include <string>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class IFileService
 	{
@@ -28,4 +28,4 @@ namespace allure_cpp { namespace service {
 		};
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

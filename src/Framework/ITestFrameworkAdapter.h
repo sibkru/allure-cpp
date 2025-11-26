@@ -6,7 +6,7 @@
 #include <memory>
 
 
-namespace allure_cpp {
+namespace allure {
 
 	/**
 	 * @brief Main interface for test framework adapters.

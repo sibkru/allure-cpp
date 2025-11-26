@@ -8,7 +8,7 @@
 #include "TestCase.h"
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	class TestSuite
 	{
@@ -75,4 +75,4 @@ namespace allure_cpp { namespace model {
 		std::vector<TestCase> m_testCases;
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

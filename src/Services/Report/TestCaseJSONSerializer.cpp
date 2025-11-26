@@ -9,7 +9,7 @@
 #include "Model/TestCase.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	std::string TestCaseJSONSerializer::serialize(const model::TestCase& testCase) const
 	{
@@ -308,4 +308,4 @@ namespace allure_cpp { namespace service {
 		}
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

@@ -7,7 +7,7 @@
 #include <string>
 
 
-namespace allure_cpp {
+namespace allure {
 	namespace model {
 		class Container;
 		class TestSuite;
@@ -55,4 +55,4 @@ namespace allure_cpp {
 		std::unique_ptr<IFileService> m_fileService;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

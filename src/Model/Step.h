@@ -7,7 +7,7 @@
 #include <memory>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	enum class Stage;
 	enum class Status;
@@ -65,4 +65,4 @@ namespace allure_cpp { namespace model {
 		std::vector<Attachment> m_attachments;
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

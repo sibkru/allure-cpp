@@ -5,7 +5,7 @@
 #include <string>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace googletest {
 
@@ -23,7 +23,7 @@ namespace googletest {
 	 * This adapter translates that information into the ITestMetadata interface,
 	 * enabling framework-independent access to test metadata.
 	 */
-	class GTestMetadata : public allure_cpp::ITestMetadata
+	class GTestMetadata : public allure::ITestMetadata
 	{
 	public:
 		/**
@@ -51,4 +51,4 @@ namespace googletest {
 		const ::testing::TestInfo& m_testInfo;
 	};
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure::adapters::googletest

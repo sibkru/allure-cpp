@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	class Label
 	{
@@ -27,4 +27,4 @@ namespace allure_cpp { namespace model {
 		std::string m_value;
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

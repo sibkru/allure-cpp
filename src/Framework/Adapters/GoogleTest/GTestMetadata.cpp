@@ -1,7 +1,7 @@
 #include "Framework/Adapters/GoogleTest/GTestMetadata.h"
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace googletest {
 
@@ -62,4 +62,4 @@ namespace googletest {
 		return valueParam ? valueParam : "";
 	}
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure::adapters::googletest

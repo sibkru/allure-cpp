@@ -4,17 +4,17 @@
 #include <CppUTest/TestRegistry.h>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
 	CppUTestAdapter::CppUTestAdapter(
-		std::unique_ptr<allure_cpp::service::ITestProgramStartEventHandler> programStartHandler,
-		std::unique_ptr<allure_cpp::service::ITestProgramEndEventHandler> programEndHandler,
-		std::unique_ptr<allure_cpp::service::ITestSuiteStartEventHandler> suiteStartHandler,
-		std::unique_ptr<allure_cpp::service::ITestSuiteEndEventHandler> suiteEndHandler,
-		std::unique_ptr<allure_cpp::service::ITestCaseStartEventHandler> caseStartHandler,
-		std::unique_ptr<allure_cpp::service::ITestCaseEndEventHandler> caseEndHandler)
+		std::unique_ptr<allure::service::ITestProgramStartEventHandler> programStartHandler,
+		std::unique_ptr<allure::service::ITestProgramEndEventHandler> programEndHandler,
+		std::unique_ptr<allure::service::ITestSuiteStartEventHandler> suiteStartHandler,
+		std::unique_ptr<allure::service::ITestSuiteEndEventHandler> suiteEndHandler,
+		std::unique_ptr<allure::service::ITestCaseStartEventHandler> caseStartHandler,
+		std::unique_ptr<allure::service::ITestCaseEndEventHandler> caseEndHandler)
 		: m_programStartHandler(std::move(programStartHandler))
 		, m_programEndHandler(std::move(programEndHandler))
 		, m_suiteStartHandler(std::move(suiteStartHandler))
@@ -69,4 +69,4 @@ namespace cpputest {
 		);
 	}
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest

@@ -3,7 +3,7 @@
 #include "Framework/ITestStatusProvider.h"
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
@@ -24,7 +24,7 @@ namespace cpputest {
 	 * }
 	 * @endcode
 	 */
-	class CppUTestStatusProvider : public allure_cpp::ITestStatusProvider
+	class CppUTestStatusProvider : public allure::ITestStatusProvider
 	{
 	public:
 		/**
@@ -39,4 +39,4 @@ namespace cpputest {
 		bool isCurrentTestSkipped() const override;
 	};
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest

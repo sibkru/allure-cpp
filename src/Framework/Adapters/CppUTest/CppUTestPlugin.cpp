@@ -8,17 +8,17 @@
 #include <CppUTest/MemoryLeakDetector.h>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
 	CppUTestPlugin::CppUTestPlugin(
-		allure_cpp::service::ITestProgramStartEventHandler* programStartHandler,
-		allure_cpp::service::ITestProgramEndEventHandler* programEndHandler,
-		allure_cpp::service::ITestSuiteStartEventHandler* suiteStartHandler,
-		allure_cpp::service::ITestSuiteEndEventHandler* suiteEndHandler,
-		allure_cpp::service::ITestCaseStartEventHandler* caseStartHandler,
-		allure_cpp::service::ITestCaseEndEventHandler* caseEndHandler)
+		allure::service::ITestProgramStartEventHandler* programStartHandler,
+		allure::service::ITestProgramEndEventHandler* programEndHandler,
+		allure::service::ITestSuiteStartEventHandler* suiteStartHandler,
+		allure::service::ITestSuiteEndEventHandler* suiteEndHandler,
+		allure::service::ITestCaseStartEventHandler* caseStartHandler,
+		allure::service::ITestCaseEndEventHandler* caseEndHandler)
 		: TestPlugin("AllureReportingPlugin")
 		, TestLifecycleListenerBase(
 			programStartHandler,
@@ -62,7 +62,7 @@ namespace cpputest {
 			{
 				if (m_groupStarted)
 				{
-					this->onTestSuiteEnd(allure_cpp::model::Status::PASSED);
+					this->onTestSuiteEnd(allure::model::Status::PASSED);
 				}
 				m_currentGroup = group;
 				m_groupStarted = true;
@@ -73,7 +73,7 @@ namespace cpputest {
 			// Report the skipped test
 			CppUTestMetadata metadata(test);
 			this->onTestStart(metadata);
-			this->onTestEnd(metadata, allure_cpp::model::Status::SKIPPED, "Test is ignored", "");
+			this->onTestEnd(metadata, allure::model::Status::SKIPPED, "Test is ignored", "");
 
 			// Re-enable leak detection
 			if (leakDetector != nullptr)
@@ -110,7 +110,7 @@ namespace cpputest {
 			if (m_groupStarted)
 			{
 				// Determine previous group status (passed if we're here)
-				this->onTestSuiteEnd(allure_cpp::model::Status::PASSED);
+				this->onTestSuiteEnd(allure::model::Status::PASSED);
 			}
 
 			// Start new group
@@ -148,13 +148,13 @@ namespace cpputest {
 		CppUTestMetadata metadata(test);
 
 		// Determine status by comparing failure count before and after the test
-		allure_cpp::model::Status status;
+		allure::model::Status status;
 		std::string statusMessage;
 		std::string statusTrace;
 
 		if (result.getFailureCount() > m_initialFailureCount)
 		{
-			status = allure_cpp::model::Status::FAILED;
+			status = allure::model::Status::FAILED;
             statusMessage = AllureCppUTestOutput::getAndClearFailureMessage();
             if (statusMessage.empty()) {
 			    statusMessage = "Test failed";
@@ -165,7 +165,7 @@ namespace cpputest {
 		}
 		else
 		{
-			status = allure_cpp::model::Status::PASSED;
+			status = allure::model::Status::PASSED;
 		}
 
 		// Call parent method

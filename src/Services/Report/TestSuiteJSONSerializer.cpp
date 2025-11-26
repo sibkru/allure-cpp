@@ -4,7 +4,7 @@
 #include "Model/TestSuite.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	std::string TestSuiteJSONSerializer::serialize(const model::TestSuite& testSuite) const
 	{
@@ -193,4 +193,4 @@ namespace allure_cpp { namespace service {
 		}
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

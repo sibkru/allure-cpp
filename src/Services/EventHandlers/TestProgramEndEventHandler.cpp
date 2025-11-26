@@ -4,7 +4,7 @@
 #include "Services/Report/ITestProgramJSONBuilder.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TestProgramEndEventHandler::TestProgramEndEventHandler(model::TestProgram& testProgram,
 														   std::unique_ptr<ITestProgramJSONBuilder> testProgramJSONBuilderService)
@@ -21,4 +21,4 @@ namespace allure_cpp { namespace service {
 		m_testProgramJSONBuilderService->buildMetadataFiles(m_testProgram);
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

@@ -8,11 +8,11 @@
 #include <memory>
 
 
-namespace allure_cpp {
+namespace allure {
 	class ITestFrameworkAdapter;
 }
 
-namespace allure_cpp {
+namespace allure {
 
 	namespace service {
 		class IServicesFactory;
@@ -21,8 +21,8 @@ namespace allure_cpp {
 	class AllureAPI
 	{
 	public:
-		static std::unique_ptr<allure_cpp::ITestStatusProvider> getStatusProvider();
-		static void setFrameworkAdapter(std::shared_ptr<allure_cpp::ITestFrameworkAdapter>);
+		static std::unique_ptr<allure::ITestStatusProvider> getStatusProvider();
+		static void setFrameworkAdapter(std::shared_ptr<allure::ITestFrameworkAdapter>);
 
 		static model::TestProgram& getTestProgram();
 		static void cleanup();
@@ -89,7 +89,7 @@ namespace allure_cpp {
 	private:
 		static model::TestProgram m_testProgram;
 		static std::unique_ptr<service::IServicesFactory> m_servicesFactory;
-		static std::shared_ptr<allure_cpp::ITestFrameworkAdapter> m_frameworkAdapter;
+		static std::shared_ptr<allure::ITestFrameworkAdapter> m_frameworkAdapter;
 	};
 
-} // namespace allure_cpp
+} // namespace allure

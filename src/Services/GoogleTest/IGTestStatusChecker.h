@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class IGTestStatusChecker
 	{
@@ -16,4 +16,4 @@ namespace allure_cpp { namespace service {
 		virtual model::Status getCurrentTestStatus() const = 0;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

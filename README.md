@@ -20,7 +20,7 @@ Add to your `CMakeLists.txt`:
 cmake_minimum_required(VERSION 3.14)
 project(MyTestProject)
 
-set(CMAKE_CXX_STANDARD 14)  # Minimum C++14 required
+set(CMAKE_CXX_STANDARD 17)  # Minimum C++17 required
 
 # Fetch allure-cpp
 include(FetchContent)
@@ -46,7 +46,7 @@ Add to your `CMakeLists.txt`:
 cmake_minimum_required(VERSION 3.14)
 project(MyTestProject)
 
-set(CMAKE_CXX_STANDARD 14)  # Minimum C++14 required
+set(CMAKE_CXX_STANDARD 17)  # Minimum C++17 required
 
 # Fetch allure-cpp
 include(FetchContent)
@@ -85,26 +85,25 @@ int main(int argc, char* argv[])
 **Test file** (`tests/MyTests.cpp`):
 
 ```cpp
+#include "allure-cpp.h"
 #include <gtest/gtest.h>
-#include "AllureAPI.h"
 
-class CalculatorTests : public ::testing::Test
-{
+class CalculatorTests : public ::testing::Test {
 protected:
-    static void SetUpTestSuite()
-    {
-        allure_cpp::AllureAPI::setTestSuiteName("Calculator Test Suite");
-        allure_cpp::AllureAPI::setTestSuiteDescription("Tests for basic calculator operations");
+    static void SetUpTestSuite() {
+        suite()
+            .name("Calculator Test Suite")
+            .description("Tests for basic calculator operations");
     }
 };
 
-TEST_F(CalculatorTests, AdditionTest)
-{
-    allure_cpp::AllureAPI::setTestCaseName("Verify addition of two numbers");
-    allure_cpp::AllureAPI::addSeverity("critical");
-    allure_cpp::AllureAPI::addFeature("Arithmetic Operations");
+TEST_F(CalculatorTests, AdditionTest) {
+    test()
+        .name("Verify addition of two numbers")
+        .severity("critical")
+        .feature("Arithmetic Operations");
 
-    allure_cpp::AllureAPI::addAction("Perform addition", []() {
+    step("Perform addition", []() {
         int result = 2 + 3;
         EXPECT_EQ(5, result);
     });
@@ -116,8 +115,10 @@ TEST_F(CalculatorTests, AdditionTest)
 **Main file** (`main.cpp`):
 
 ```cpp
+#include "allure-cpp.h"
+// Keep CppUTest (and the adapter that pulls it in) last so its new/delete
+// overrides don't affect other headers.
 #include <CppUTest/CommandLineTestRunner.h>
-#include "Framework/Adapters/CppUTest/AllureCppUTest.h"
 #include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"
 
 int main(int argc, const char* const* argv)
@@ -129,12 +130,15 @@ int main(int argc, const char* const* argv)
 }
 ```
 
+Keep your own project/standard headers (including `allure-cpp.h`) above the
+CppUTest include. Place CppUTest at the end of your include list and include the
+Allure adapter immediately after it so nothing else is processed under
+CppUTest's macro overrides.
+
 **Test file** (`tests/MyTests.cpp`):
 
-**Note:** Include `AllureAPI.h` before `<CppUTest/TestHarness.h>` to avoid conflicts with CppUTest's memory leak detection macros.
-
 ```cpp
-#include "AllureAPI.h"
+#include "allure-cpp.h"
 #include <CppUTest/TestHarness.h>
 
 TEST_GROUP(CalculatorTests)
@@ -143,11 +147,12 @@ TEST_GROUP(CalculatorTests)
 
 TEST(CalculatorTests, AdditionTest)
 {
-    allure_cpp::AllureAPI::setTestCaseName("Verify addition of two numbers");
-    allure_cpp::AllureAPI::addSeverity("critical");
-    allure_cpp::AllureAPI::addFeature("Arithmetic Operations");
+    test()
+        .name("Verify addition of two numbers")
+        .severity("critical")
+        .feature("Arithmetic Operations");
 
-    allure_cpp::AllureAPI::addAction("Perform addition", []() {
+    step("Perform addition", []() {
         int result = 2 + 3;
         CHECK_EQUAL(5, result);
     });
@@ -158,7 +163,7 @@ TEST(CalculatorTests, AdditionTest)
 
 ```bash
 mkdir build && cd build
-cmake ..
+cmake .. -DALLURE_ENABLE_CPPUTEST=ON
 cmake --build .
 ./MyTests
 
@@ -176,7 +181,7 @@ allure serve allure-results
 
 **Requirements:**
 - CMake 3.14+
-- C++14 compiler or newer
+- C++17 compiler or newer
 - Git
 
 **Build:**
@@ -185,11 +190,11 @@ allure serve allure-results
 git clone https://github.com/sibkru/allure-cpp.git
 cd allure-cpp
 mkdir build && cd build
-cmake ..
+cmake .. -DALLURE_ENABLE_GOOGLETEST=ON  # and/or ALLURE_ENABLE_CPPUTEST=ON
 cmake --build .
 ```
 
-See [BUILD.md](BUILD.md) for detailed build options.
+Examples require `-DALLURE_BUILD_EXAMPLES=ON`. Tests live under `./build/bin/UnitTest` and `./build/bin/IntegrationTest`. See [BUILD.md](BUILD.md) for detailed options.
 
 ## Attribution
 

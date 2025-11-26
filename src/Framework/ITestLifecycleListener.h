@@ -4,7 +4,7 @@
 #include "Model/Status.h"
 
 
-namespace allure_cpp {
+namespace allure {
 
 	/**
 	 * @brief Framework-agnostic interface for receiving test lifecycle events.
@@ -76,11 +76,11 @@ namespace allure_cpp {
 		 * @param metadata Complete test metadata
 		 * @param status Final test status (PASSED, FAILED, BROKEN, SKIPPED)
 		 *
-		 * @note The status parameter uses the existing allure_cpp::model::Status
+		 * @note The status parameter uses the existing allure::model::Status
 		 *       enum which is framework-agnostic.
 		 */
 		virtual void onTestEnd(const ITestMetadata& metadata,
-		                       allure_cpp::model::Status status) = 0;
+		                       allure::model::Status status) = 0;
 
 		/**
 		 * @brief Called when a test suite ends.
@@ -89,7 +89,7 @@ namespace allure_cpp {
 		 *
 		 * @param status Overall suite status (typically worst status of contained tests)
 		 */
-		virtual void onTestSuiteEnd(allure_cpp::model::Status status) = 0;
+		virtual void onTestSuiteEnd(allure::model::Status status) = 0;
 
 		/**
 		 * @brief Called when the test program ends.

@@ -4,7 +4,7 @@
 #include "TestSuite.h"
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	class TestProgram
 	{
@@ -68,4 +68,4 @@ namespace allure_cpp { namespace model {
 		TestCase* m_runningTestCase = nullptr;
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

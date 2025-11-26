@@ -3,7 +3,7 @@
 #include "ITimeService.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class TimeService : public ITimeService
 	{
@@ -14,4 +14,4 @@ namespace allure_cpp { namespace service {
 		time_t getCurrentTime() const;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

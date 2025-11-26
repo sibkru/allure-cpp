@@ -25,7 +25,7 @@
 #endif
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TestProgramJSONBuilder::TestProgramJSONBuilder(std::unique_ptr<ITestCaseJSONSerializer> testCaseJSONSerializer,
 												   std::unique_ptr<IContainerJSONSerializer> containerJSONSerializer,
@@ -495,4 +495,4 @@ namespace allure_cpp { namespace service {
 		return outputFolder + PATH_SEPARATOR + "history" + PATH_SEPARATOR + "history-trend.json";
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

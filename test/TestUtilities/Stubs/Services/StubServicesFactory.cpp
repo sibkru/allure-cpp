@@ -25,9 +25,9 @@
 
 using namespace testing;
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	StubServicesFactory::StubServicesFactory(allure_cpp::model::TestProgram& testProgram)
+	StubServicesFactory::StubServicesFactory(allure::model::TestProgram& testProgram)
 		:m_testProgram(testProgram)
 	{
 		ON_CALL(*this, buildGTestEventListenerProxy()).WillByDefault(Invoke(this, &StubServicesFactory::buildGTestEventListenerStub));
@@ -66,131 +66,131 @@ namespace allure_cpp { namespace test_utility {
 		auto testSuiteEndEventHandler = buildTestSuiteEndEventHandler();
 		auto testProgramEndEventHandler = buildTestProgramEndEventHandler();
 
-		return new allure_cpp::service::GTestEventListener
+		return new allure::service::GTestEventListener
 						(std::move(testProgramStartEventHandler), std::move(testSuiteStartEventHandler),
 						 std::move(testCaseStartEventHandler), std::move(testCaseEndEventHandler),
 						 std::move(testSuiteEndEventHandler), std::move(testProgramEndEventHandler));
 	}
 
-	allure_cpp::service::IGTestStatusChecker* StubServicesFactory::buildGTestStatusCheckerStub() const
+	allure::service::IGTestStatusChecker* StubServicesFactory::buildGTestStatusCheckerStub() const
 	{
-		return new allure_cpp::service::GTestStatusChecker();
+		return new allure::service::GTestStatusChecker();
 	}
 
 	// Lifecycle events handling services
-	allure_cpp::service::ITestProgramStartEventHandler* StubServicesFactory::buildTestProgramStartEventHandlerStub() const
+	allure::service::ITestProgramStartEventHandler* StubServicesFactory::buildTestProgramStartEventHandlerStub() const
 	{
-		return new allure_cpp::service::TestProgramStartEventHandler(m_testProgram);
+		return new allure::service::TestProgramStartEventHandler(m_testProgram);
 	}
 
-	allure_cpp::service::ITestSuiteStartEventHandler* StubServicesFactory::buildTestSuiteStartEventHandlerStub() const
-	{
-		auto uuidGeneratorService = buildUUIDGeneratorService();
-		auto timeService = buildTimeService();
-		return new allure_cpp::service::TestSuiteStartEventHandler(m_testProgram, std::move(uuidGeneratorService), std::move(timeService));
-	}
-
-	allure_cpp::service::ITestCaseStartEventHandler* StubServicesFactory::buildTestCaseStartEventHandlerStub() const
+	allure::service::ITestSuiteStartEventHandler* StubServicesFactory::buildTestSuiteStartEventHandlerStub() const
 	{
 		auto uuidGeneratorService = buildUUIDGeneratorService();
 		auto timeService = buildTimeService();
-		return new allure_cpp::service::TestCaseStartEventHandler(m_testProgram, std::move(uuidGeneratorService), std::move(timeService));
+		return new allure::service::TestSuiteStartEventHandler(m_testProgram, std::move(uuidGeneratorService), std::move(timeService));
 	}
 
-	allure_cpp::service::ITestStepStartEventHandler* StubServicesFactory::buildTestStepStartEventHandlerStub() const
+	allure::service::ITestCaseStartEventHandler* StubServicesFactory::buildTestCaseStartEventHandlerStub() const
 	{
+		auto uuidGeneratorService = buildUUIDGeneratorService();
 		auto timeService = buildTimeService();
-		return new allure_cpp::service::TestStepStartEventHandler(m_testProgram, std::move(timeService));
+		return new allure::service::TestCaseStartEventHandler(m_testProgram, std::move(uuidGeneratorService), std::move(timeService));
 	}
 
-	allure_cpp::service::ITestStepEndEventHandler* StubServicesFactory::buildTestStepEndEventHandlerStub() const
+	allure::service::ITestStepStartEventHandler* StubServicesFactory::buildTestStepStartEventHandlerStub() const
 	{
 		auto timeService = buildTimeService();
-		return new allure_cpp::service::TestStepEndEventHandler(m_testProgram, std::move(timeService));
+		return new allure::service::TestStepStartEventHandler(m_testProgram, std::move(timeService));
 	}
 
-	allure_cpp::service::ITestCaseEndEventHandler* StubServicesFactory::buildTestCaseEndEventHandlerStub() const
+	allure::service::ITestStepEndEventHandler* StubServicesFactory::buildTestStepEndEventHandlerStub() const
 	{
 		auto timeService = buildTimeService();
-		auto testCaseJSONSerializer = std::unique_ptr<allure_cpp::service::ITestCaseJSONSerializer>(buildTestCaseJSONSerializerStub());
+		return new allure::service::TestStepEndEventHandler(m_testProgram, std::move(timeService));
+	}
+
+	allure::service::ITestCaseEndEventHandler* StubServicesFactory::buildTestCaseEndEventHandlerStub() const
+	{
+		auto timeService = buildTimeService();
+		auto testCaseJSONSerializer = std::unique_ptr<allure::service::ITestCaseJSONSerializer>(buildTestCaseJSONSerializerStub());
 		auto fileService = buildFileService();
-		return new allure_cpp::service::TestCaseEndEventHandler(m_testProgram, std::move(timeService), std::move(testCaseJSONSerializer), std::move(fileService));
+		return new allure::service::TestCaseEndEventHandler(m_testProgram, std::move(timeService), std::move(testCaseJSONSerializer), std::move(fileService));
 	}
 
-	allure_cpp::service::ITestSuiteEndEventHandler* StubServicesFactory::buildTestSuiteEndEventHandlerStub() const
+	allure::service::ITestSuiteEndEventHandler* StubServicesFactory::buildTestSuiteEndEventHandlerStub() const
 	{
 		auto timeService = buildTimeService();
-		auto containerJSONSerializer = std::unique_ptr<allure_cpp::service::IContainerJSONSerializer>(buildContainerJSONSerializerStub());
+		auto containerJSONSerializer = std::unique_ptr<allure::service::IContainerJSONSerializer>(buildContainerJSONSerializerStub());
 		auto fileService = buildFileService();
-		return new allure_cpp::service::TestSuiteEndEventHandler(m_testProgram, std::move(timeService), std::move(containerJSONSerializer), std::move(fileService));
+		return new allure::service::TestSuiteEndEventHandler(m_testProgram, std::move(timeService), std::move(containerJSONSerializer), std::move(fileService));
 	}
 
-	allure_cpp::service::ITestProgramEndEventHandler* StubServicesFactory::buildTestProgramEndEventHandlerStub() const
+	allure::service::ITestProgramEndEventHandler* StubServicesFactory::buildTestProgramEndEventHandlerStub() const
 	{
 		auto testProgramJSONBuilder = buildTestProgramJSONBuilder();
-		return new allure_cpp::service::TestProgramEndEventHandler(m_testProgram, std::move(testProgramJSONBuilder));
+		return new allure::service::TestProgramEndEventHandler(m_testProgram, std::move(testProgramJSONBuilder));
 	}
 
 
 	// Property services
-	allure_cpp::service::ITestSuitePropertySetter* StubServicesFactory::buildTestSuitePropertySetterStub() const
+	allure::service::ITestSuitePropertySetter* StubServicesFactory::buildTestSuitePropertySetterStub() const
 	{
-		return new allure_cpp::service::TestSuitePropertySetter(m_testProgram);
+		return new allure::service::TestSuitePropertySetter(m_testProgram);
 	}
 
-	allure_cpp::service::ITestCasePropertySetter* StubServicesFactory::buildTestCasePropertySetterStub() const
+	allure::service::ITestCasePropertySetter* StubServicesFactory::buildTestCasePropertySetterStub() const
 	{
-		return new allure_cpp::service::TestCasePropertySetter(m_testProgram);
+		return new allure::service::TestCasePropertySetter(m_testProgram);
 	}
 
 
 	// Report services
-	allure_cpp::service::ITestProgramJSONBuilder* StubServicesFactory::buildTestProgramJSONBuilderStub() const
+	allure::service::ITestProgramJSONBuilder* StubServicesFactory::buildTestProgramJSONBuilderStub() const
 	{
-		std::unique_ptr<allure_cpp::service::ITestCaseJSONSerializer> testCaseJSONSerializer =
-			std::make_unique<allure_cpp::service::TestCaseJSONSerializer>();
+		std::unique_ptr<allure::service::ITestCaseJSONSerializer> testCaseJSONSerializer =
+			std::make_unique<allure::service::TestCaseJSONSerializer>();
 
-		std::unique_ptr<allure_cpp::service::IContainerJSONSerializer> containerJSONSerializer =
-			std::make_unique<allure_cpp::service::ContainerJSONSerializer>();
+		std::unique_ptr<allure::service::IContainerJSONSerializer> containerJSONSerializer =
+			std::make_unique<allure::service::ContainerJSONSerializer>();
 
 		auto fileService = buildFileService();
 
-		return new allure_cpp::service::TestProgramJSONBuilder(std::move(testCaseJSONSerializer),
+		return new allure::service::TestProgramJSONBuilder(std::move(testCaseJSONSerializer),
 		                                                        std::move(containerJSONSerializer),
 		                                                        std::move(fileService));
 	}
 
-	allure_cpp::service::ITestCaseJSONSerializer* StubServicesFactory::buildTestCaseJSONSerializerStub() const
+	allure::service::ITestCaseJSONSerializer* StubServicesFactory::buildTestCaseJSONSerializerStub() const
 	{
-		return new allure_cpp::service::TestCaseJSONSerializer();
+		return new allure::service::TestCaseJSONSerializer();
 	}
 
-	allure_cpp::service::IContainerJSONSerializer* StubServicesFactory::buildContainerJSONSerializerStub() const
+	allure::service::IContainerJSONSerializer* StubServicesFactory::buildContainerJSONSerializerStub() const
 	{
-		return new allure_cpp::service::ContainerJSONSerializer();
+		return new allure::service::ContainerJSONSerializer();
 	}
 
-	allure_cpp::service::ITestSuiteJSONSerializer* StubServicesFactory::buildTestSuiteJSONSerializerStub() const
+	allure::service::ITestSuiteJSONSerializer* StubServicesFactory::buildTestSuiteJSONSerializerStub() const
 	{
-		return new allure_cpp::service::TestSuiteJSONSerializer();
+		return new allure::service::TestSuiteJSONSerializer();
 	}
 
 
 	// System services
-	allure_cpp::service::IUUIDGeneratorService* StubServicesFactory::buildUUIDGeneratorServiceStub() const
+	allure::service::IUUIDGeneratorService* StubServicesFactory::buildUUIDGeneratorServiceStub() const
 	{
-		return new allure_cpp::service::UUIDGeneratorService();
+		return new allure::service::UUIDGeneratorService();
 	}
 
-	allure_cpp::service::IFileService* StubServicesFactory::buildFileServiceStub() const
+	allure::service::IFileService* StubServicesFactory::buildFileServiceStub() const
 	{
-		return new allure_cpp::service::FileService();
+		return new allure::service::FileService();
 	}
 
-	allure_cpp::service::ITimeService* StubServicesFactory::buildTimeServiceStub() const
+	allure::service::ITimeService* StubServicesFactory::buildTimeServiceStub() const
 	{
-		return new allure_cpp::service::TimeService();
+		return new allure::service::TimeService();
 	}
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

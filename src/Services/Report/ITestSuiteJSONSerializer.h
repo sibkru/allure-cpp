@@ -2,11 +2,11 @@
 
 #include <string>
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 	class TestSuite;
-}} // namespace allure_cpp::service
+}} // namespace allure::service
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITestSuiteJSONSerializer
 	{
@@ -16,4 +16,4 @@ namespace allure_cpp { namespace service {
 		virtual std::string serialize(const model::TestSuite&) const = 0;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

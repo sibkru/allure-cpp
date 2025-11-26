@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	class Parameter
 	{
@@ -33,4 +33,4 @@ namespace allure_cpp { namespace model {
 		std::string m_mode;
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

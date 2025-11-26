@@ -3,7 +3,7 @@
 #include <chrono>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TimeService::TimeService()
 	{
@@ -18,4 +18,4 @@ namespace allure_cpp { namespace service {
 		return static_cast<time_t>(millis);
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

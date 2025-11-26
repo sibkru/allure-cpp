@@ -4,7 +4,7 @@
 
 using namespace testing;
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
 	StubFileService::StubFileService(std::vector<StubFile>& filesSaved)
 		:m_filesSaved(filesSaved)
@@ -24,5 +24,5 @@ namespace allure_cpp { namespace test_utility {
 		m_filesSaved.push_back(newSavedFile);
 	}
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

@@ -3,7 +3,7 @@
 #include "Step.h"
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	class ExpectedResult : public Step
 	{
@@ -16,4 +16,4 @@ namespace allure_cpp { namespace model {
 		Step* clone() const override;
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

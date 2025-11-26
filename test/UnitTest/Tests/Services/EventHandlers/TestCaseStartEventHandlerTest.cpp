@@ -8,8 +8,8 @@
 
 
 using namespace testing;
-using namespace allure_cpp;
-using namespace allure_cpp::test_utility;
+using namespace allure;
+using namespace allure::test_utility;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 
@@ -36,6 +36,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 			m_testProgram.addTestSuite(runningTestSuite);
 
 			m_runningTestSuite = &m_testProgram.getTestSuite(1);
+			m_testProgram.setRunningTestSuite(m_runningTestSuite);
 		}
 
 		std::unique_ptr<service::IUUIDGeneratorService> buildUUIDGeneratorService()
@@ -93,6 +94,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 	TEST_F(TestCaseStartEventHandlerTest, testHandleTestCaseStartThrowsExceptionWhenNoRunningTestSuite)
 	{
 		m_testProgram.clearTestSuites();
+		m_testProgram.setRunningTestSuite(nullptr);
 		ASSERT_THROW(m_service->handleTestCaseStart("StartedTestCase"),
 					 service::TestCaseStartEventHandler::NoRunningTestSuiteException);
 	}

@@ -1,7 +1,7 @@
 #include "Framework/Adapters/CppUTest/CppUTestMetadata.h"
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
@@ -43,4 +43,4 @@ namespace cpputest {
 		return m_test.getLineNumber();
 	}
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest

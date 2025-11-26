@@ -10,8 +10,8 @@
 
 
 using namespace testing;
-using namespace allure_cpp;
-using namespace allure_cpp::test_utility;
+using namespace allure;
+using namespace allure::test_utility;
 using namespace systelab::json::test_utility;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
@@ -23,7 +23,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 
 	void BaseIntegrationTest::SetUp()
 	{
-		AllureAPI::getTestProgram().clearTestSuites();
+		detail::Core::instance().getTestProgram().clearTestSuites();
 		setUpServicesFactory();
 		m_eventListener = std::make_unique<StubEventListener>(*service::ServicesFactory::getInstance());
 	}
@@ -60,7 +60,7 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 
 	void BaseIntegrationTest::setUpServicesFactory()
 	{
-		model::TestProgram& testProgram = AllureAPI::getTestProgram();
+		model::TestProgram& testProgram = detail::Core::instance().getTestProgram();
 		auto servicesFactory = std::unique_ptr<StubServicesFactory>(new StubServicesFactory(testProgram));
 
 		setUpUUIDGeneratorService(*servicesFactory);

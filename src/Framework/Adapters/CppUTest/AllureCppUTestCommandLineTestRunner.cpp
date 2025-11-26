@@ -1,6 +1,6 @@
 #include <memory>
 
-#include "AllureAPI.h"
+#include "API/Core.h"
 #include "Framework/Adapters/CppUTest/AllureCppUTest.h"
 #include "Framework/Adapters/CppUTest/AllureCppUTestOutput.h"
 #include "Framework/Adapters/CppUTest/CppUTestAdapter.h"
@@ -13,10 +13,10 @@
 
 #include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"
 
-namespace allure_cpp { namespace adapters { namespace cpputest {
+namespace allure { namespace adapters { namespace cpputest {
 
 TestOutput* AllureCppUTestCommandLineTestRunner::userTestOutput = nullptr;
-static std::shared_ptr<allure_cpp::ITestFrameworkAdapter> s_adapter = nullptr;
+static std::shared_ptr<allure::ITestFrameworkAdapter> s_adapter = nullptr;
 
 AllureCppUTestCommandLineTestRunner::AllureCppUTestCommandLineTestRunner(int ac, const char *const *av, TestRegistry* registry)
 	: CommandLineTestRunner(ac, av, registry)
@@ -39,8 +39,8 @@ int AllureCppUTestCommandLineTestRunner::RunAllTests(int ac, const char *const *
 {
 	AllureCppUTest allureHelper;
 
-	auto& testProgram = allure_cpp::AllureAPI::getTestProgram();
-	auto servicesFactory = std::make_unique<allure_cpp::service::ServicesFactory>(testProgram);
+	auto& testProgram = allure::detail::Core::instance().getTestProgram();
+	auto servicesFactory = std::make_unique<allure::service::ServicesFactory>(testProgram);
 
 	// Create handlers, get raw pointers, then move ownership to the adapter
 	auto programStartHandler = servicesFactory->buildTestProgramStartEventHandler();
@@ -64,7 +64,7 @@ int AllureCppUTestCommandLineTestRunner::RunAllTests(int ac, const char *const *
 		std::move(caseStartHandler),
 		std::move(caseEndHandler)
 	);
-	allure_cpp::AllureAPI::setFrameworkAdapter(s_adapter);
+	allure::detail::Core::instance().setFrameworkAdapter(s_adapter);
 
 	auto* plugin = new CppUTestPlugin(
 		programStartHandlerPtr,
@@ -131,4 +131,4 @@ int RunAllureEnabledTests(int ac, const char *const *av, TestOutput* preferredOu
 	return AllureCppUTestCommandLineTestRunner::RunAllTests(ac, av);
 }
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest

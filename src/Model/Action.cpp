@@ -3,7 +3,7 @@
 #include "StepType.h"
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	Action::Action()
 		:Step()
@@ -25,4 +25,4 @@ namespace allure_cpp { namespace model {
 		return new Action(*this);
 	}
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

@@ -3,17 +3,17 @@
 #include "Model/Status.h"
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace googletest {
 
 	GTestEventListener::GTestEventListener(
-		allure_cpp::service::ITestProgramStartEventHandler* programStartHandler,
-		allure_cpp::service::ITestProgramEndEventHandler* programEndHandler,
-		allure_cpp::service::ITestSuiteStartEventHandler* suiteStartHandler,
-		allure_cpp::service::ITestSuiteEndEventHandler* suiteEndHandler,
-		allure_cpp::service::ITestCaseStartEventHandler* caseStartHandler,
-		allure_cpp::service::ITestCaseEndEventHandler* caseEndHandler)
+		allure::service::ITestProgramStartEventHandler* programStartHandler,
+		allure::service::ITestProgramEndEventHandler* programEndHandler,
+		allure::service::ITestSuiteStartEventHandler* suiteStartHandler,
+		allure::service::ITestSuiteEndEventHandler* suiteEndHandler,
+		allure::service::ITestCaseStartEventHandler* caseStartHandler,
+		allure::service::ITestCaseEndEventHandler* caseEndHandler)
 		: TestLifecycleListenerBase(
 			programStartHandler,
 			programEndHandler,
@@ -63,21 +63,21 @@ namespace googletest {
 		// Determine status from GoogleTest's TestResult
 		const ::testing::TestResult* result = testInfo.result();
 
-		allure_cpp::model::Status status;
+		allure::model::Status status;
 		std::string statusMessage;
 		std::string statusTrace;
 
 		if (result->Skipped())
 		{
-			status = allure_cpp::model::Status::SKIPPED;
+			status = allure::model::Status::SKIPPED;
 		}
 		else if (result->Passed())
 		{
-			status = allure_cpp::model::Status::PASSED;
+			status = allure::model::Status::PASSED;
 		}
 		else
 		{
-			status = allure_cpp::model::Status::FAILED;
+			status = allure::model::Status::FAILED;
 
 			// Extract failure message and trace
 			for (int i = 0; i < result->total_part_count(); i++)
@@ -117,10 +117,10 @@ namespace googletest {
 	void GTestEventListener::OnTestSuiteEnd(const ::testing::TestSuite& testSuite)
 	{
 		// Determine suite status
-		allure_cpp::model::Status status =
+		allure::model::Status status =
 			testSuite.Passed()
-				? allure_cpp::model::Status::PASSED
-				: allure_cpp::model::Status::FAILED;
+				? allure::model::Status::PASSED
+				: allure::model::Status::FAILED;
 
 		// Call parent method
 		this->onTestSuiteEnd(status);
@@ -132,4 +132,4 @@ namespace googletest {
 		this->onTestProgramEnd();
 	}
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure::adapters::googletest

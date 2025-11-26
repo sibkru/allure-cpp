@@ -3,7 +3,7 @@
 #include <gtest/gtest.h>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	GTestStatusChecker::GTestStatusChecker() = default;
 	GTestStatusChecker::~GTestStatusChecker() = default;
@@ -25,4 +25,4 @@ namespace allure_cpp { namespace service {
 		return model::Status::PASSED;
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

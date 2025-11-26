@@ -6,7 +6,7 @@
 #include <memory>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITestCaseEndEventHandler;
 	class ITestCaseStartEventHandler;
@@ -42,4 +42,4 @@ namespace allure_cpp { namespace service {
 		std::unique_ptr<ITestProgramEndEventHandler> m_testProgramEndEventHandler;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

@@ -5,7 +5,7 @@
 
 
 using namespace testing;
-using namespace allure_cpp;
+using namespace allure;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
 

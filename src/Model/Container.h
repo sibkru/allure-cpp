@@ -11,7 +11,7 @@
 #include <vector>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	// FixtureStep represents a setup or teardown step in a test container
 	// It has the same structure as a regular step
@@ -101,4 +101,4 @@ namespace allure_cpp { namespace model {
 		std::vector<FixtureStep> m_afters;    // Teardown steps
 	};
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

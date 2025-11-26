@@ -3,7 +3,7 @@
 #include "IGTestStatusChecker.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class GTestStatusChecker : public IGTestStatusChecker
 	{
@@ -14,4 +14,4 @@ namespace allure_cpp { namespace service {
 		model::Status getCurrentTestStatus() const override;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

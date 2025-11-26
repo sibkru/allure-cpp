@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.14)
 project(AllureCpp)
 
 # Configure environment
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -30,6 +30,14 @@ FetchContent_Declare(
   GIT_TAG v3.11.3
 )
 FetchContent_MakeAvailable(nlohmann_json)
+
+# fmt library - required for modern API string formatting
+FetchContent_Declare(
+  fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG 10.2.1
+)
+FetchContent_MakeAvailable(fmt)
 
 # GoogleTest - optional
 if(ALLURE_ENABLE_GOOGLETEST)
@@ -86,9 +94,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
             add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/IntegrationTest)
         endif()
 
-        if(ALLURE_BUILD_UNIT_TESTS OR ALLURE_BUILD_INTEGRATION_TESTS)
-            add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/SampleTestProject)
-        endif()
     endif()
 
     if(ALLURE_BUILD_EXAMPLES)

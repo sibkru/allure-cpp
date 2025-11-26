@@ -5,11 +5,11 @@
 #include <memory>
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 	class TestProgram;
-}} // namespace allure_cpp::service
+}} // namespace allure::service
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITestProgramJSONBuilder;
 
@@ -27,4 +27,4 @@ namespace allure_cpp { namespace service {
 		std::unique_ptr<ITestProgramJSONBuilder> m_testProgramJSONBuilderService;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

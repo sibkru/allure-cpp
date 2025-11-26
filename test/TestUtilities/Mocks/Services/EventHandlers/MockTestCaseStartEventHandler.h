@@ -3,17 +3,17 @@
 #include "Services/EventHandlers/ITestCaseStartEventHandler.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockTestCaseStartEventHandler : public allure_cpp::service::ITestCaseStartEventHandler
+	class MockTestCaseStartEventHandler : public allure::service::ITestCaseStartEventHandler
 	{
 	public:
 		MockTestCaseStartEventHandler();
 		virtual ~MockTestCaseStartEventHandler();
 
 		MOCK_CONST_METHOD1(handleTestCaseStart, void(const std::string&));
-		MOCK_CONST_METHOD1(handleTestCaseStart, void(const allure_cpp::ITestMetadata&));
+		MOCK_CONST_METHOD1(handleTestCaseStart, void(const allure::ITestMetadata&));
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

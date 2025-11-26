@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace allure_cpp { namespace adapters { namespace cpputest {
+namespace allure { namespace adapters { namespace cpputest {
 
 class AllureCppUTest
 {
@@ -21,8 +21,8 @@ private:
 	std::unique_ptr<Impl> m_impl;
 };
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest
 
 namespace allure {
-using AllureCppUTest = allure_cpp::adapters::cpputest::AllureCppUTest;
+using AllureCppUTest = allure::adapters::cpputest::AllureCppUTest;
 }

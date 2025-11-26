@@ -3,9 +3,9 @@
 #include "Services/EventHandlers/ITestProgramEndEventHandler.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockTestProgramEndEventHandler : public allure_cpp::service::ITestProgramEndEventHandler
+	class MockTestProgramEndEventHandler : public allure::service::ITestProgramEndEventHandler
 	{
 	public:
 		MockTestProgramEndEventHandler();
@@ -14,5 +14,5 @@ namespace allure_cpp { namespace test_utility {
 		MOCK_CONST_METHOD0(handleTestProgramEnd, void());
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

@@ -3,9 +3,9 @@
 #include "Services/System/IFileService.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
-	class MockFileService:  public allure_cpp::service::IFileService
+	class MockFileService:  public allure::service::IFileService
 	{
 	public:
 		MockFileService();
@@ -14,5 +14,5 @@ namespace allure_cpp { namespace test_utility {
 		MOCK_CONST_METHOD2(saveFile, void(const std::string&, const std::string&));
 	};
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

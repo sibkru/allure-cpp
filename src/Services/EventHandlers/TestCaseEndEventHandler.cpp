@@ -12,7 +12,7 @@
 #endif
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	TestCaseEndEventHandler::TestCaseEndEventHandler(model::TestProgram& testProgram,
 													 std::unique_ptr<ITimeService> timeService,
@@ -97,4 +97,4 @@ namespace allure_cpp { namespace service {
 		return *testSuite;
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

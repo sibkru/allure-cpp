@@ -10,7 +10,7 @@
 #include <gtest/gtest.h>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace googletest {
 
@@ -56,7 +56,7 @@ namespace googletest {
 	 * @endcode
 	 */
 	class GTestEventListener : public ::testing::EmptyTestEventListener,
-	                           public allure_cpp::TestLifecycleListenerBase
+	                           public allure::TestLifecycleListenerBase
 	{
 	public:
 		/**
@@ -72,12 +72,12 @@ namespace googletest {
 		 * @param caseEndHandler Handler for test case end events (must not be null)
 		 */
 		GTestEventListener(
-			allure_cpp::service::ITestProgramStartEventHandler* programStartHandler,
-			allure_cpp::service::ITestProgramEndEventHandler* programEndHandler,
-			allure_cpp::service::ITestSuiteStartEventHandler* suiteStartHandler,
-			allure_cpp::service::ITestSuiteEndEventHandler* suiteEndHandler,
-			allure_cpp::service::ITestCaseStartEventHandler* caseStartHandler,
-			allure_cpp::service::ITestCaseEndEventHandler* caseEndHandler);
+			allure::service::ITestProgramStartEventHandler* programStartHandler,
+			allure::service::ITestProgramEndEventHandler* programEndHandler,
+			allure::service::ITestSuiteStartEventHandler* suiteStartHandler,
+			allure::service::ITestSuiteEndEventHandler* suiteEndHandler,
+			allure::service::ITestCaseStartEventHandler* caseStartHandler,
+			allure::service::ITestCaseEndEventHandler* caseEndHandler);
 
 		~GTestEventListener() override = default;
 
@@ -90,4 +90,4 @@ namespace googletest {
 		void OnTestProgramEnd(const ::testing::UnitTest& unitTest) override;
 	};
 
-}}} // namespace allure_cpp::adapters::googletest
+}}} // namespace allure::adapters::googletest

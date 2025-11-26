@@ -5,7 +5,7 @@
 #include <vector>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class FileService : public IFileService
 	{
@@ -25,4 +25,4 @@ namespace allure_cpp { namespace service {
 		void createFolder(const std::string folderPath) const;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

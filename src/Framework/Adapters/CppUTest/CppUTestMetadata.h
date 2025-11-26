@@ -5,7 +5,7 @@
 #include <string>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
@@ -23,7 +23,7 @@ namespace cpputest {
 	 * This adapter translates that information into the ITestMetadata interface,
 	 * enabling framework-independent access to test metadata.
 	 */
-	class CppUTestMetadata : public allure_cpp::ITestMetadata
+	class CppUTestMetadata : public allure::ITestMetadata
 	{
 	public:
 		/**
@@ -47,4 +47,4 @@ namespace cpputest {
 		const UtestShell& m_test;
 	};
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest

@@ -17,7 +17,7 @@
 #endif
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	namespace {
 		// Simple hash function for generating historyId
@@ -200,4 +200,4 @@ namespace allure_cpp { namespace service {
 		return *testSuite;
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

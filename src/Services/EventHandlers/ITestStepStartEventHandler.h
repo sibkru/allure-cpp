@@ -3,7 +3,7 @@
 #include <string>
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	class ITestStepStartEventHandler
 	{
@@ -13,4 +13,4 @@ namespace allure_cpp { namespace service {
 		virtual void handleTestStepStart(const std::string& testStepDescription, bool isAction) const = 0;
 	};
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

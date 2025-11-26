@@ -2,7 +2,7 @@
 #include <CppUTest/TestHarness.h>
 
 
-namespace allure_cpp {
+namespace allure {
 namespace adapters {
 namespace cpputest {
 
@@ -22,4 +22,4 @@ namespace cpputest {
 		return false;
 	}
 
-}}} // namespace allure_cpp::adapters::cpputest
+}}} // namespace allure::adapters::cpputest

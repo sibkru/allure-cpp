@@ -19,7 +19,7 @@
 #include "Services/System/IUUIDGeneratorService.h"
 
 
-namespace allure_cpp { namespace test_utility {
+namespace allure { namespace test_utility {
 
 	MockServicesFactory::MockServicesFactory() = default;
 	MockServicesFactory::~MockServicesFactory() = default;
@@ -31,93 +31,93 @@ namespace allure_cpp { namespace test_utility {
 		return std::unique_ptr<::testing::TestEventListener>(buildGTestEventListenerProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::IGTestStatusChecker> MockServicesFactory::buildGTestStatusChecker() const
+	std::unique_ptr<allure::service::IGTestStatusChecker> MockServicesFactory::buildGTestStatusChecker() const
 	{
-		return std::unique_ptr<allure_cpp::service::IGTestStatusChecker>(buildGTestStatusCheckerProxy());
+		return std::unique_ptr<allure::service::IGTestStatusChecker>(buildGTestStatusCheckerProxy());
 	}
 
 
 	// Lifecycle events handling services
-	std::unique_ptr<allure_cpp::service::ITestProgramStartEventHandler> MockServicesFactory::buildTestProgramStartEventHandler() const
+	std::unique_ptr<allure::service::ITestProgramStartEventHandler> MockServicesFactory::buildTestProgramStartEventHandler() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestProgramStartEventHandler>(buildTestProgramStartEventHandlerProxy());
+		return std::unique_ptr<allure::service::ITestProgramStartEventHandler>(buildTestProgramStartEventHandlerProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestSuiteStartEventHandler> MockServicesFactory::buildTestSuiteStartEventHandler() const
+	std::unique_ptr<allure::service::ITestSuiteStartEventHandler> MockServicesFactory::buildTestSuiteStartEventHandler() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestSuiteStartEventHandler>(buildTestSuiteStartEventHandlerProxy());
+		return std::unique_ptr<allure::service::ITestSuiteStartEventHandler>(buildTestSuiteStartEventHandlerProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestCaseStartEventHandler> MockServicesFactory::buildTestCaseStartEventHandler() const
+	std::unique_ptr<allure::service::ITestCaseStartEventHandler> MockServicesFactory::buildTestCaseStartEventHandler() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestCaseStartEventHandler>(buildTestCaseStartEventHandlerProxy());
+		return std::unique_ptr<allure::service::ITestCaseStartEventHandler>(buildTestCaseStartEventHandlerProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestStepStartEventHandler> MockServicesFactory::buildTestStepStartEventHandler() const
+	std::unique_ptr<allure::service::ITestStepStartEventHandler> MockServicesFactory::buildTestStepStartEventHandler() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestStepStartEventHandler>(buildTestStepStartEventHandlerProxy());
+		return std::unique_ptr<allure::service::ITestStepStartEventHandler>(buildTestStepStartEventHandlerProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestStepEndEventHandler> MockServicesFactory::buildTestStepEndEventHandler() const
+	std::unique_ptr<allure::service::ITestStepEndEventHandler> MockServicesFactory::buildTestStepEndEventHandler() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestStepEndEventHandler>(buildTestStepEndEventHandlerProxy());
+		return std::unique_ptr<allure::service::ITestStepEndEventHandler>(buildTestStepEndEventHandlerProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestCaseEndEventHandler> MockServicesFactory::buildTestCaseEndEventHandler() const
+	std::unique_ptr<allure::service::ITestCaseEndEventHandler> MockServicesFactory::buildTestCaseEndEventHandler() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestCaseEndEventHandler>(buildTestCaseEndEventHandlerProxy());
+		return std::unique_ptr<allure::service::ITestCaseEndEventHandler>(buildTestCaseEndEventHandlerProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestSuiteEndEventHandler> MockServicesFactory::buildTestSuiteEndEventHandler() const
+	std::unique_ptr<allure::service::ITestSuiteEndEventHandler> MockServicesFactory::buildTestSuiteEndEventHandler() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestSuiteEndEventHandler>(buildTestSuiteEndEventHandlerProxy());
+		return std::unique_ptr<allure::service::ITestSuiteEndEventHandler>(buildTestSuiteEndEventHandlerProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestProgramEndEventHandler> MockServicesFactory::buildTestProgramEndEventHandler() const
+	std::unique_ptr<allure::service::ITestProgramEndEventHandler> MockServicesFactory::buildTestProgramEndEventHandler() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestProgramEndEventHandler>(buildTestProgramEndEventHandlerProxy());
+		return std::unique_ptr<allure::service::ITestProgramEndEventHandler>(buildTestProgramEndEventHandlerProxy());
 	}
 
 
 	// Property services
-	std::unique_ptr<allure_cpp::service::ITestSuitePropertySetter> MockServicesFactory::buildTestSuitePropertySetter() const
+	std::unique_ptr<allure::service::ITestSuitePropertySetter> MockServicesFactory::buildTestSuitePropertySetter() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestSuitePropertySetter>(buildTestSuitePropertySetterProxy());
+		return std::unique_ptr<allure::service::ITestSuitePropertySetter>(buildTestSuitePropertySetterProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestCasePropertySetter> MockServicesFactory::buildTestCasePropertySetter() const
+	std::unique_ptr<allure::service::ITestCasePropertySetter> MockServicesFactory::buildTestCasePropertySetter() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestCasePropertySetter>(buildTestCasePropertySetterProxy());
+		return std::unique_ptr<allure::service::ITestCasePropertySetter>(buildTestCasePropertySetterProxy());
 	}
 
 
 	// JSON services
-	std::unique_ptr<allure_cpp::service::ITestProgramJSONBuilder> MockServicesFactory::buildTestProgramJSONBuilder() const
+	std::unique_ptr<allure::service::ITestProgramJSONBuilder> MockServicesFactory::buildTestProgramJSONBuilder() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestProgramJSONBuilder>(buildTestProgramJSONBuilderProxy());
+		return std::unique_ptr<allure::service::ITestProgramJSONBuilder>(buildTestProgramJSONBuilderProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITestSuiteJSONSerializer> MockServicesFactory::buildTestSuiteJSONSerializer() const
+	std::unique_ptr<allure::service::ITestSuiteJSONSerializer> MockServicesFactory::buildTestSuiteJSONSerializer() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITestSuiteJSONSerializer>(buildTestSuiteJSONSerializerProxy());
+		return std::unique_ptr<allure::service::ITestSuiteJSONSerializer>(buildTestSuiteJSONSerializerProxy());
 	}
 
 
 	// System services
-	std::unique_ptr<allure_cpp::service::IUUIDGeneratorService> MockServicesFactory::buildUUIDGeneratorService() const
+	std::unique_ptr<allure::service::IUUIDGeneratorService> MockServicesFactory::buildUUIDGeneratorService() const
 	{
-		return std::unique_ptr<allure_cpp::service::IUUIDGeneratorService>(buildUUIDGeneratorServiceProxy());
+		return std::unique_ptr<allure::service::IUUIDGeneratorService>(buildUUIDGeneratorServiceProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::IFileService> MockServicesFactory::buildFileService() const
+	std::unique_ptr<allure::service::IFileService> MockServicesFactory::buildFileService() const
 	{
-		return std::unique_ptr<allure_cpp::service::IFileService>(buildFileServiceProxy());
+		return std::unique_ptr<allure::service::IFileService>(buildFileServiceProxy());
 	}
 
-	std::unique_ptr<allure_cpp::service::ITimeService> MockServicesFactory::buildTimeService() const
+	std::unique_ptr<allure::service::ITimeService> MockServicesFactory::buildTimeService() const
 	{
-		return std::unique_ptr<allure_cpp::service::ITimeService>(buildTimeServiceProxy());
+		return std::unique_ptr<allure::service::ITimeService>(buildTimeServiceProxy());
 	}
 
-}} // namespace allure_cpp::test_utility
+}} // namespace allure::test_utility
 

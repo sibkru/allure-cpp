@@ -1,7 +1,7 @@
 #include "TestSuite.h"
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	TestSuite::TestSuite()
 		:m_uuid()
@@ -252,4 +252,4 @@ namespace allure_cpp { namespace model {
 		return !(lhs == rhs);
 	}
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

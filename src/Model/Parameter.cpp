@@ -1,7 +1,7 @@
 #include "Parameter.h"
 
 
-namespace allure_cpp { namespace model {
+namespace allure { namespace model {
 
 	Parameter::Parameter()
 		:m_name("")
@@ -81,4 +81,4 @@ namespace allure_cpp { namespace model {
 		return !(lhs == rhs);
 	}
 
-}} // namespace allure_cpp::model
+}} // namespace allure::model

@@ -3,7 +3,7 @@
 #include "Model/Container.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	std::string ContainerJSONSerializer::serialize(const model::Container& container) const
 	{
@@ -172,4 +172,4 @@ namespace allure_cpp { namespace service {
 		}
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

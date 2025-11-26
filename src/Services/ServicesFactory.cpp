@@ -24,7 +24,7 @@
 #include "Services/Report/TestProgramJSONBuilder.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	ServicesFactory::ServicesFactory(model::TestProgram& testProgram)
 		:m_testProgram(testProgram)
@@ -179,4 +179,4 @@ namespace allure_cpp { namespace service {
 		m_instance = std::move(instance);
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

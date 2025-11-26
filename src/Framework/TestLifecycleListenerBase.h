@@ -11,7 +11,7 @@
 #include <memory>
 
 
-namespace allure_cpp {
+namespace allure {
 
 	/**
 	 * @brief Base implementation of ITestLifecycleListener that bridges to existing event handlers.
@@ -68,12 +68,12 @@ namespace allure_cpp {
 		 * @param caseEndHandler Handler for test case end events (must not be null)
 		 */
 		TestLifecycleListenerBase(
-			allure_cpp::service::ITestProgramStartEventHandler* programStartHandler,
-			allure_cpp::service::ITestProgramEndEventHandler* programEndHandler,
-			allure_cpp::service::ITestSuiteStartEventHandler* suiteStartHandler,
-			allure_cpp::service::ITestSuiteEndEventHandler* suiteEndHandler,
-			allure_cpp::service::ITestCaseStartEventHandler* caseStartHandler,
-			allure_cpp::service::ITestCaseEndEventHandler* caseEndHandler);
+			allure::service::ITestProgramStartEventHandler* programStartHandler,
+			allure::service::ITestProgramEndEventHandler* programEndHandler,
+			allure::service::ITestSuiteStartEventHandler* suiteStartHandler,
+			allure::service::ITestSuiteEndEventHandler* suiteEndHandler,
+			allure::service::ITestCaseStartEventHandler* caseStartHandler,
+			allure::service::ITestCaseEndEventHandler* caseEndHandler);
 
 		virtual ~TestLifecycleListenerBase() = default;
 
@@ -81,21 +81,21 @@ namespace allure_cpp {
 		void onTestProgramStart() override;
 		void onTestSuiteStart(const ITestMetadata& metadata) override;
 		void onTestStart(const ITestMetadata& metadata) override;
-		void onTestEnd(const ITestMetadata& metadata, allure_cpp::model::Status status) override;
-		void onTestSuiteEnd(allure_cpp::model::Status status) override;
+		void onTestEnd(const ITestMetadata& metadata, allure::model::Status status) override;
+		void onTestSuiteEnd(allure::model::Status status) override;
 		void onTestProgramEnd() override;
 
 		// Overload for capturing error details
-		void onTestEnd(const ITestMetadata& metadata, allure_cpp::model::Status status,
+		void onTestEnd(const ITestMetadata& metadata, allure::model::Status status,
 		               const std::string& statusMessage, const std::string& statusTrace);
 
 	private:
-		allure_cpp::service::ITestProgramStartEventHandler* m_programStartHandler;
-		allure_cpp::service::ITestProgramEndEventHandler* m_programEndHandler;
-		allure_cpp::service::ITestSuiteStartEventHandler* m_suiteStartHandler;
-		allure_cpp::service::ITestSuiteEndEventHandler* m_suiteEndHandler;
-		allure_cpp::service::ITestCaseStartEventHandler* m_caseStartHandler;
-		allure_cpp::service::ITestCaseEndEventHandler* m_caseEndHandler;
+		allure::service::ITestProgramStartEventHandler* m_programStartHandler;
+		allure::service::ITestProgramEndEventHandler* m_programEndHandler;
+		allure::service::ITestSuiteStartEventHandler* m_suiteStartHandler;
+		allure::service::ITestSuiteEndEventHandler* m_suiteEndHandler;
+		allure::service::ITestCaseStartEventHandler* m_caseStartHandler;
+		allure::service::ITestCaseEndEventHandler* m_caseEndHandler;
 	};
 
 }

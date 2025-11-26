@@ -8,7 +8,7 @@
 #include "Services/EventHandlers/ITestProgramStartEventHandler.h"
 
 
-namespace allure_cpp { namespace service {
+namespace allure { namespace service {
 
 	GTestEventListener::GTestEventListener(std::unique_ptr<service::ITestProgramStartEventHandler> testProgramStartEventHandler,
 										   std::unique_ptr<service::ITestSuiteStartEventHandler> testSuiteStartEventHandler,
@@ -59,4 +59,4 @@ namespace allure_cpp { namespace service {
 		m_testProgramEndEventHandler->handleTestProgramEnd();
 	}
 
-}} // namespace allure_cpp::service
+}} // namespace allure::service

@@ -166,6 +166,12 @@ cmake --build .
 allure serve allure-results
 ```
 
+## Executor metadata (history trend)
+
+- The library writes `allure-results/executor.json` on each run so Allure can build history trends. By default, `buildOrder` is a short counter (last history `buildOrder` + 1, starting at 1) and `buildName` is a readable timestamp.
+- Override values via API (`AllureAPI::setExecutorBuildName`, `AllureAPI::setExecutorBuildOrder`) or env vars (`ALLURE_BUILD_NAME`, `ALLURE_BUILD_ORDER`, `ALLURE_EXECUTOR_NAME`).
+- To keep a pre-generated `executor.json`, set `ALLURE_EXECUTOR_PRESERVE=1`; otherwise the file is overwritten on each run to avoid stale metadata.
+
 ## Build from Source
 
 **Requirements:**

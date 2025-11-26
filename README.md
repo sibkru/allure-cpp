@@ -72,12 +72,12 @@ target_link_libraries(MyTests PRIVATE AllureCpp CppUTest)
 
 ```cpp
 #include <gtest/gtest.h>
-#include "Framework/Adapters/GoogleTest/AllureGTest.h"
+#include "allure-cpp.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
-    allure_cpp::adapters::googletest::AllureGTest allureHelper;
+    allure::adapters::googletest::AllureGTest allureHelper;
     return RUN_ALL_TESTS();
 }
 ```
@@ -116,8 +116,7 @@ TEST_F(CalculatorTests, AdditionTest) {
 
 ```cpp
 #include "allure-cpp.h"
-// Keep CppUTest (and the adapter that pulls it in) last so its new/delete
-// overrides don't affect other headers.
+// Include your headers first so they aren't compiled under CppUTest's new/delete overrides.
 #include <CppUTest/CommandLineTestRunner.h>
 #include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"
 
@@ -125,8 +124,8 @@ int main(int argc, const char* const* argv)
 {
     // Initializes Allure (output folder + framework name) and runs tests with
     // the Allure-enabled runner. No custom output: uses CppUTest defaults.
-    allure_cpp::adapters::cpputest::AllureCppUTest allureHelper;
-    return allure_cpp::adapters::cpputest::RunAllureEnabledTests(argc, argv);
+    allure::adapters::cpputest::AllureCppUTest allureHelper;
+    return allure::adapters::cpputest::RunAllureEnabledTests(argc, argv);
 }
 ```
 

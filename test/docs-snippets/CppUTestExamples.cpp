@@ -1,10 +1,10 @@
+// [snippet:landing-cpputest-example]
 // Include allure-cpp.h BEFORE CppUTest headers to avoid conflicts with CppUTest's new/delete overrides
 #include "allure-cpp.h"
 #include <CppUTest/TestHarness.h>
 
 using namespace allure;
 
-// [snippet:landing-cpputest-example]
 TEST_GROUP(LandingPageTests)
 {
     void setup() override

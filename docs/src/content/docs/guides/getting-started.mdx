@@ -14,6 +14,9 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 1. **Add dependencies by pasting this into your CMakeLists.txt.**
 
     ```cmake title="CMakeLists.txt"
+    cmake_minimum_required(VERSION 3.14)
+    project(FirstTest)
+
     include(FetchContent)
     FetchContent_Declare(
       googletest
@@ -38,6 +41,9 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 2. **Use this GoogleTest main in `main.cpp`.**
 
       ```cpp title="main.cpp"
+      #include <gtest/gtest.h>
+      #include "allure-cpp.h"
+
       int main(int argc, char** argv)
       {
           ::testing::InitGoogleTest(&argc, argv);
@@ -49,6 +55,11 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 3. **Add your first annotated test to `tests.cpp`.**
 
       ```cpp title="tests.cpp"
+      #include <gtest/gtest.h>
+      #include "allure-cpp.h"
+
+      using namespace allure;
+
       class LandingPageTests : public ::testing::Test {
       public:
           static void SetUpTestSuite() {
@@ -100,6 +111,9 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 1. **Add dependencies by pasting this into your CMakeLists.txt.**
 
     ```cmake title="CMakeLists.txt"
+    cmake_minimum_required(VERSION 3.14)
+    project(FirstTest)
+
     include(FetchContent)
     FetchContent_Declare(
       CppUTest
@@ -143,6 +157,12 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 3. **Add your first annotated test to `tests.cpp`.**
 
       ```cpp title="tests.cpp"
+      // Include allure-cpp.h BEFORE CppUTest headers to avoid conflicts with CppUTest's new/delete overrides
+      #include "allure-cpp.h"
+      #include <CppUTest/TestHarness.h>
+
+      using namespace allure;
+
       TEST_GROUP(LandingPageTests)
       {
           void setup() override

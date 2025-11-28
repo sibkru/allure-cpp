@@ -83,7 +83,7 @@ SuiteMetadata suite()
 
 **Returns:**
 
-Fluent builder for test suite metadata. Metadata is automatically applied when the builder is destroyed (RAII). Each setter queues work to be executed once the suite builder leaves scope.
+Returns a value of type `SuiteMetadata`
 
 
 ### test
@@ -96,6 +96,6 @@ TestMetadata test()
 
 **Returns:**
 
-Fluent builder for test case metadata. Metadata is automatically applied when the builder is destroyed (RAII). Each setter records an operation that is executed once the builder leaves scope, so chains stay cheap and side-effect free until destruction. Builders are intended for use on the thread executing the current test case.
+Returns a value of type `TestMetadata`
 
 

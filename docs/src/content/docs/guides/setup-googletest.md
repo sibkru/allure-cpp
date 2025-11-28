@@ -43,6 +43,9 @@ The library expects you to provide your own GoogleTest target. It only fetches G
 Create your test runner's main file with the Allure adapter initialized. The adapter registers itself as a GoogleTest event listener to capture test results.
 
 ```cpp 
+#include <gtest/gtest.h>
+#include "allure-cpp.h"
+
 int main(int argc, char** argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
@@ -60,6 +63,9 @@ If you prefer to use GoogleTest's built-in `gtest_main` instead of writing your 
 First, create a test listener initialization file:
 
 ```cpp 
+#include <gtest/gtest.h>
+#include "allure-cpp.h"
+
 namespace {
     // Initialize Allure before any tests run
     class AllureEnvironment : public ::testing::Environment {

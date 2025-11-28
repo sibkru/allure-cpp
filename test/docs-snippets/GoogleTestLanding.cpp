@@ -1,9 +1,9 @@
+// [snippet:landing-googletest-example]
 #include <gtest/gtest.h>
 #include "allure-cpp.h"
 
 using namespace allure;
 
-// [snippet:landing-googletest-example]
 class LandingPageTests : public ::testing::Test {
 public:
     static void SetUpTestSuite() {

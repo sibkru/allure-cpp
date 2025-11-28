@@ -7,7 +7,7 @@ hero:
   tagline: Unofficial C++ Adapter for the Allure Framework
   actions:
     - text: Getting Started
-      link: guides/getting-started/
+      link: /guides/getting-started/
       icon: right-arrow
 ---
 
@@ -18,6 +18,11 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 <Tabs syncKey="framework">
   <TabItem label="GoogleTest">
     ```cpp 
+    #include <gtest/gtest.h>
+    #include "allure-cpp.h"
+
+    using namespace allure;
+
     class LandingPageTests : public ::testing::Test {
     public:
         static void SetUpTestSuite() {
@@ -58,6 +63,12 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
   </TabItem>
   <TabItem label="CppUTest">
     ```cpp 
+    // Include allure-cpp.h BEFORE CppUTest headers to avoid conflicts with CppUTest's new/delete overrides
+    #include "allure-cpp.h"
+    #include <CppUTest/TestHarness.h>
+
+    using namespace allure;
+
     TEST_GROUP(LandingPageTests)
     {
         void setup() override

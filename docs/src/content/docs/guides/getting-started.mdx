@@ -1,0 +1,193 @@
+---
+title: Quickstart Guide
+description: Minimal steps to get your first Allure report from C++ tests.
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+This quickstart shows the smallest setup to produce an Allure report. Pick your test framework tab and copy the snippets.
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+
+<Steps>
+1. **Add dependencies by pasting this into your CMakeLists.txt.**
+
+    ```cmake title="CMakeLists.txt"
+    include(FetchContent)
+    FetchContent_Declare(
+      googletest
+      GIT_REPOSITORY https://github.com/google/googletest.git
+      GIT_TAG        v1.14.0
+    )
+    FetchContent_MakeAvailable(googletest)
+
+    FetchContent_Declare(
+      AllureCpp
+      GIT_REPOSITORY https://github.com/sibkru/allure-cpp.git
+      GIT_TAG        main
+    )
+    set(ALLURE_ENABLE_GOOGLETEST ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(AllureCpp)
+
+    # Your test target
+    add_executable(MyTests main.cpp tests.cpp)
+    target_link_libraries(MyTests PRIVATE AllureCpp gtest gtest_main)
+    ```
+
+2. **Use this GoogleTest main in `main.cpp`.**
+
+      ```cpp title="main.cpp"
+      int main(int argc, char** argv)
+      {
+          ::testing::InitGoogleTest(&argc, argv);
+          allure::adapters::googletest::AllureGTest allureHelper;
+          return RUN_ALL_TESTS();
+      }
+      ```
+
+3. **Add your first annotated test to `tests.cpp`.**
+
+      ```cpp title="tests.cpp"
+      class LandingPageTests : public ::testing::Test {
+      public:
+          static void SetUpTestSuite() {
+              suite()
+                  .name("My Test Suite")
+                  .description("This is what your annotated testcases look like.")
+                  .epic("library demo")
+                  .severity("critical");
+          }
+      };
+
+      TEST_F(LandingPageTests, testWithSteps) {
+          test()
+              .name("Test with multiple steps")
+              .feature("Step-by-Step Execution")
+              .story("User can track test execution with detailed steps");
+
+          int result = 0;
+
+          step("Initialize value to 5", [&]() {
+              result = 5;
+          });
+
+          {
+              auto s = step("alternative step syntax");
+              result *= 2;
+          }
+
+          step("Add 3 to value", [&]() {
+              result += 3;
+          });
+
+          step("Verify result is 13", [&]() {
+              EXPECT_EQ(13, result);
+          });
+      }
+      ```
+
+4. **Run tests and view the report.**
+
+    - Build and run your tests: `ctest` or the test binary.
+    - Find results in `allure-results/` and generate the report with `allure serve allure-results`.
+</Steps>
+
+</TabItem>
+  <TabItem label="CppUTest">
+
+<Steps>
+1. **Add dependencies by pasting this into your CMakeLists.txt.**
+
+    ```cmake title="CMakeLists.txt"
+    include(FetchContent)
+    FetchContent_Declare(
+      CppUTest
+      GIT_REPOSITORY https://github.com/cpputest/cpputest.git
+      GIT_TAG        v4.0
+    )
+    set(CPPUTEST_USE_EXTENSIONS ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(CppUTest)
+
+    FetchContent_Declare(
+      AllureCpp
+      GIT_REPOSITORY https://github.com/sibkru/allure-cpp.git
+      GIT_TAG        main
+    )
+    set(ALLURE_ENABLE_CPPUTEST ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(AllureCpp)
+
+    # Your test target
+    add_executable(MyTests main.cpp tests.cpp)
+    target_link_libraries(MyTests PRIVATE AllureCpp CppUTest)
+    ```
+
+2. **Use this CppUTest main in `main.cpp`.**
+
+      ```cpp title="main.cpp"
+      // Include your headers first so they aren't compiled under CppUTest's new/delete overrides
+      #include "allure-cpp.h"
+
+      // CppUTest includes come last
+      #include <CppUTest/CommandLineTestRunner.h>
+      #include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"
+
+      int main(int argc, const char* const* argv)
+      {
+          // Initialize Allure and run tests with the Allure-enabled runner
+          allure::adapters::cpputest::AllureCppUTest allureHelper;
+          return allure::adapters::cpputest::RunAllureEnabledTests(argc, argv);
+      }
+      ```
+
+3. **Add your first annotated test to `tests.cpp`.**
+
+      ```cpp title="tests.cpp"
+      TEST_GROUP(LandingPageTests)
+      {
+          void setup() override
+          {
+              suite()
+                  .name("My Test Suite")
+                  .description("This is what your annotated testcases look like.")
+                  .epic("library demo")
+                  .severity("critical");
+          }
+      };
+
+      TEST(LandingPageTests, TestWithSteps)
+      {
+          test()
+              .name("Test with multiple steps")
+              .feature("Step-by-Step Execution")
+              .story("User can track test execution with detailed steps");
+
+          int result = 0;
+
+          step("Initialize value to 5", [&]() {
+              result = 5;
+          });
+
+          {
+              auto s = step("alternative step syntax");
+              result *= 2;
+          }
+
+          step("Add 3 to value", [&]() {
+              result += 3;
+          });
+
+          step("Verify result is 13", [&]() {
+              CHECK_EQUAL(13, result);
+          });
+      }
+      ```
+
+4. **Run tests and view the report.**
+
+    - Build and run your tests: `ctest` or the test binary.
+    - Find results in `allure-results/` and generate the report with `allure serve allure-results`.
+</Steps>
+
+</TabItem>
+</Tabs>

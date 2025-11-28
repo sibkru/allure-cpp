@@ -1,0 +1,208 @@
+---
+title: Annotate your Testcases
+description: Learn how to add metadata and steps to your tests
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+This guide shows you how to annotate your tests with Allure metadata and organize them with steps.
+
+## Test Group Metadata
+
+Test group (suite) metadata applies to all tests within that group. The approach differs between GoogleTest and CppUTest.
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    Use `SetUpTestSuite()` to configure suite-level metadata:
+
+    ```cpp 
+    class CalculatorTests : public ::testing::Test {
+    protected:
+        static void SetUpTestSuite() {
+            suite()
+                .name("Calculator Test Suite")
+                .description("Tests for basic arithmetic operations")
+                .epic("Calculator Module")
+                .severity("critical");
+        }
+    };
+    ```
+  </TabItem>
+  <TabItem label="CppUTest">
+    Use the `setup()` method in your test group:
+
+    ```cpp 
+    TEST_GROUP(CalculatorTests)
+    {
+        void setup() override
+        {
+            suite()
+                .name("Calculator Test Suite")
+                .description("Tests for basic arithmetic operations")
+                .epic("Calculator Module")
+                .severity("critical");
+        }
+    };
+    ```
+  </TabItem>
+</Tabs>
+
+## Test Metadata
+
+Call `test()` at the start of each test to set test-specific metadata like name, feature, and story.
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    ```cpp 
+    TEST_F(CalculatorTests, AdditionTest) {
+        test()
+            .name("Verify addition of two numbers")
+            .feature("Arithmetic Operations")
+            .story("User can add two numbers")
+            .severity("critical");
+
+        int result = 2 + 3;
+        EXPECT_EQ(5, result);
+    }
+    ```
+  </TabItem>
+  <TabItem label="CppUTest">
+    ```cpp 
+    TEST(CalculatorTests, AdditionTest)
+    {
+        test()
+            .name("Verify addition of two numbers")
+            .feature("Arithmetic Operations")
+            .story("User can add two numbers")
+            .severity("critical");
+
+        int result = 2 + 3;
+        CHECK_EQUAL(5, result);
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Steps
+
+Use the `step()` function to organize test logic into named steps that appear in the Allure report. Steps accept a lambda function and automatically manage their lifecycle.
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    ```cpp 
+    TEST_F(CalculatorTests, MultiStepTest) {
+        test()
+            .name("Multi-step calculation")
+            .feature("Arithmetic Operations");
+
+        int result = 0;
+
+        step("Initialize value to 5", [&]() {
+            result = 5;
+        });
+
+        step("Add 3 to value", [&]() {
+            result += 3;
+        });
+
+        step("Verify result is 8", [&]() {
+            EXPECT_EQ(8, result);
+        });
+    }
+    ```
+  </TabItem>
+  <TabItem label="CppUTest">
+    ```cpp 
+    TEST(CalculatorTests, MultiStepTest)
+    {
+        test()
+            .name("Multi-step calculation")
+            .feature("Arithmetic Operations");
+
+        int result = 0;
+
+        step("Initialize value to 5", [&]() {
+            result = 5;
+        });
+
+        step("Add 3 to value", [&]() {
+            result += 3;
+        });
+
+        step("Verify result is 8", [&]() {
+            CHECK_EQUAL(8, result);
+        });
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Alternative Step Syntax
+
+You can also use RAII-style steps without lambdas:
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    ```cpp 
+    TEST_F(CalculatorTests, RAIIStyleSteps) {
+        test().name("RAII-style steps example");
+
+        int result = 0;
+
+        {
+            auto s = step("Initialize value");
+            result = 5;
+        }
+
+        {
+            auto s = step("Multiply by 2");
+            result *= 2;
+        }
+
+        EXPECT_EQ(10, result);
+    }
+    ```
+  </TabItem>
+  <TabItem label="CppUTest">
+    ```cpp 
+    TEST(CalculatorTests, RAIIStyleSteps)
+    {
+        test().name("RAII-style steps example");
+
+        int result = 0;
+
+        {
+            auto s = step("Initialize value");
+            result = 5;
+        }
+
+        {
+            auto s = step("Multiply by 2");
+            result *= 2;
+        }
+
+        CHECK_EQUAL(10, result);
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+## Available Metadata
+
+### Suite-level
+- `.name(string)` - Suite name
+- `.description(string)` - Suite description
+- `.epic(string)` - Epic classification
+- `.severity(string)` - Severity level: "blocker", "critical", "normal", "minor", "trivial"
+- `.label(key, value)` - Custom label
+
+### Test-level
+- `.name(string)` - Test name
+- `.description(string)` - Test description
+- `.feature(string)` - Feature classification
+- `.story(string)` - User story
+- `.severity(string)` - Severity level
+- `.label(key, value)` - Custom label
+- `.flaky()` - Mark test as flaky
+- `.known()` - Mark test as known issue
+- `.muted()` - Mark test as muted

@@ -23,8 +23,3 @@ pnpm-debug.log*
 # Generated files
 generated/
 
-# Generated documentation (from templates)
-src/content/docs/guides
-
-# Generated API reference
-src/content/docs/reference/

@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include "../shared/Calculator.h"
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTest/TestHarness.h>

@@ -1,6 +1,6 @@
 // [snippet:googletest-environment]
 #include <gtest/gtest.h>
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 namespace {
     // Initialize Allure before any tests run

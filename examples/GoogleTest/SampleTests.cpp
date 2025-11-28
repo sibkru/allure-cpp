@@ -1,4 +1,4 @@
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include <gtest/gtest.h>
 #include <chrono>
 #include <cstring>

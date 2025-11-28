@@ -1,5 +1,5 @@
 // [snippet:cpputest-main-custom-output]
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTest/TeamCityTestOutput.h>
 #include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"

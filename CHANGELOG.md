@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Changed
 - fixed docs snippets to ensure includes are part of the snippets
 - fixed getting starting cmakelists.txt to contain project and minimum cmake version
+- fixed includes of public library headers to angle brackets in examples and docs
 
 
 ### Removed

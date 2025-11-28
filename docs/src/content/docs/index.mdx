@@ -19,7 +19,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
   <TabItem label="GoogleTest">
     ```cpp 
     #include <gtest/gtest.h>
-    #include "allure-cpp.h"
+    #include <allure-cpp.h>
 
     using namespace allure;
 
@@ -64,7 +64,7 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
   <TabItem label="CppUTest">
     ```cpp 
     // Include allure-cpp.h BEFORE CppUTest headers to avoid conflicts with CppUTest's new/delete overrides
-    #include "allure-cpp.h"
+    #include <allure-cpp.h>
     #include <CppUTest/TestHarness.h>
 
     using namespace allure;

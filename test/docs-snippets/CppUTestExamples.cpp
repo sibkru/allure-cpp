@@ -1,6 +1,6 @@
 // [snippet:landing-cpputest-example]
 // Include allure-cpp.h BEFORE CppUTest headers to avoid conflicts with CppUTest's new/delete overrides
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include <CppUTest/TestHarness.h>
 
 using namespace allure;

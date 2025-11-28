@@ -1,4 +1,4 @@
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include "Model/TestSuite.h"
 
 #include "TestUtilities/Stubs/Services/StubEventListener.h"

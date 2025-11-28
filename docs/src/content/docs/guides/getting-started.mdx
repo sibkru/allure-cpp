@@ -42,7 +42,7 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 
       ```cpp title="main.cpp"
       #include <gtest/gtest.h>
-      #include "allure-cpp.h"
+      #include <allure-cpp.h>
 
       int main(int argc, char** argv)
       {
@@ -56,7 +56,7 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 
       ```cpp title="tests.cpp"
       #include <gtest/gtest.h>
-      #include "allure-cpp.h"
+      #include <allure-cpp.h>
 
       using namespace allure;
 
@@ -140,7 +140,7 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 
       ```cpp title="main.cpp"
       // Include your headers first so they aren't compiled under CppUTest's new/delete overrides
-      #include "allure-cpp.h"
+      #include <allure-cpp.h>
 
       // CppUTest includes come last
       #include <CppUTest/CommandLineTestRunner.h>
@@ -158,7 +158,7 @@ This quickstart shows the smallest setup to produce an Allure report. Pick your 
 
       ```cpp title="tests.cpp"
       // Include allure-cpp.h BEFORE CppUTest headers to avoid conflicts with CppUTest's new/delete overrides
-      #include "allure-cpp.h"
+      #include <allure-cpp.h>
       #include <CppUTest/TestHarness.h>
 
       using namespace allure;

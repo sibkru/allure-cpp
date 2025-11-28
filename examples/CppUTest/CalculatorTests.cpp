@@ -1,5 +1,5 @@
 #include "../shared/Calculator.h"
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include <CppUTest/TestHarness.h>
 
 using namespace allure;

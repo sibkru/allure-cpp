@@ -1,6 +1,6 @@
 // Include your headers first so they are not compiled under CppUTest's new/delete
 // overrides.
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 // Bring in CppUTest yourself; keep these last so their overrides don't leak.
 #include <CppUTest/CommandLineTestRunner.h>

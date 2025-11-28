@@ -44,7 +44,7 @@ Create your test runner's main file with the Allure adapter initialized. The ada
 
 ```cpp 
 // Include your headers first so they aren't compiled under CppUTest's new/delete overrides
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 // CppUTest includes come last
 #include <CppUTest/CommandLineTestRunner.h>
@@ -65,7 +65,7 @@ The `AllureCppUTest` constructor configures the Allure output directory and fram
 The default setup uses CppUTest's standard console output. If you need custom output formatting (TeamCity, JUnit, etc.), you can provide your own output implementation.
 
 ```cpp 
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include <CppUTest/CommandLineTestRunner.h>
 #include <CppUTest/TeamCityTestOutput.h>
 #include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"

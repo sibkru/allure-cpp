@@ -44,7 +44,7 @@ Create your test runner's main file with the Allure adapter initialized. The ada
 
 ```cpp 
 #include <gtest/gtest.h>
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 int main(int argc, char** argv)
 {
@@ -64,7 +64,7 @@ First, create a test listener initialization file:
 
 ```cpp 
 #include <gtest/gtest.h>
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 namespace {
     // Initialize Allure before any tests run

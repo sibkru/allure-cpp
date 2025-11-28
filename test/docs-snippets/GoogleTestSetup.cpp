@@ -1,6 +1,6 @@
 // [snippet:googletest-main]
 #include <gtest/gtest.h>
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 int main(int argc, char** argv)
 {

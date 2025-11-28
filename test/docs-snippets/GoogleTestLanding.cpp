@@ -1,6 +1,6 @@
 // [snippet:landing-googletest-example]
 #include <gtest/gtest.h>
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 using namespace allure;
 

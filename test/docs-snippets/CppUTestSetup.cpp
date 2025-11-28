@@ -1,6 +1,6 @@
 // [snippet:cpputest-main]
 // Include your headers first so they aren't compiled under CppUTest's new/delete overrides
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 // CppUTest includes come last
 #include <CppUTest/CommandLineTestRunner.h>

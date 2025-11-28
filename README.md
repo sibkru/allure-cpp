@@ -75,7 +75,7 @@ target_link_libraries(MyTests PRIVATE AllureCpp CppUTest)
 
 ```cpp
 #include <gtest/gtest.h>
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 
 int main(int argc, char** argv)
 {
@@ -88,7 +88,7 @@ int main(int argc, char** argv)
 **Test file** (`tests/MyTests.cpp`):
 
 ```cpp
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include <gtest/gtest.h>
 
 class CalculatorTests : public ::testing::Test {
@@ -118,10 +118,10 @@ TEST_F(CalculatorTests, AdditionTest) {
 **Main file** (`main.cpp`):
 
 ```cpp
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 // Include your headers first so they aren't compiled under CppUTest's new/delete overrides.
 #include <CppUTest/CommandLineTestRunner.h>
-#include "Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h"
+#include <Framework/Adapters/CppUTest/AllureCppUTestCommandLineTestRunner.h>
 
 int main(int argc, const char* const* argv)
 {
@@ -140,7 +140,7 @@ CppUTest's macro overrides.
 **Test file** (`tests/MyTests.cpp`):
 
 ```cpp
-#include "allure-cpp.h"
+#include <allure-cpp.h>
 #include <CppUTest/TestHarness.h>
 
 TEST_GROUP(CalculatorTests)

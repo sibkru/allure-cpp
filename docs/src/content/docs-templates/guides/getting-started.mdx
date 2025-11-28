@@ -1,0 +1,96 @@
+---
+title: Quickstart Guide
+description: Minimal steps to get your first Allure report from C++ tests.
+---
+
+import { Tabs, TabItem, Steps } from '@astrojs/starlight/components';
+
+This quickstart shows the smallest setup to produce an Allure report. Pick your test framework tab and copy the snippets.
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+
+<Steps>
+1. **Add dependencies by pasting this into your CMakeLists.txt.**
+
+    ```cmake title="CMakeLists.txt"
+    include(FetchContent)
+    FetchContent_Declare(
+      googletest
+      GIT_REPOSITORY https://github.com/google/googletest.git
+      GIT_TAG        v1.14.0
+    )
+    FetchContent_MakeAvailable(googletest)
+
+    FetchContent_Declare(
+      AllureCpp
+      GIT_REPOSITORY https://github.com/sibkru/allure-cpp.git
+      GIT_TAG        main
+    )
+    set(ALLURE_ENABLE_GOOGLETEST ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(AllureCpp)
+
+    # Your test target
+    add_executable(MyTests main.cpp tests.cpp)
+    target_link_libraries(MyTests PRIVATE AllureCpp gtest gtest_main)
+    ```
+
+2. **Use this GoogleTest main in `main.cpp`.**
+
+      <!-- snippet:googletest-main:cpp:title="main.cpp" -->
+
+3. **Add your first annotated test to `tests.cpp`.**
+
+      <!-- snippet:landing-googletest-example:cpp:title="tests.cpp" -->
+
+4. **Run tests and view the report.**
+
+    - Build and run your tests: `ctest` or the test binary.
+    - Find results in `allure-results/` and generate the report with `allure serve allure-results`.
+</Steps>
+
+</TabItem>
+  <TabItem label="CppUTest">
+
+<Steps>
+1. **Add dependencies by pasting this into your CMakeLists.txt.**
+
+    ```cmake title="CMakeLists.txt"
+    include(FetchContent)
+    FetchContent_Declare(
+      CppUTest
+      GIT_REPOSITORY https://github.com/cpputest/cpputest.git
+      GIT_TAG        v4.0
+    )
+    set(CPPUTEST_USE_EXTENSIONS ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(CppUTest)
+
+    FetchContent_Declare(
+      AllureCpp
+      GIT_REPOSITORY https://github.com/sibkru/allure-cpp.git
+      GIT_TAG        main
+    )
+    set(ALLURE_ENABLE_CPPUTEST ON CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(AllureCpp)
+
+    # Your test target
+    add_executable(MyTests main.cpp tests.cpp)
+    target_link_libraries(MyTests PRIVATE AllureCpp CppUTest)
+    ```
+
+2. **Use this CppUTest main in `main.cpp`.**
+
+      <!-- snippet:cpputest-main:cpp:title="main.cpp" -->
+
+3. **Add your first annotated test to `tests.cpp`.**
+
+      <!-- snippet:landing-cpputest-example:cpp:title="tests.cpp" -->
+
+4. **Run tests and view the report.**
+
+    - Build and run your tests: `ctest` or the test binary.
+    - Find results in `allure-results/` and generate the report with `allure serve allure-results`.
+</Steps>
+
+</TabItem>
+</Tabs>

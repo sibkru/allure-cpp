@@ -1,0 +1,34 @@
+# MrDocs Configuration File
+# Documentation: https://mrdocs.com
+
+# Source-root: The directory containing the project source code
+source-root: src/API
+
+# Output directory for generated documentation
+output: docs/generated
+
+# Generator type: xml, html, or adoc
+# We use xml as an intermediate format for custom processing
+generator: xml
+
+# Compilation database - MrDocs uses this to understand how to compile the code
+compilation-database: build/compile_commands.json
+
+# Ignore AST visitation failures for files with missing system headers
+ignore-failures: true
+
+# Only extract public members
+extract-private: false
+
+# Extract template functions
+extract-all: true
+
+# Exclude internal implementation and interfaces not meant for end users
+exclude-symbols:
+  - "allure::model::*"
+  - "allure::service::*"
+  - "allure::detail::*"
+  - "allure::Core"
+  - "allure::NullStatusProvider"
+  - "allure::ITestFrameworkAdapter"
+  - "allure::ITestStatusProvider"

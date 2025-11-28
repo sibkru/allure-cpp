@@ -122,6 +122,11 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 
     endif()
 
+    # Documentation snippets (always built when standalone to ensure docs are correct)
+    if(ALLURE_ENABLE_GOOGLETEST OR ALLURE_ENABLE_CPPUTEST)
+        add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test/docs-snippets)
+    endif()
+
     if(ALLURE_BUILD_EXAMPLES)
         if(ALLURE_ENABLE_GOOGLETEST OR ALLURE_ENABLE_CPPUTEST)
             add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)

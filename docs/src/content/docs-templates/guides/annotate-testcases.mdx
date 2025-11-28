@@ -1,0 +1,84 @@
+---
+title: Annotate your Testcases
+description: Learn how to add metadata and steps to your tests
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+This guide shows you how to annotate your tests with Allure metadata and organize them with steps.
+
+## Test Group Metadata
+
+Test group (suite) metadata applies to all tests within that group. The approach differs between GoogleTest and CppUTest.
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    Use `SetUpTestSuite()` to configure suite-level metadata:
+
+    <!-- snippet:googletest-suite-metadata:cpp -->
+  </TabItem>
+  <TabItem label="CppUTest">
+    Use the `setup()` method in your test group:
+
+    <!-- snippet:cpputest-suite-metadata:cpp -->
+  </TabItem>
+</Tabs>
+
+## Test Metadata
+
+Call `test()` at the start of each test to set test-specific metadata like name, feature, and story.
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    <!-- snippet:googletest-test-metadata:cpp -->
+  </TabItem>
+  <TabItem label="CppUTest">
+    <!-- snippet:cpputest-test-metadata:cpp -->
+  </TabItem>
+</Tabs>
+
+## Steps
+
+Use the `step()` function to organize test logic into named steps that appear in the Allure report. Steps accept a lambda function and automatically manage their lifecycle.
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    <!-- snippet:googletest-steps:cpp -->
+  </TabItem>
+  <TabItem label="CppUTest">
+    <!-- snippet:cpputest-steps:cpp -->
+  </TabItem>
+</Tabs>
+
+### Alternative Step Syntax
+
+You can also use RAII-style steps without lambdas:
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    <!-- snippet:googletest-raii-steps:cpp -->
+  </TabItem>
+  <TabItem label="CppUTest">
+    <!-- snippet:cpputest-raii-steps:cpp -->
+  </TabItem>
+</Tabs>
+
+## Available Metadata
+
+### Suite-level
+- `.name(string)` - Suite name
+- `.description(string)` - Suite description
+- `.epic(string)` - Epic classification
+- `.severity(string)` - Severity level: "blocker", "critical", "normal", "minor", "trivial"
+- `.label(key, value)` - Custom label
+
+### Test-level
+- `.name(string)` - Test name
+- `.description(string)` - Test description
+- `.feature(string)` - Feature classification
+- `.story(string)` - User story
+- `.severity(string)` - Severity level
+- `.label(key, value)` - Custom label
+- `.flaky()` - Mark test as flaky
+- `.known()` - Mark test as known issue
+- `.muted()` - Mark test as muted

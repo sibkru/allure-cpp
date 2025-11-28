@@ -6,10 +6,16 @@
 namespace allure {
 
 /**
+ * @file StepGuard.h
+ * @brief RAII guard that manages the lifetime of an Allure step.
+ */
+
+/**
  * RAII guard for automatic step lifecycle management.
  *
  * The step starts when the guard is constructed and automatically ends
  * when the guard is destroyed (goes out of scope).
+ * If a guard is moved, only the destination guard remains active.
  *
  * Example:
  *   {
@@ -21,7 +27,7 @@ class StepGuard {
 public:
     /**
      * Construct a step guard and start the step.
-     * @param name The name of the step
+     * @param name The name of the step.
      */
     explicit StepGuard(std::string_view name);
 
@@ -40,7 +46,7 @@ public:
     StepGuard& operator=(StepGuard&& other) noexcept;
 
 private:
-    bool m_active{true};  // False if moved-from
+    bool m_active{true};  ///< True if the guard is active. Becomes false if it has been moved from.
 };
 
 } // namespace allure

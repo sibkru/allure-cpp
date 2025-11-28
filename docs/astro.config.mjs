@@ -26,8 +26,8 @@ export default defineConfig({
 				{
 					label: 'Example Reports',
 					items: [
-						{ label: 'GoogleTest Example Report', link: '/googletest-example' },
-						{ label: 'CppUTest Example Report', link: '/cpputest-example' },
+						{ label: 'GoogleTest Example Report', link: 'googletest-example' },
+						{ label: 'CppUTest Example Report', link: 'cpputest-example' },
 					],
 				},
 				{

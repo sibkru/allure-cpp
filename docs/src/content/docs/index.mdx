@@ -1,0 +1,101 @@
+---
+title: Allure Reports for C++ Tests
+description: Get started building your docs site with Starlight.
+# template: splash # Remove or comment out this line to display the site sidebar on this page.
+tableOfContents: false
+hero:
+  tagline: Unofficial C++ Adapter for the Allure Framework
+  actions:
+    - text: Getting Started
+      link: guides/getting-started/
+      icon: right-arrow
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Test report generation made easy
+
+<Tabs syncKey="framework">
+  <TabItem label="GoogleTest">
+    ```cpp 
+    class LandingPageTests : public ::testing::Test {
+    public:
+        static void SetUpTestSuite() {
+            suite()
+                .name("My Test Suite")
+                .description("This is what your annotated testcases look like.")
+                .epic("library demo")
+                .severity("critical");
+        }
+    };
+
+    TEST_F(LandingPageTests, testWithSteps) {
+        test()
+            .name("Test with multiple steps")
+            .feature("Step-by-Step Execution")
+            .story("User can track test execution with detailed steps");
+
+        int result = 0;
+
+        step("Initialize value to 5", [&]() {
+            result = 5;
+        });
+
+        {
+            auto s = step("alternative step syntax");
+            result *= 2;
+        }
+
+        step("Add 3 to value", [&]() {
+            result += 3;
+        });
+
+        step("Verify result is 13", [&]() {
+            EXPECT_EQ(13, result);
+        });
+    }
+    ```
+  </TabItem>
+  <TabItem label="CppUTest">
+    ```cpp 
+    TEST_GROUP(LandingPageTests)
+    {
+        void setup() override
+        {
+            suite()
+                .name("My Test Suite")
+                .description("This is what your annotated testcases look like.")
+                .epic("library demo")
+                .severity("critical");
+        }
+    };
+
+    TEST(LandingPageTests, TestWithSteps)
+    {
+        test()
+            .name("Test with multiple steps")
+            .feature("Step-by-Step Execution")
+            .story("User can track test execution with detailed steps");
+
+        int result = 0;
+
+        step("Initialize value to 5", [&]() {
+            result = 5;
+        });
+
+        {
+            auto s = step("alternative step syntax");
+            result *= 2;
+        }
+
+        step("Add 3 to value", [&]() {
+            result += 3;
+        });
+
+        step("Verify result is 13", [&]() {
+            CHECK_EQUAL(13, result);
+        });
+    }
+    ```
+  </TabItem>
+</Tabs>

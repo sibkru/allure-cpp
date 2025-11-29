@@ -80,7 +80,7 @@ if(ALLURE_ENABLE_CPPUTEST)
     FetchContent_Declare(
       cpputest
       GIT_REPOSITORY https://github.com/cpputest/cpputest.git
-      GIT_TAG v4.0
+      GIT_TAG master
     )
     set(TESTS OFF CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(cpputest)

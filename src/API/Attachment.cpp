@@ -3,6 +3,7 @@
 #include "../Model/Attachment.h"
 #include "../Services/System/IUUIDGeneratorService.h"
 
+#include <cstring>
 #include <fstream>
 
 namespace allure {

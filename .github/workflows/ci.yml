@@ -169,8 +169,10 @@ jobs:
         id: cache-mrdocs
         uses: actions/cache@v4
         with:
-          path: /usr/local/bin/mrdocs
-          key: mrdocs-v0.8.0-linux
+          path: |
+            /usr/local/bin/mrdocs
+            /usr/local/share/mrdocs
+          key: mrdocs-v0.8.0-linux-bundle
 
       - name: Install MrDocs
         if: steps.cache-mrdocs.outputs.cache-hit != 'true'
@@ -179,6 +181,9 @@ jobs:
           wget https://github.com/cppalliance/mrdocs/releases/download/v${MRDOCS_VERSION}/MrDocs-${MRDOCS_VERSION}-Linux.tar.gz
           tar -xzf MrDocs-${MRDOCS_VERSION}-Linux.tar.gz
           sudo mv MrDocs-${MRDOCS_VERSION}-Linux/bin/mrdocs /usr/local/bin/
+          # MrDocs expects its addons under /usr/local/share/mrdocs; copy bundled assets too.
+          sudo rm -rf /usr/local/share/mrdocs
+          sudo cp -r MrDocs-${MRDOCS_VERSION}-Linux/share/mrdocs /usr/local/share/
           sudo chmod +x /usr/local/bin/mrdocs
 
       - name: Verify MrDocs installation

@@ -175,11 +175,11 @@ jobs:
       - name: Install MrDocs
         if: steps.cache-mrdocs.outputs.cache-hit != 'true'
         run: |
-          MRDOCS_VERSION=v0.8.0
-          wget -q https://github.com/cppalliance/mrdocs/releases/download/${MRDOCS_VERSION}/mrdocs-${MRDOCS_VERSION}-linux-amd64.tar.gz
-          tar -xzf mrdocs-${MRDOCS_VERSION}-linux-amd64.tar.gz
-          sudo mv mrdocs /usr/local/bin/
-          chmod +x /usr/local/bin/mrdocs
+          MRDOCS_VERSION=0.8.0
+          wget https://github.com/cppalliance/mrdocs/releases/download/v${MRDOCS_VERSION}/MrDocs-${MRDOCS_VERSION}-Linux.tar.gz
+          tar -xzf MrDocs-${MRDOCS_VERSION}-Linux.tar.gz
+          sudo mv MrDocs-${MRDOCS_VERSION}-Linux/bin/mrdocs /usr/local/bin/
+          sudo chmod +x /usr/local/bin/mrdocs
 
       - name: Verify MrDocs installation
         run: mrdocs --version

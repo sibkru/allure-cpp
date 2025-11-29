@@ -83,7 +83,7 @@ if(ALLURE_ENABLE_CPPUTEST)
       GIT_TAG master
     )
     set(TESTS OFF CACHE BOOL "" FORCE)
-    set(MEMORY_LEAK_DETECTION OFF CACHE BOOL "" FORCE)
+    set(CPPUTEST_MEM_LEAK_DETECTION_DISABLED ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(cpputest)
   else()
     find_package(CppUTest CONFIG REQUIRED)

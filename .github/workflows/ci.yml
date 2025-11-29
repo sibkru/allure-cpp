@@ -21,46 +21,46 @@ jobs:
       matrix:
         include:
           # Linux GCC
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             compiler: gcc
-            cc: gcc
-            cxx: g++
+            cc: gcc-14
+            cxx: g++-14
             framework: googletest
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             compiler: gcc
-            cc: gcc
-            cxx: g++
+            cc: gcc-14
+            cxx: g++-14
             framework: cpputest
 
           # Linux Clang
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             compiler: clang
-            cc: clang
-            cxx: clang++
+            cc: clang-18
+            cxx: clang++-18
             framework: googletest
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             compiler: clang
-            cc: clang
-            cxx: clang++
+            cc: clang-18
+            cxx: clang++-18
             framework: cpputest
 
           # macOS
-          - os: macos-latest
+          - os: macos-14
             compiler: clang
             cc: clang
             cxx: clang++
             framework: googletest
-          - os: macos-latest
+          - os: macos-14
             compiler: clang
             cc: clang
             cxx: clang++
             framework: cpputest
 
           # Windows MSVC
-          - os: windows-latest
+          - os: windows-2022
             compiler: msvc
             framework: googletest
-          - os: windows-latest
+          - os: windows-2022
             compiler: msvc
             framework: cpputest
 
@@ -147,7 +147,7 @@ jobs:
 
   documentation:
     needs: test-matrix
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -187,13 +187,13 @@ jobs:
       - name: Install CMake and build tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build g++-11
+          sudo apt-get install -y cmake ninja-build g++-14
 
       - name: Run documentation update script
         run: bash scripts/update_docs.sh --build-docs
         env:
-          CC: gcc-11
-          CXX: g++-11
+          CC: gcc-14
+          CXX: g++-14
 
       - name: Upload documentation artifact
         uses: actions/upload-artifact@v4

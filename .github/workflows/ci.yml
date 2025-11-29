@@ -189,6 +189,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build
 
+      - name: Install Allure CLI
+        run: |
+          npm install -g allure
+          allure --version
+
       - name: Run documentation update script
         run: bash scripts/update_docs.sh --build-docs
 

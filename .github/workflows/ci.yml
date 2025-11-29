@@ -21,46 +21,46 @@ jobs:
       matrix:
         include:
           # Linux GCC
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             compiler: gcc
-            cc: gcc-11
-            cxx: g++-11
+            cc: gcc
+            cxx: g++
             framework: googletest
-          - os: ubuntu-22.04
+          - os: ubuntu-latest
             compiler: gcc
-            cc: gcc-11
-            cxx: g++-11
+            cc: gcc
+            cxx: g++
             framework: cpputest
 
           # Linux Clang
-          - os: ubuntu-22.04
-            compiler: clang
-            cc: clang-14
-            cxx: clang++-14
-            framework: googletest
-          - os: ubuntu-22.04
-            compiler: clang
-            cc: clang-14
-            cxx: clang++-14
-            framework: cpputest
-
-          # macOS
-          - os: macos-13
+          - os: ubuntu-latest
             compiler: clang
             cc: clang
             cxx: clang++
             framework: googletest
-          - os: macos-13
+          - os: ubuntu-latest
+            compiler: clang
+            cc: clang
+            cxx: clang++
+            framework: cpputest
+
+          # macOS
+          - os: macos-latest
+            compiler: clang
+            cc: clang
+            cxx: clang++
+            framework: googletest
+          - os: macos-latest
             compiler: clang
             cc: clang
             cxx: clang++
             framework: cpputest
 
           # Windows MSVC
-          - os: windows-2022
+          - os: windows-latest
             compiler: msvc
             framework: googletest
-          - os: windows-2022
+          - os: windows-latest
             compiler: msvc
             framework: cpputest
 

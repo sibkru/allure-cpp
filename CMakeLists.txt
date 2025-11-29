@@ -52,7 +52,12 @@ if(ALLURE_ENABLE_GOOGLETEST)
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
   else()
-    find_package(GTest CONFIG REQUIRED)
+    # If the parent project already provided GTest targets (e.g., via FetchContent),
+    # reuse them instead of insisting on a package config.
+    if(NOT (TARGET GTest::gtest OR TARGET gtest))
+      find_package(GTest CONFIG REQUIRED)
+    endif()
+
     if(TARGET GTest::gtest AND NOT TARGET gtest)
       add_library(gtest ALIAS GTest::gtest)
     endif()

@@ -17,6 +17,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Removed
 - (placeholder)
 
+## [0.2.0] - 2025-11-29
+
+### Changed
+- fixed CMakeLists.txt file to correctly use googletest, when allure-cpp is included as library in another project and googletest is fetched via Cmake FetchContent
+- fixed docs snippets to ensure includes are part of the snippets
+- fixed getting starting cmakelists.txt to contain project and minimum cmake version
+- fixed includes of public library headers to angle brackets in examples and docs
+
+
+
 ## [0.1.0] - 2025-11-28
 ### Added
 - Initial public release of `allure-cpp`, a library for generating Allure 2 reports from C++ tests.

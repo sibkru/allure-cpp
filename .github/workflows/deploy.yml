@@ -1,7 +1,9 @@
 name: Deploy Docs to GitHub Pages
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types: [completed]
     branches: [main]
   workflow_dispatch:
 
@@ -15,7 +17,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check-ci-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - run: echo "CI passed, proceeding with deployment"
+
   build:
+    needs: check-ci-success
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

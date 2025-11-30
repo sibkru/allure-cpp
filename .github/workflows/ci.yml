@@ -194,9 +194,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build
 
+      - name: Install Java (for Allure CLI)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-17-jre
+
       - name: Install Allure CLI
         run: |
-          npm install -g allure
+          npm install -g allure-commandline@2.29.0
           allure --version
 
       - name: Run documentation update script

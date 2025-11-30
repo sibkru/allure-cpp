@@ -61,6 +61,8 @@ target_include_directories(${ALLURE_CPP} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+# Always emit Allure 3 compatible IDs; flag retained for compatibility but unused here
+
 # Link dependencies
 target_link_libraries(${ALLURE_CPP} PUBLIC nlohmann_json::nlohmann_json fmt::fmt)
 

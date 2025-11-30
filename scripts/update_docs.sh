@@ -141,12 +141,7 @@ if [ "$1" = "--build-docs" ] || [ "$1" = "--with-examples" ]; then
             exit 1
         }
 
-        # Move reports to public directory for documentation site
-        echo "Moving reports to docs/public/..."
-        mkdir -p docs/public
-        rm -rf docs/public/googletest-example docs/public/cpputest-example
-        mv docs/googletest-example docs/public/googletest-example
-        mv docs/cpputest-example docs/public/cpputest-example
+        # Reports already generated to docs/public by generate_trend_reports.sh
 
         echo -e "${GREEN}✓ Example Allure reports generated${NC}"
     fi

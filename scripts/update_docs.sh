@@ -127,9 +127,30 @@ python3 scripts/inject_snippets.py || {
 echo -e "${GREEN}✓ Snippets injected successfully${NC}"
 echo ""
 
-# Step 5: Build documentation (optional)
+# Step 5: Generate example Allure reports (optional)
+if [ "$1" = "--build-docs" ] || [ "$1" = "--with-examples" ]; then
+    echo -e "${YELLOW}Step 5: Generating example Allure reports...${NC}"
+
+    # Check if allure CLI is available
+    if ! command -v allure &> /dev/null; then
+        echo -e "${YELLOW}Warning: allure CLI not found. Skipping example report generation.${NC}"
+        echo -e "${YELLOW}Install allure from: https://docs.qameta.io/allure/${NC}"
+    else
+        bash scripts/generate_trend_reports.sh || {
+            echo -e "${RED}Failed to generate example reports${NC}"
+            exit 1
+        }
+
+        # Reports already generated to docs/public by generate_trend_reports.sh
+
+        echo -e "${GREEN}✓ Example Allure reports generated${NC}"
+    fi
+    echo ""
+fi
+
+# Step 6: Build documentation (optional)
 if [ "$1" = "--build-docs" ]; then
-    echo -e "${YELLOW}Step 5: Building documentation site...${NC}"
+    echo -e "${YELLOW}Step 6: Building documentation site...${NC}"
     cd docs
     if [ ! -d "node_modules" ]; then
         echo "Installing npm dependencies..."

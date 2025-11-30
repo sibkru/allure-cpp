@@ -1,53 +1,48 @@
-#include <allure-cpp.h>
-#include <gtest/gtest.h>
-#include <chrono>
-#include <cstring>
-#include <stdexcept>
+#include <memory>
+#include <vector>
 #include <string>
 #include <thread>
-#include <vector>
-#include <strings.h>
+#include <chrono>
+
+#include <allure-cpp.h>
 #include "../shared/Calculator.h"
+#include <CppUTest/CommandLineTestRunner.h>
+#include <CppUTest/TestHarness.h>
 
 using namespace allure;
 
-/**
- * @brief Sample test suite to demonstrate Allure reporting with the new modern API
- *
- * This file showcases all features of the modern allure-cpp API including:
- * - RAII-based step guards (automatic cleanup)
- * - Fluent metadata builders (no .apply() needed)
- * - Simplified attachment API
- * - Modern C++17 style with string formatting
- */
+//==============================================================================
+// Basic Test Suite
+//==============================================================================
 
-class BasicTestSuite : public testing::Test
+TEST_GROUP(BasicTestSuite)
 {
-public:
-	static void SetUpTestSuite()
-	{
-		suite()
+    void setup() override
+    {
+        suite()
 			.name("Basic Test Suite")
 			.description("A simple test suite to verify API compatibility")
-			.epic("Core Functionality")
+			.epic("Phase 3 Validation")
 			.severity("critical")
+			.label("layer", "unit")
 			.label("tmsId", "API-COMPAT-001");
-	}
+        test().label("layer", "unit");
+        test().epic("Phase 3 Validation");
+    }
 };
 
-TEST_F(BasicTestSuite, testSimplePass)
+TEST(BasicTestSuite, testSimplePass)
 {
 	test()
 		.name("Simple passing test")
 		.feature("Basic Operations")
-		.story("User can execute simple tests");
-
+		.story("User can execute simple CppUTest cases");
 	std::this_thread::sleep_for(std::chrono::milliseconds(50));
-	EXPECT_TRUE(true);
-	EXPECT_EQ(1, 1);
+	CHECK_TRUE(true);
+	CHECK_EQUAL(1, 1);
 }
 
-TEST_F(BasicTestSuite, testWithSteps)
+TEST(BasicTestSuite, testWithSteps)
 {
 	test()
 		.name("Test with multiple steps")
@@ -61,7 +56,7 @@ TEST_F(BasicTestSuite, testWithSteps)
 	});
 
 	step("Value should be 5", [&]() {
-		EXPECT_EQ(5, result);
+		CHECK_EQUAL(5, result);
 	});
 
 	step("Add 3 to value", [&]() {
@@ -69,71 +64,84 @@ TEST_F(BasicTestSuite, testWithSteps)
 	});
 
 	step("Value should be 8", [&]() {
-		EXPECT_EQ(8, result);
+		CHECK_EQUAL(8, result);
 	});
 }
 
-TEST_F(BasicTestSuite, testWithStatusQuery)
+TEST(BasicTestSuite, testWithStatusQuery)
 {
-	test().name("Test demonstrating status provider");
+	test()
+		.name("Test demonstrating status provider")
+		.feature("Observability")
+		.story("Framework surfaces test status to helpers");
 
 	// Perform some assertions
-	EXPECT_TRUE(true);
+	CHECK_TRUE(true);
 
 	// Query status (still available via Core)
 	auto statusProvider = detail::Core::instance().getStatusProvider();
-	EXPECT_FALSE(statusProvider->isCurrentTestFailed());
-	EXPECT_FALSE(statusProvider->isCurrentTestSkipped());
+	CHECK_FALSE(statusProvider->isCurrentTestFailed());
+	CHECK_FALSE(statusProvider->isCurrentTestSkipped());
 }
 
+//==============================================================================
+// Parametric Test Suite
+//==============================================================================
 
-class ParametricTestSuite : public testing::TestWithParam<int>
+TEST_GROUP(ParametricTestSuite)
 {
-public:
-	static void SetUpTestSuite()
-	{
-		suite()
+    void setup() override
+    {
+        suite()
 			.name("Parametric Test Suite")
 			.description("Tests with parameters")
 			.epic("Phase 3 Validation")
-			.severity("normal");
-	}
+			.severity("normal")
+			.label("layer", "unit");
+        test().label("layer", "unit");
+        test().epic("Phase 3 Validation");
+    }
 };
 
-TEST_P(ParametricTestSuite, testWithParameter)
+TEST(ParametricTestSuite, testWithParameter)
 {
-	int param = GetParam();
-	test().name("Test with parameter: " + std::to_string(param));
+    // CppUTest doesn't have built-in parametric tests, so we simulate it with a loop
+    for (int param : {10, 20, 30})
+    {
+        test()
+			.name("Test with parameter: " + std::to_string(param))
+			.feature("Parameterized Execution")
+			.story("User can run the same test for multiple inputs");
 
-	// Keep a tiny pause to demonstrate timing without slowing the suite
-	std::this_thread::sleep_for(std::chrono::milliseconds(5));
-	EXPECT_GE(param, 0);
-	EXPECT_LT(param, 100);
+        // Keep a tiny pause to demonstrate timing without slowing the suite
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        CHECK_TRUE(param >= 0);
+        CHECK_TRUE(param < 100);
+    }
 }
 
-INSTANTIATE_TEST_SUITE_P(
-	NumberRange,
-	ParametricTestSuite,
-	testing::Values(10, 20, 30)
-);
+//==============================================================================
+// Complex Test Suite
+//==============================================================================
 
-
-class ComplexTestSuite : public testing::Test
+TEST_GROUP(ComplexTestSuite)
 {
-public:
-	static void SetUpTestSuite()
-	{
-		suite()
+    void setup() override
+    {
+        suite()
 			.name("Complex Test Suite")
 			.description("Complex scenarios with nested steps")
-			.epic("Advanced Features")
+			.epic("Phase 3 Validation")
 			.severity("high")
+			.label("layer", "integration")
 			.label("feature", "api-compatibility")
 			.label("component", "allure-reporting");
-	}
+        test().label("layer", "integration");
+        test().epic("Phase 3 Validation");
+    }
 };
 
-TEST_F(ComplexTestSuite, testNestedSteps)
+TEST(ComplexTestSuite, testNestedSteps)
 {
 	test()
 		.name("Test with nested operations")
@@ -147,7 +155,7 @@ TEST_F(ComplexTestSuite, testNestedSteps)
 	});
 
 	step("Vector should be empty", [&]() {
-		EXPECT_EQ(0, numbers.size());
+		CHECK_EQUAL(0, numbers.size());
 	});
 
 	step("Add three numbers", [&]() {
@@ -157,7 +165,7 @@ TEST_F(ComplexTestSuite, testNestedSteps)
 	});
 
 	step("Vector should have 3 elements", [&]() {
-		EXPECT_EQ(3, numbers.size());
+		CHECK_EQUAL(3, numbers.size());
 	});
 
 	step("Sum should be 6", [&]() {
@@ -165,11 +173,11 @@ TEST_F(ComplexTestSuite, testNestedSteps)
 		for (int n : numbers) {
 			sum += n;
 		}
-		EXPECT_EQ(6, sum);
+		CHECK_EQUAL(6, sum);
 	});
 }
 
-TEST_F(ComplexTestSuite, testMultipleAssertions)
+TEST(ComplexTestSuite, testMultipleAssertions)
 {
 	test()
 		.name("Test with multiple assertions")
@@ -179,213 +187,295 @@ TEST_F(ComplexTestSuite, testMultipleAssertions)
 	std::string text = "Hello, Allure!";
 
 	step("Text should not be empty", [&]() {
-		EXPECT_FALSE(text.empty());
+		CHECK_FALSE(text.empty());
 	});
 
 	step("Text should contain 'Allure'", [&]() {
-		EXPECT_NE(text.find("Allure"), std::string::npos);
+		CHECK_TRUE(text.find("Allure") != std::string::npos);
 	});
 
 	step("Text length should be 14", [&]() {
-		EXPECT_EQ(14, text.length());
+		CHECK_EQUAL(14, text.length());
 	});
 }
 
+//==============================================================================
+// Failure Examples Test Suite
+//==============================================================================
 
-// Test Suite with Failures (for demonstrating categories)
-class FailureExamplesTestSuite : public testing::Test
+TEST_GROUP(FailureExamplesTestSuite)
 {
-public:
-	static void SetUpTestSuite()
-	{
-		suite()
+    void setup() override
+    {
+        suite()
 			.name("Failure Examples")
 			.description("Examples of different failure types for category testing")
 			.epic("Testing")
-			.severity("normal");
-	}
+			.severity("normal")
+			.label("layer", "integration");
+        test().label("layer", "integration");
+        test().epic("Testing");
+    }
 };
 
-TEST_F(FailureExamplesTestSuite, testProductDefect)
+TEST(FailureExamplesTestSuite, testProductDefect)
 {
-	test().name("Product defect - calculation error");
+	test()
+		.name("Product defect - calculation error")
+		.feature("Failure Scenarios")
+		.story("Unexpected product defect is reported");
 
 	step("Perform calculation", []() {
 		// Intentional failure to demonstrate category
 	});
 
 	step("Result should be correct", []() {
-		EXPECT_EQ(2 + 2, 5) << "Calculation failed - this is a product defect";
+		CHECK_EQUAL(5, 2 + 2);
 	});
 }
 
-TEST_F(FailureExamplesTestSuite, testBrokenTest)
+TEST(FailureExamplesTestSuite, testBrokenTest)
 {
-	test().name("Broken test - runtime error");
+	test()
+		.name("Broken test - runtime error")
+		.feature("Failure Scenarios")
+		.story("Infrastructure failures are visible");
 
 	step("Access invalid pointer", []() {
 		// Simulate a test defect (broken test infrastructure)
-		std::string* ptr = nullptr;
-		if (ptr == nullptr) {
-			throw std::runtime_error("RuntimeException: Test infrastructure is broken");
+		try {
+			std::string* ptr = nullptr;
+			if (ptr == nullptr) {
+				throw std::runtime_error("RuntimeException: Test infrastructure is broken");
+			}
+		} catch (const std::runtime_error& e) {
+			FAIL("Runtime exception thrown");
 		}
 	});
 }
 
-TEST_F(FailureExamplesTestSuite, testAnotherFailure)
+TEST(FailureExamplesTestSuite, testAnotherFailure)
 {
-	test().name("Another product failure");
+	test()
+		.name("Another product failure")
+		.feature("Failure Scenarios")
+		.story("Mismatched strings are captured");
 
 	step("String comparison should work", []() {
 		std::string actual = "Hello";
 		std::string expected = "World";
-		EXPECT_EQ(actual, expected) << "String mismatch - product defect";
+		STRCMP_EQUAL(expected.c_str(), actual.c_str());
 	});
 }
 
-TEST_F(FailureExamplesTestSuite, testCheckFailure)
+TEST(FailureExamplesTestSuite, testLongsEqualFailure)
 {
-	test().name("Generic check failure");
-	EXPECT_TRUE(false) << "Expected condition to be true";
+	test()
+		.name("Longs comparison failure")
+		.feature("Failure Scenarios")
+		.story("Long comparison mismatch is captured");
+
+	step("Long values should match", []() {
+		LONGS_EQUAL(123, 321);
+	});
 }
 
-TEST_F(FailureExamplesTestSuite, testCheckTextFailure)
+TEST(FailureExamplesTestSuite, testDoublesEqualFailure)
 {
-	test().name("Check with message failure");
-	EXPECT_TRUE(false) << "CheckText message should appear";
+	test()
+		.name("Double comparison failure")
+		.feature("Failure Scenarios")
+		.story("Floating point mismatch is captured");
+
+	step("Doubles should be within tolerance", []() {
+		DOUBLES_EQUAL(1.0, 1.123, 0.01);
+	});
 }
 
-TEST_F(FailureExamplesTestSuite, testCheckFalseFailure)
+TEST(FailureExamplesTestSuite, testBytesEqualFailure)
 {
-	test().name("Check false failure");
-	EXPECT_FALSE(true) << "Expected condition to be false";
+	test()
+		.name("Byte comparison failure")
+		.feature("Failure Scenarios")
+		.story("Byte mismatch is captured");
+
+	step("Bytes should match", []() {
+		BYTES_EQUAL('A', 'B');
+	});
 }
 
-TEST_F(FailureExamplesTestSuite, testCheckEqualFailure)
+TEST(FailureExamplesTestSuite, testMemcmpEqualFailure)
 {
-	test().name("Check equal failure");
-	EXPECT_EQ(10, 20);
+	test()
+		.name("Memory comparison failure")
+		.feature("Failure Scenarios")
+		.story("Buffer mismatches are reported");
+
+	step("Buffers should match", []() {
+		const char expected[] = "foo";
+		const char actual[] = "f0o";
+		MEMCMP_EQUAL(expected, actual, sizeof(expected) - 1);
+	});
 }
 
-TEST_F(FailureExamplesTestSuite, testCheckCompareFailure)
+TEST(FailureExamplesTestSuite, testCheckFailure)
 {
-	test().name("Check compare failure");
+	test()
+		.name("Generic check failure")
+		.feature("Failure Scenarios")
+		.story("Generic assertion failure");
+	CHECK(false);
+}
+
+TEST(FailureExamplesTestSuite, testCheckTextFailure)
+{
+	test()
+		.name("Check with message failure")
+		.feature("Failure Scenarios")
+		.story("Assertion with message fails");
+	CHECK_TEXT(false, "CheckText message should appear");
+}
+
+TEST(FailureExamplesTestSuite, testCheckFalseFailure)
+{
+	test()
+		.name("Check false failure")
+		.feature("Failure Scenarios")
+		.story("Boolean false check fails");
+	CHECK_FALSE(true);
+}
+
+TEST(FailureExamplesTestSuite, testCheckEqualFailure)
+{
+	test()
+		.name("Check equal failure")
+		.feature("Failure Scenarios")
+		.story("Equality check fails");
+	CHECK_EQUAL(10, 20);
+}
+
+TEST(FailureExamplesTestSuite, testCheckCompareFailure)
+{
+	test()
+		.name("Check compare failure")
+		.feature("Failure Scenarios")
+		.story("Comparison check fails");
 	int a = 5;
 	int b = 1;
-	EXPECT_LT(a, b);
+	CHECK_COMPARE(a, <, b);
 }
 
-TEST_F(FailureExamplesTestSuite, testCheckThrowsFailure)
+TEST(FailureExamplesTestSuite, testCheckThrowsFailure)
 {
-	test().name("Check throws failure");
-	EXPECT_THROW([]() { /* no throw */ }(), std::runtime_error);
+	test()
+		.name("Check throws failure")
+		.feature("Failure Scenarios")
+		.story("Expected exception not thrown");
+	CHECK_THROWS(std::runtime_error, []() { /* no throw */ }());
 }
 
-TEST_F(FailureExamplesTestSuite, testStrnCmpEqualFailure)
+TEST(FailureExamplesTestSuite, testStrnCmpEqualFailure)
 {
-	test().name("STRNCMP failure");
-	EXPECT_EQ(0, strncmp("Hello", "Help", 4));
+	test()
+		.name("STRNCMP failure")
+		.feature("Failure Scenarios")
+		.story("String prefix mismatch is captured");
+	STRNCMP_EQUAL("Hello", "Help", 4);
 }
 
-TEST_F(FailureExamplesTestSuite, testStrCmpNoCaseFailure)
+TEST(FailureExamplesTestSuite, testStrCmpNoCaseFailure)
 {
-	test().name("STRCMP no-case failure");
-	EXPECT_EQ(0, strcasecmp("Allure", "aLLuRe?"));
+	test()
+		.name("STRCMP no-case failure")
+		.feature("Failure Scenarios")
+		.story("Case-insensitive string mismatch");
+	STRCMP_NOCASE_EQUAL("Allure", "aLLuRe?");
 }
 
-TEST_F(FailureExamplesTestSuite, testStrCmpContainsFailure)
+TEST(FailureExamplesTestSuite, testStrCmpContainsFailure)
 {
-	test().name("STRCMP contains failure");
-	std::string actual = "haystack";
-	EXPECT_NE(actual.find("needle"), std::string::npos);
+	test()
+		.name("STRCMP contains failure")
+		.feature("Failure Scenarios")
+		.story("Substring expectation fails");
+	STRCMP_CONTAINS("needle", "haystack");
 }
 
-TEST_F(FailureExamplesTestSuite, testLongsEqualFailure)
+TEST(FailureExamplesTestSuite, testUnsignedLongsEqualFailure)
 {
-	test().name("Longs comparison failure");
-	EXPECT_EQ(123, 321);
+	test()
+		.name("Unsigned longs failure")
+		.feature("Failure Scenarios")
+		.story("Unsigned long mismatch");
+	UNSIGNED_LONGS_EQUAL(static_cast<unsigned long>(1), static_cast<unsigned long>(2));
 }
 
-TEST_F(FailureExamplesTestSuite, testUnsignedLongsEqualFailure)
+TEST(FailureExamplesTestSuite, testPointersEqualFailure)
 {
-	test().name("Unsigned longs failure");
-	unsigned long a = 1;
-	unsigned long b = 2;
-	EXPECT_EQ(a, b);
-}
-
-TEST_F(FailureExamplesTestSuite, testDoublesEqualFailure)
-{
-	test().name("Double comparison failure");
-	EXPECT_NEAR(1.0, 1.123, 0.01);
-}
-
-TEST_F(FailureExamplesTestSuite, testBytesEqualFailure)
-{
-	test().name("Byte comparison failure");
-	uint8_t expected = static_cast<uint8_t>('A');
-	uint8_t actual = static_cast<uint8_t>('B');
-	EXPECT_EQ(expected, actual);
-}
-
-TEST_F(FailureExamplesTestSuite, testMemcmpEqualFailure)
-{
-	test().name("Memory comparison failure");
-	const char expected[] = "foo";
-	const char actual[] = "f0o";
-	EXPECT_EQ(0, memcmp(expected, actual, sizeof(expected) - 1));
-}
-
-TEST_F(FailureExamplesTestSuite, testPointersEqualFailure)
-{
-	test().name("Pointer comparison failure");
+	test()
+		.name("Pointer comparison failure")
+		.feature("Failure Scenarios")
+		.story("Pointer inequality caught");
 	int x = 0;
 	int y = 0;
 	int* px = &x;
 	int* py = &y;
-	EXPECT_EQ(px, py) << "Pointers should match";
+	POINTERS_EQUAL(px, py);
 }
 
 void expectedFunction() {}
 void actualFunction() {}
 
-TEST_F(FailureExamplesTestSuite, testFunctionPointersEqualFailure)
+TEST(FailureExamplesTestSuite, testFunctionPointersEqualFailure)
 {
-	test().name("Function pointer comparison failure");
-	EXPECT_EQ(&expectedFunction, &actualFunction);
+	test()
+		.name("Function pointer comparison failure")
+		.feature("Failure Scenarios")
+		.story("Function pointer mismatch");
+	FUNCTIONPOINTERS_EQUAL(&expectedFunction, &actualFunction);
 }
 
-TEST_F(FailureExamplesTestSuite, testBitsEqualFailure)
+TEST(FailureExamplesTestSuite, testBitsEqualFailure)
 {
-	test().name("Bits comparison failure");
+	test()
+		.name("Bits comparison failure")
+		.feature("Failure Scenarios")
+		.story("Bitmask comparison fails");
 	uint8_t expected = 0b11110000;
 	uint8_t actual = 0b11000011;
 	uint8_t mask = 0xFF;
-	EXPECT_EQ(expected & mask, actual & mask);
+	BITS_EQUAL(expected, actual, mask);
 }
 
-TEST_F(FailureExamplesTestSuite, testExplicitFail)
+TEST(FailureExamplesTestSuite, testExplicitFail)
 {
-	test().name("Explicit fail");
-	GTEST_FAIL() << "Forced failure";
+	test()
+		.name("Explicit fail")
+		.feature("Failure Scenarios")
+		.story("Intentional failure for demo");
+	FAIL("Forced failure");
 }
 
+//==============================================================================
+// New Features Test Suite
+//==============================================================================
 
-// Test Suite demonstrating new features: nested steps with RAII and test marking
-class NewFeaturesTestSuite : public testing::Test
+TEST_GROUP(NewFeaturesTestSuite)
 {
-public:
-	static void SetUpTestSuite()
-	{
-		suite()
+    void setup() override
+    {
+        suite()
 			.name("New Features Demo")
 			.description("Demonstrating RAII steps and test marking features")
 			.epic("Phase 3 Features")
-			.severity("high");
-	}
+			.severity("high")
+			.label("layer", "e2e");
+        test().label("layer", "e2e");
+        test().epic("Phase 3 Features");
+    }
 };
 
-TEST_F(NewFeaturesTestSuite, testWithNestedSteps)
+TEST(NewFeaturesTestSuite, testWithNestedSteps)
 {
 	test().name("Test with nested steps (RAII - automatic cleanup)");
 
@@ -408,11 +498,11 @@ TEST_F(NewFeaturesTestSuite, testWithNestedSteps)
 	});
 
 	step("User should be registered", []() {
-		EXPECT_TRUE(true);
+		CHECK_TRUE(true);
 	});
 }
 
-TEST_F(NewFeaturesTestSuite, testWithDeeplyNestedSteps)
+TEST(NewFeaturesTestSuite, testWithDeeplyNestedSteps)
 {
 	test().name("Test with deeply nested substeps");
 
@@ -443,11 +533,11 @@ TEST_F(NewFeaturesTestSuite, testWithDeeplyNestedSteps)
 	});
 
 	step("Workflow should complete successfully", []() {
-		EXPECT_TRUE(true);
+		CHECK_TRUE(true);
 	});
 }
 
-TEST_F(NewFeaturesTestSuite, testMarkedAsFlaky)
+TEST(NewFeaturesTestSuite, testMarkedAsFlaky)
 {
 	test()
 		.name("Flaky test example")
@@ -460,11 +550,11 @@ TEST_F(NewFeaturesTestSuite, testMarkedAsFlaky)
 	});
 
 	step("Operation should succeed (but is unreliable)", []() {
-		EXPECT_TRUE(true);
+		CHECK_TRUE(true);
 	});
 }
 
-TEST_F(NewFeaturesTestSuite, testMarkedAsKnown)
+TEST(NewFeaturesTestSuite, testMarkedAsKnown)
 {
 	test()
 		.name("Known issue test")
@@ -472,11 +562,11 @@ TEST_F(NewFeaturesTestSuite, testMarkedAsKnown)
 
 	// This test demonstrates a known issue that has been documented
 	step("Known issue: will fail until bug #123 is fixed", []() {
-		EXPECT_EQ(2 + 2, 5) << "This is a known issue - see ticket BUG-123";
+		CHECK_EQUAL(5, 2 + 2);
 	});
 }
 
-TEST_F(NewFeaturesTestSuite, testMarkedAsMuted)
+TEST(NewFeaturesTestSuite, testMarkedAsMuted)
 {
 	test()
 		.name("Muted test example")
@@ -484,30 +574,6 @@ TEST_F(NewFeaturesTestSuite, testMarkedAsMuted)
 
 	// This test is muted - failures are expected and ignored
 	step("This failure is muted", []() {
-		EXPECT_TRUE(false) << "This test is temporarily disabled";
-	});
-}
-
-TEST_F(NewFeaturesTestSuite, testWithFormattedSteps)
-{
-	test()
-		.name("Test with formatted step names")
-		.feature("Modern C++17 API")
-		.story("User can use format strings in step names");
-
-	std::string username = "testuser";
-	int userId = 12345;
-
-	// New feature: formatted step names with fmt syntax
-	step("Login as user: {}", username, [&]() {
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	});
-
-	step("User ID should be: {}", userId, [&]() {
-		EXPECT_EQ(userId, 12345);
-	});
-
-	step("Process {} items for user {}", 42, username, [&]() {
-		EXPECT_TRUE(true);
+		CHECK_TRUE(false);
 	});
 }

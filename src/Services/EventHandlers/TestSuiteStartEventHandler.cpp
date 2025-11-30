@@ -48,11 +48,10 @@ namespace allure { namespace service {
 		// Set fullName (for GoogleTest, this is the test suite name)
 		testSuite.setFullName(testSuiteName);
 
-		// Generate historyId from the test suite name for consistent test history tracking
-		testSuite.setHistoryId(generateSimpleHash(testSuiteName));
-
-		// Set testCaseId to the same as UUID for now
-		testSuite.setTestCaseId(uuid);
+		// Generate stable ids from suite name
+		const std::string stableId = generateSimpleHash(testSuiteName);
+		testSuite.setHistoryId(stableId);
+		testSuite.setTestCaseId(stableId);
 
 		testSuite.setStart(m_timeService->getCurrentTime());
 		testSuite.setStage(model::Stage::RUNNING);

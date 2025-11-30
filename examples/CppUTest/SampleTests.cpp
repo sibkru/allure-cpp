@@ -24,13 +24,19 @@ TEST_GROUP(BasicTestSuite)
 			.description("A simple test suite to verify API compatibility")
 			.epic("Phase 3 Validation")
 			.severity("critical")
+			.label("layer", "unit")
 			.label("tmsId", "API-COMPAT-001");
+        test().label("layer", "unit");
+        test().epic("Phase 3 Validation");
     }
 };
 
 TEST(BasicTestSuite, testSimplePass)
 {
-	test().name("Simple passing test");
+	test()
+		.name("Simple passing test")
+		.feature("Basic Operations")
+		.story("User can execute simple CppUTest cases");
 	std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	CHECK_TRUE(true);
 	CHECK_EQUAL(1, 1);
@@ -64,7 +70,10 @@ TEST(BasicTestSuite, testWithSteps)
 
 TEST(BasicTestSuite, testWithStatusQuery)
 {
-	test().name("Test demonstrating status provider");
+	test()
+		.name("Test demonstrating status provider")
+		.feature("Observability")
+		.story("Framework surfaces test status to helpers");
 
 	// Perform some assertions
 	CHECK_TRUE(true);
@@ -87,7 +96,10 @@ TEST_GROUP(ParametricTestSuite)
 			.name("Parametric Test Suite")
 			.description("Tests with parameters")
 			.epic("Phase 3 Validation")
-			.severity("normal");
+			.severity("normal")
+			.label("layer", "unit");
+        test().label("layer", "unit");
+        test().epic("Phase 3 Validation");
     }
 };
 
@@ -96,7 +108,10 @@ TEST(ParametricTestSuite, testWithParameter)
     // CppUTest doesn't have built-in parametric tests, so we simulate it with a loop
     for (int param : {10, 20, 30})
     {
-        test().name("Test with parameter: " + std::to_string(param));
+        test()
+			.name("Test with parameter: " + std::to_string(param))
+			.feature("Parameterized Execution")
+			.story("User can run the same test for multiple inputs");
 
         // Keep a tiny pause to demonstrate timing without slowing the suite
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -118,8 +133,11 @@ TEST_GROUP(ComplexTestSuite)
 			.description("Complex scenarios with nested steps")
 			.epic("Phase 3 Validation")
 			.severity("high")
+			.label("layer", "integration")
 			.label("feature", "api-compatibility")
 			.label("component", "allure-reporting");
+        test().label("layer", "integration");
+        test().epic("Phase 3 Validation");
     }
 };
 
@@ -193,13 +211,19 @@ TEST_GROUP(FailureExamplesTestSuite)
 			.name("Failure Examples")
 			.description("Examples of different failure types for category testing")
 			.epic("Testing")
-			.severity("normal");
+			.severity("normal")
+			.label("layer", "integration");
+        test().label("layer", "integration");
+        test().epic("Testing");
     }
 };
 
 TEST(FailureExamplesTestSuite, testProductDefect)
 {
-	test().name("Product defect - calculation error");
+	test()
+		.name("Product defect - calculation error")
+		.feature("Failure Scenarios")
+		.story("Unexpected product defect is reported");
 
 	step("Perform calculation", []() {
 		// Intentional failure to demonstrate category
@@ -212,7 +236,10 @@ TEST(FailureExamplesTestSuite, testProductDefect)
 
 TEST(FailureExamplesTestSuite, testBrokenTest)
 {
-	test().name("Broken test - runtime error");
+	test()
+		.name("Broken test - runtime error")
+		.feature("Failure Scenarios")
+		.story("Infrastructure failures are visible");
 
 	step("Access invalid pointer", []() {
 		// Simulate a test defect (broken test infrastructure)
@@ -229,7 +256,10 @@ TEST(FailureExamplesTestSuite, testBrokenTest)
 
 TEST(FailureExamplesTestSuite, testAnotherFailure)
 {
-	test().name("Another product failure");
+	test()
+		.name("Another product failure")
+		.feature("Failure Scenarios")
+		.story("Mismatched strings are captured");
 
 	step("String comparison should work", []() {
 		std::string actual = "Hello";
@@ -240,7 +270,10 @@ TEST(FailureExamplesTestSuite, testAnotherFailure)
 
 TEST(FailureExamplesTestSuite, testLongsEqualFailure)
 {
-	test().name("Longs comparison failure");
+	test()
+		.name("Longs comparison failure")
+		.feature("Failure Scenarios")
+		.story("Long comparison mismatch is captured");
 
 	step("Long values should match", []() {
 		LONGS_EQUAL(123, 321);
@@ -249,7 +282,10 @@ TEST(FailureExamplesTestSuite, testLongsEqualFailure)
 
 TEST(FailureExamplesTestSuite, testDoublesEqualFailure)
 {
-	test().name("Double comparison failure");
+	test()
+		.name("Double comparison failure")
+		.feature("Failure Scenarios")
+		.story("Floating point mismatch is captured");
 
 	step("Doubles should be within tolerance", []() {
 		DOUBLES_EQUAL(1.0, 1.123, 0.01);
@@ -258,7 +294,10 @@ TEST(FailureExamplesTestSuite, testDoublesEqualFailure)
 
 TEST(FailureExamplesTestSuite, testBytesEqualFailure)
 {
-	test().name("Byte comparison failure");
+	test()
+		.name("Byte comparison failure")
+		.feature("Failure Scenarios")
+		.story("Byte mismatch is captured");
 
 	step("Bytes should match", []() {
 		BYTES_EQUAL('A', 'B');
@@ -267,7 +306,10 @@ TEST(FailureExamplesTestSuite, testBytesEqualFailure)
 
 TEST(FailureExamplesTestSuite, testMemcmpEqualFailure)
 {
-	test().name("Memory comparison failure");
+	test()
+		.name("Memory comparison failure")
+		.feature("Failure Scenarios")
+		.story("Buffer mismatches are reported");
 
 	step("Buffers should match", []() {
 		const char expected[] = "foo";
@@ -278,31 +320,46 @@ TEST(FailureExamplesTestSuite, testMemcmpEqualFailure)
 
 TEST(FailureExamplesTestSuite, testCheckFailure)
 {
-	test().name("Generic check failure");
+	test()
+		.name("Generic check failure")
+		.feature("Failure Scenarios")
+		.story("Generic assertion failure");
 	CHECK(false);
 }
 
 TEST(FailureExamplesTestSuite, testCheckTextFailure)
 {
-	test().name("Check with message failure");
+	test()
+		.name("Check with message failure")
+		.feature("Failure Scenarios")
+		.story("Assertion with message fails");
 	CHECK_TEXT(false, "CheckText message should appear");
 }
 
 TEST(FailureExamplesTestSuite, testCheckFalseFailure)
 {
-	test().name("Check false failure");
+	test()
+		.name("Check false failure")
+		.feature("Failure Scenarios")
+		.story("Boolean false check fails");
 	CHECK_FALSE(true);
 }
 
 TEST(FailureExamplesTestSuite, testCheckEqualFailure)
 {
-	test().name("Check equal failure");
+	test()
+		.name("Check equal failure")
+		.feature("Failure Scenarios")
+		.story("Equality check fails");
 	CHECK_EQUAL(10, 20);
 }
 
 TEST(FailureExamplesTestSuite, testCheckCompareFailure)
 {
-	test().name("Check compare failure");
+	test()
+		.name("Check compare failure")
+		.feature("Failure Scenarios")
+		.story("Comparison check fails");
 	int a = 5;
 	int b = 1;
 	CHECK_COMPARE(a, <, b);
@@ -310,37 +367,55 @@ TEST(FailureExamplesTestSuite, testCheckCompareFailure)
 
 TEST(FailureExamplesTestSuite, testCheckThrowsFailure)
 {
-	test().name("Check throws failure");
+	test()
+		.name("Check throws failure")
+		.feature("Failure Scenarios")
+		.story("Expected exception not thrown");
 	CHECK_THROWS(std::runtime_error, []() { /* no throw */ }());
 }
 
 TEST(FailureExamplesTestSuite, testStrnCmpEqualFailure)
 {
-	test().name("STRNCMP failure");
+	test()
+		.name("STRNCMP failure")
+		.feature("Failure Scenarios")
+		.story("String prefix mismatch is captured");
 	STRNCMP_EQUAL("Hello", "Help", 4);
 }
 
 TEST(FailureExamplesTestSuite, testStrCmpNoCaseFailure)
 {
-	test().name("STRCMP no-case failure");
+	test()
+		.name("STRCMP no-case failure")
+		.feature("Failure Scenarios")
+		.story("Case-insensitive string mismatch");
 	STRCMP_NOCASE_EQUAL("Allure", "aLLuRe?");
 }
 
 TEST(FailureExamplesTestSuite, testStrCmpContainsFailure)
 {
-	test().name("STRCMP contains failure");
+	test()
+		.name("STRCMP contains failure")
+		.feature("Failure Scenarios")
+		.story("Substring expectation fails");
 	STRCMP_CONTAINS("needle", "haystack");
 }
 
 TEST(FailureExamplesTestSuite, testUnsignedLongsEqualFailure)
 {
-	test().name("Unsigned longs failure");
+	test()
+		.name("Unsigned longs failure")
+		.feature("Failure Scenarios")
+		.story("Unsigned long mismatch");
 	UNSIGNED_LONGS_EQUAL(static_cast<unsigned long>(1), static_cast<unsigned long>(2));
 }
 
 TEST(FailureExamplesTestSuite, testPointersEqualFailure)
 {
-	test().name("Pointer comparison failure");
+	test()
+		.name("Pointer comparison failure")
+		.feature("Failure Scenarios")
+		.story("Pointer inequality caught");
 	int x = 0;
 	int y = 0;
 	int* px = &x;
@@ -353,13 +428,19 @@ void actualFunction() {}
 
 TEST(FailureExamplesTestSuite, testFunctionPointersEqualFailure)
 {
-	test().name("Function pointer comparison failure");
+	test()
+		.name("Function pointer comparison failure")
+		.feature("Failure Scenarios")
+		.story("Function pointer mismatch");
 	FUNCTIONPOINTERS_EQUAL(&expectedFunction, &actualFunction);
 }
 
 TEST(FailureExamplesTestSuite, testBitsEqualFailure)
 {
-	test().name("Bits comparison failure");
+	test()
+		.name("Bits comparison failure")
+		.feature("Failure Scenarios")
+		.story("Bitmask comparison fails");
 	uint8_t expected = 0b11110000;
 	uint8_t actual = 0b11000011;
 	uint8_t mask = 0xFF;
@@ -368,7 +449,10 @@ TEST(FailureExamplesTestSuite, testBitsEqualFailure)
 
 TEST(FailureExamplesTestSuite, testExplicitFail)
 {
-	test().name("Explicit fail");
+	test()
+		.name("Explicit fail")
+		.feature("Failure Scenarios")
+		.story("Intentional failure for demo");
 	FAIL("Forced failure");
 }
 
@@ -384,7 +468,10 @@ TEST_GROUP(NewFeaturesTestSuite)
 			.name("New Features Demo")
 			.description("Demonstrating RAII steps and test marking features")
 			.epic("Phase 3 Features")
-			.severity("high");
+			.severity("high")
+			.label("layer", "e2e");
+        test().label("layer", "e2e");
+        test().epic("Phase 3 Features");
     }
 };
 

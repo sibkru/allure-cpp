@@ -20,7 +20,7 @@
 namespace allure { namespace service {
 
 	namespace {
-		// Simple hash function for generating historyId
+		// Simple hash function for generating stable ids (deterministic within same binary)
 		std::string generateSimpleHash(const std::string& input)
 		{
 			std::hash<std::string> hasher;
@@ -82,11 +82,14 @@ namespace allure { namespace service {
 		std::string fullName = testSuite.getName() + "." + testCaseName;
 		testCase.setFullName(fullName);
 
-		// Generate historyId from the full name for consistent test history tracking
-		testCase.setHistoryId(generateSimpleHash(fullName));
-
-		// Set testCaseId to the same as UUID for now
-		testCase.setTestCaseId(uuid);
+		// Stable ID used for both Allure 2 (historyId) and Allure 3 (testCaseId/ALLURE_ID)
+		const std::string stableId = generateSimpleHash(fullName);
+		testCase.setTestCaseId(stableId);
+		testCase.setHistoryId(stableId);
+		model::Label allureIdLabel;
+		allureIdLabel.setName("ALLURE_ID");
+		allureIdLabel.setValue(stableId);
+		testCase.addLabel(allureIdLabel);
 
 		testCase.setStart(m_timeService->getCurrentTime());
 		testCase.setStage(model::Stage::RUNNING);
@@ -113,11 +116,13 @@ namespace allure { namespace service {
 		testCase.setName(metadata.getTestName());
 		testCase.setFullName(metadata.getFullName());
 
-		// Generate historyId from the full name for consistent test history tracking
-		testCase.setHistoryId(generateSimpleHash(metadata.getFullName()));
-
-		// Set testCaseId to the same as UUID for now
-		testCase.setTestCaseId(uuid);
+		const std::string stableId = generateSimpleHash(metadata.getFullName());
+		testCase.setTestCaseId(stableId);
+		testCase.setHistoryId(stableId);
+		model::Label allureIdLabel;
+		allureIdLabel.setName("ALLURE_ID");
+		allureIdLabel.setValue(stableId);
+		testCase.addLabel(allureIdLabel);
 
 		testCase.setStart(m_timeService->getCurrentTime());
 		testCase.setStage(model::Stage::RUNNING);

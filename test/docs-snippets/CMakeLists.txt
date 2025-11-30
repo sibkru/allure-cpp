@@ -73,6 +73,7 @@ if(ALLURE_ENABLE_CPPUTEST)
     target_link_libraries(DocsSnippet_CppUTestSetup PRIVATE
         AllureCpp
         CppUTest
+        CppUTestExt
     )
 
     # CppUTest with custom output
@@ -83,6 +84,7 @@ if(ALLURE_ENABLE_CPPUTEST)
     target_link_libraries(DocsSnippet_CppUTestCustomOutput PRIVATE
         AllureCpp
         CppUTest
+        CppUTestExt
     )
 
     # Mark these as documentation tests

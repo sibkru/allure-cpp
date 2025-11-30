@@ -1,5 +1,3 @@
-enable_testing()
-
 # Add project folder into includes
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

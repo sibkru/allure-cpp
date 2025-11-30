@@ -80,9 +80,10 @@ if(ALLURE_ENABLE_CPPUTEST)
     FetchContent_Declare(
       cpputest
       GIT_REPOSITORY https://github.com/cpputest/cpputest.git
-      GIT_TAG v4.0
+      GIT_TAG master
     )
     set(TESTS OFF CACHE BOOL "" FORCE)
+    set(CPPUTEST_MEM_LEAK_DETECTION_DISABLED ON CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(cpputest)
   else()
     find_package(CppUTest CONFIG REQUIRED)
@@ -110,6 +111,9 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 # This allows the library to be used via FetchContent without building tests
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     message(STATUS "Building Allure-Cpp tests and examples")
+
+    # Enable CTest support
+    enable_testing()
 
     if(ALLURE_ENABLE_GOOGLETEST)
         if(ALLURE_BUILD_UNIT_TESTS OR ALLURE_BUILD_INTEGRATION_TESTS)

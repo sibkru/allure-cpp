@@ -6,6 +6,10 @@
 #include "TestUtilities/Mocks/Services/System/MockTimeService.h"
 #include "TestUtilities/Mocks/Services/System/MockUUIDGeneratorService.h"
 
+#include <algorithm>
+#include <functional>
+#include <iomanip>
+#include <sstream>
 
 using namespace testing;
 using namespace allure;
@@ -72,6 +76,15 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 		time_t m_currentTime;
 	};
 
+	std::string generateStableId(const std::string& fullName)
+	{
+		std::hash<std::string> hasher;
+		size_t hashValue = hasher(fullName);
+		std::stringstream ss;
+		ss << std::hex << std::setfill('0') << std::setw(16) << hashValue;
+		return ss.str();
+	}
+
 
 	TEST_F(TestCaseStartEventHandlerTest, testHandleTestCaseStartAddsStartedTestCaseIntoRunningSuite)
 	{
@@ -81,11 +94,19 @@ namespace systelab { namespace gtest_allure { namespace unit_test {
 		ASSERT_EQ(1, m_runningTestSuite->getTestCases().size());
 
 		model::TestCase& addedTestCase = m_runningTestSuite->getTestCases()[0];
+		const std::string expectedFullName = "TestSuiteName.StartedTestCase";
+		const std::string expectedStableId = generateStableId(expectedFullName);
 		EXPECT_EQ(m_generatedUUID, addedTestCase.getUUID());
 		EXPECT_EQ(startedTestCaseName, addedTestCase.getName());
-		EXPECT_EQ("TestSuiteName.StartedTestCase", addedTestCase.getFullName());
-		EXPECT_FALSE(addedTestCase.getHistoryId().empty());
-		EXPECT_EQ(m_generatedUUID, addedTestCase.getTestCaseId());
+		EXPECT_EQ(expectedFullName, addedTestCase.getFullName());
+		EXPECT_EQ(expectedStableId, addedTestCase.getHistoryId());
+		EXPECT_EQ(expectedStableId, addedTestCase.getTestCaseId());
+
+		// ALLURE_ID label should be set to the stable id used for history and testCase ids
+		auto allureIdLabel = std::find_if(addedTestCase.getLabels().begin(), addedTestCase.getLabels().end(),
+				[](const allure::model::Label& label) { return label.getName() == "ALLURE_ID"; });
+		ASSERT_NE(allureIdLabel, addedTestCase.getLabels().end());
+		EXPECT_EQ(expectedStableId, allureIdLabel->getValue());
 		EXPECT_EQ(m_currentTime, addedTestCase.getStart());
 		EXPECT_EQ(model::Stage::RUNNING, addedTestCase.getStage());
 		EXPECT_EQ(model::Status::UNKNOWN, addedTestCase.getStatus());

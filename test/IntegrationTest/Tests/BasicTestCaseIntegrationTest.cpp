@@ -3,12 +3,26 @@
 
 #include "TestUtilities/JSONComparison.h"
 
+#include <functional>
+#include <iomanip>
+#include <sstream>
 
 using namespace testing;
 using namespace systelab::json::test_utility;
 using namespace allure;
 
 namespace systelab { namespace gtest_allure { namespace unit_test {
+
+namespace {
+std::string generateStableId(const std::string& fullName)
+{
+	std::hash<std::string> hasher;
+	size_t hashValue = hasher(fullName);
+	std::stringstream ss;
+	ss << std::hex << std::setfill('0') << std::setw(16) << hashValue;
+	return ss.str();
+}
+}
 
 	class BasicTestCaseIntegrationTest : public testing::Test
 									   , public BaseIntegrationTest
@@ -67,32 +81,41 @@ TEST_F(BasicTestCaseIntegrationTest, testProgramWithSingleTestSuite)
 		{
 			StubFile file = getSavedFile(i);
 
-			if (file.m_path.find("test-uuid-1-result.json") != std::string::npos)
+		if (file.m_path.find("test-uuid-1-result.json") != std::string::npos)
+		{
+			foundTestCaseFile = true;
+			// Parse and check key fields (ignoring auto-generated fields like host, thread, historyId)
+			nlohmann::json actual = nlohmann::json::parse(file.m_content);
+			const std::string expectedFullName = "SingleTestSuite.SingleTestCase";
+			const std::string expectedStableId = generateStableId(expectedFullName);
+			ASSERT_EQ("test-uuid-1", actual["uuid"]);
+			ASSERT_EQ("SingleTestCase", actual["name"]);
+			ASSERT_EQ(expectedFullName, actual["fullName"]);
+			ASSERT_EQ(expectedStableId, actual["testCaseId"]);
+			ASSERT_EQ(expectedStableId, actual["historyId"]);
+			ASSERT_EQ("passed", actual["status"]);
+			ASSERT_EQ("finished", actual["stage"]);
+			ASSERT_EQ(222, actual["start"]);
+			ASSERT_EQ(333, actual["stop"]);
+			// Verify some expected labels exist
+			ASSERT_TRUE(actual.contains("labels"));
+			bool foundSuiteLabel = false;
+			bool foundAllureIdLabel = false;
+			for (const auto& label : actual["labels"])
 			{
-				foundTestCaseFile = true;
-				// Parse and check key fields (ignoring auto-generated fields like host, thread, historyId)
-				nlohmann::json actual = nlohmann::json::parse(file.m_content);
-				ASSERT_EQ("test-uuid-1", actual["uuid"]);
-				ASSERT_EQ("test-uuid-1", actual["testCaseId"]);
-				ASSERT_EQ("SingleTestCase", actual["name"]);
-				ASSERT_EQ("SingleTestSuite.SingleTestCase", actual["fullName"]);
-				ASSERT_EQ("passed", actual["status"]);
-				ASSERT_EQ("finished", actual["stage"]);
-				ASSERT_EQ(222, actual["start"]);
-				ASSERT_EQ(333, actual["stop"]);
-				// Verify some expected labels exist
-				ASSERT_TRUE(actual.contains("labels"));
-				bool foundSuiteLabel = false;
-				for (const auto& label : actual["labels"])
+				if (label["name"] == "suite" && label["value"] == "SingleTestSuite")
 				{
-					if (label["name"] == "suite" && label["value"] == "SingleTestSuite")
-					{
-						foundSuiteLabel = true;
-						break;
-					}
+					foundSuiteLabel = true;
+					break;
 				}
-				ASSERT_TRUE(foundSuiteLabel);
+				if (label["name"] == "ALLURE_ID" && label["value"] == expectedStableId)
+				{
+					foundAllureIdLabel = true;
+				}
 			}
+			ASSERT_TRUE(foundSuiteLabel);
+			ASSERT_TRUE(foundAllureIdLabel);
+		}
 			else if (file.m_path.find("suite-uuid-1-container.json") != std::string::npos)
 			{
 				foundContainerFile = true;

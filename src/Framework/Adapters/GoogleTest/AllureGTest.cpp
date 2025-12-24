@@ -32,9 +32,9 @@ public:
 		detail::Core::instance().setFrameworkAdapter(adapter);
 		m_adapter = std::move(adapter);
 
-		// Remove default printer to avoid duplicate output alongside Allure listener
-		auto& listeners = ::testing::UnitTest::GetInstance()->listeners();
-		delete listeners.Release(listeners.default_result_printer());
+		// Note: We intentionally keep GoogleTest's default printer active.
+		// Allure's listener only writes JSON files and doesn't print to console,
+		// so both listeners can coexist without duplicate output.
 	}
 
 private:

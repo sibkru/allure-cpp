@@ -118,6 +118,22 @@ void reportFailureToAllure(const AllureRCListener& listener,
                   << " times (tried " << listener.shrinkAttempts() << ")";
         allure::step(shrinkMsg.str(), [](){});
 
+        // Include distribution stats if any test cases ran before failure
+        if (!listener.tagCounts().empty() && listener.testCaseCount() > 0)
+        {
+            allure::step("Distribution (before failure)", [&]() {
+                for (const auto& entry : listener.tagCounts())
+                {
+                    double pct = 100.0 * static_cast<double>(entry.second) /
+                                 static_cast<double>(listener.testCaseCount());
+                    std::ostringstream ss;
+                    ss << formatTags({entry.first}) << ": " << std::fixed
+                       << std::setprecision(1) << pct << "%";
+                    allure::step(ss.str(), [](){});
+                }
+            });
+        }
+
         // Attach counterexample as text file
         std::ostringstream counterexample;
         counterexample << "Counterexample:\n";

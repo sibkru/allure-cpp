@@ -98,6 +98,7 @@ void reportSuccessToAllure(const AllureRCListener& listener,
             allure::test().parameter(entry.first, ss.str());
         }
     }
+
 }
 
 void reportFailureToAllure(const AllureRCListener& listener,

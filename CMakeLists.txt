@@ -13,6 +13,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Options to control which test frameworks to enable (default: none)
 option(ALLURE_ENABLE_GOOGLETEST "Enable GoogleTest adapter" OFF)
 option(ALLURE_ENABLE_CPPUTEST "Enable CppUTest adapter" OFF)
+option(ALLURE_ENABLE_RAPIDCHECK "Enable RapidCheck adapter (requires GoogleTest)" OFF)
 # Options to control which internal test targets to build (default: off)
 option(ALLURE_BUILD_UNIT_TESTS "Build unit tests" OFF)
 option(ALLURE_BUILD_INTEGRATION_TESTS "Build integration tests" OFF)
@@ -96,13 +97,44 @@ if(ALLURE_ENABLE_CPPUTEST)
   endif()
 endif()
 
+# RapidCheck - optional (requires GoogleTest)
+if(ALLURE_ENABLE_RAPIDCHECK)
+  if(NOT ALLURE_ENABLE_GOOGLETEST)
+    message(FATAL_ERROR "RapidCheck adapter requires GoogleTest. Please enable ALLURE_ENABLE_GOOGLETEST.")
+  endif()
+  message(STATUS "Allure-Cpp: RapidCheck adapter enabled")
+
+  # Check if rapidcheck target already exists (parent project fetched it)
+  if(TARGET rapidcheck)
+    message(STATUS "Allure-Cpp: Using existing rapidcheck target")
+  else()
+    # Try find_package first (for system installs)
+    find_package(rapidcheck CONFIG QUIET)
+    if(rapidcheck_FOUND)
+      message(STATUS "Allure-Cpp: Found system RapidCheck")
+      if(TARGET rapidcheck::rapidcheck AND NOT TARGET rapidcheck)
+        add_library(rapidcheck ALIAS rapidcheck::rapidcheck)
+      endif()
+    else()
+      # Fallback: fetch it ourselves
+      message(STATUS "Allure-Cpp: Fetching RapidCheck")
+      FetchContent_Declare(
+        rapidcheck
+        GIT_REPOSITORY https://github.com/emil-e/rapidcheck.git
+        GIT_TAG master
+      )
+      set(RC_ENABLE_GTEST ON CACHE BOOL "" FORCE)
+      set(RC_ENABLE_GMOCK OFF CACHE BOOL "" FORCE)
+      set(RC_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
+      FetchContent_MakeAvailable(rapidcheck)
+    endif()
+  endif()
+endif()
+
 # Adjust compilation flags
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=implicit-fallthrough")
 endif()
-
-# Configure include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Add main library (always built)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)

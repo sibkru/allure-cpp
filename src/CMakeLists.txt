@@ -54,11 +54,20 @@ if(ALLURE_ENABLE_CPPUTEST)
     list(APPEND ALLURE_CORE_HDR ${CPPUTEST_ADAPTER_HDR})
 endif()
 
+# Conditionally add RapidCheck adapter sources
+if(ALLURE_ENABLE_RAPIDCHECK)
+    file(GLOB RAPIDCHECK_ADAPTER_SRC "Framework/Adapters/RapidCheck/*.cpp")
+    file(GLOB RAPIDCHECK_ADAPTER_HDR "Framework/Adapters/RapidCheck/*.h")
+    list(APPEND ALLURE_CORE_SRC ${RAPIDCHECK_ADAPTER_SRC})
+    list(APPEND ALLURE_CORE_HDR ${RAPIDCHECK_ADAPTER_HDR})
+endif()
+
 # Create the library
 add_library(${ALLURE_CPP} STATIC ${ALLURE_CORE_SRC} ${ALLURE_CORE_HDR})
 
 target_include_directories(${ALLURE_CPP} PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:include>
 )
 
 # Always emit Allure 3 compatible IDs; flag retained for compatibility but unused here
@@ -77,6 +86,11 @@ endif()
 if(ALLURE_ENABLE_CPPUTEST)
     target_link_libraries(${ALLURE_CPP} PUBLIC CppUTest)
     target_compile_definitions(${ALLURE_CPP} PUBLIC ALLURE_CPPUTEST_ENABLED)
+endif()
+
+if(ALLURE_ENABLE_RAPIDCHECK)
+    target_link_libraries(${ALLURE_CPP} PUBLIC rapidcheck)
+    target_compile_definitions(${ALLURE_CPP} PUBLIC ALLURE_RAPIDCHECK_ENABLED)
 endif()
 
 #Configure source groups

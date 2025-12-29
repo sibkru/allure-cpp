@@ -8,6 +8,11 @@ file(GLOB_RECURSE INTEGRATION_TEST_PROJECT_HDR "*.h")
 add_executable(${INTEGRATION_TEST_PROJECT} ${INTEGRATION_TEST_PROJECT_SRC} ${INTEGRATION_TEST_PROJECT_HDR})
 target_link_libraries(${INTEGRATION_TEST_PROJECT} AllureCpp TestUtilities gtest gmock gtest_main)
 
+# Link RapidCheck for RapidCheck integration tests
+if(ALLURE_ENABLE_RAPIDCHECK)
+    target_link_libraries(${INTEGRATION_TEST_PROJECT} rapidcheck)
+endif()
+
 # Ignored missing PDBs link warning on Visual Studio
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set_target_properties(${INTEGRATION_TEST_PROJECT} PROPERTIES LINK_FLAGS "/ignore:4099")

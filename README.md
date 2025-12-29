@@ -8,6 +8,7 @@ A C++ library for generating [Allure 2](https://docs.qameta.io/allure/) C++ test
 **Supported Test Frameworks:**
 - [GoogleTest](https://github.com/google/googletest) - [View Example Report](https://sibkru.github.io/allure-cpp/googletest-example/)
 - [CppUTest](https://cpputest.github.io/) - [View Example Report](https://sibkru.github.io/allure-cpp/cpputest-example/)
+- [RapidCheck](https://github.com/emil-e/rapidcheck) - Property-based testing with distribution stats and counterexample reporting (see `examples/RapidCheck/`)
 
 The library features a generic adapter interface that makes it easy to add support for additional C++ testing frameworks.
 

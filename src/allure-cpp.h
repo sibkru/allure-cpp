@@ -57,6 +57,12 @@
     #include "Framework/Adapters/CppUTest/AllureCppUTest.h"
 #endif
 
+// Note: RapidCheck adapter is NOT auto-included here because it requires
+// RapidCheck headers that should be included by the user. Include the adapter
+// header directly in your property test files:
+//   #include <Framework/Adapters/RapidCheck/AllureRapidCheck.h>
+// This replaces #include <rapidcheck/gtest.h> and provides Allure reporting.
+
 /**
  * Main namespace for Allure C++ API.
  *

@@ -103,20 +103,30 @@ if(ALLURE_ENABLE_RAPIDCHECK)
     message(FATAL_ERROR "RapidCheck adapter requires GoogleTest. Please enable ALLURE_ENABLE_GOOGLETEST.")
   endif()
   message(STATUS "Allure-Cpp: RapidCheck adapter enabled")
-  if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
-    FetchContent_Declare(
-      rapidcheck
-      GIT_REPOSITORY https://github.com/emil-e/rapidcheck.git
-      GIT_TAG master
-    )
-    set(RC_ENABLE_GTEST ON CACHE BOOL "" FORCE)
-    set(RC_ENABLE_GMOCK OFF CACHE BOOL "" FORCE)
-    set(RC_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
-    FetchContent_MakeAvailable(rapidcheck)
+
+  # Check if rapidcheck target already exists (parent project fetched it)
+  if(TARGET rapidcheck)
+    message(STATUS "Allure-Cpp: Using existing rapidcheck target")
   else()
-    find_package(rapidcheck CONFIG REQUIRED)
-    if(TARGET rapidcheck::rapidcheck AND NOT TARGET rapidcheck)
-      add_library(rapidcheck ALIAS rapidcheck::rapidcheck)
+    # Try find_package first (for system installs)
+    find_package(rapidcheck CONFIG QUIET)
+    if(rapidcheck_FOUND)
+      message(STATUS "Allure-Cpp: Found system RapidCheck")
+      if(TARGET rapidcheck::rapidcheck AND NOT TARGET rapidcheck)
+        add_library(rapidcheck ALIAS rapidcheck::rapidcheck)
+      endif()
+    else()
+      # Fallback: fetch it ourselves
+      message(STATUS "Allure-Cpp: Fetching RapidCheck")
+      FetchContent_Declare(
+        rapidcheck
+        GIT_REPOSITORY https://github.com/emil-e/rapidcheck.git
+        GIT_TAG master
+      )
+      set(RC_ENABLE_GTEST ON CACHE BOOL "" FORCE)
+      set(RC_ENABLE_GMOCK OFF CACHE BOOL "" FORCE)
+      set(RC_ENABLE_TESTS OFF CACHE BOOL "" FORCE)
+      FetchContent_MakeAvailable(rapidcheck)
     endif()
   endif()
 endif()

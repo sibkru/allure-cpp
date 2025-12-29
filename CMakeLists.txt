@@ -136,9 +136,6 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-error=implicit-fallthrough")
 endif()
 
-# Configure include directories
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-
 # Add main library (always built)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
